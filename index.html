@@ -1,0 +1,78 @@
+<!-- index.html — Welcome page -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Personal website of Yaroslav Krupoder — software engineering student, projects, research, and writing." />
+    <meta name="author" content="Yaroslav Krupoder" />
+    <meta property="og:title" content="Yaroslav Krupoder" />
+    <meta property="og:description" content="Personal website of Yaroslav Krupoder — software engineering student, projects, research, and writing." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%232f5c4c'>Y</text></svg>" />
+    <title>Yaroslav Krupoder</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Site header with name and theme toggle -->
+    <header>
+      <h1>Yaroslav Krupoder</h1>
+      <button id="theme-toggle">[dark]</button>
+    </header>
+
+    <!-- Navigation — same on every page -->
+    <nav>
+      <ul>
+        <li><a href="index.html">Welcome</a></li>
+        <li><a href="about.html">About Me</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="research.html">Research</a></li>
+        <li><a href="contacts.html">Contacts</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <!-- Short introduction -->
+      <section>
+        <p>
+          Welcome to my website. My name is Yaroslav Krupoder.
+          Let's get acquainted.
+        </p>
+      </section>
+
+      <!-- Cards linking to other pages -->
+      <section>
+        <div class="card">
+          <h2>About Me</h2>
+          <p>Who I am and what I study.</p>
+          <a href="about.html">Read more</a>
+        </div>
+
+        <div class="card">
+          <h2>Projects</h2>
+          <p>Things I have built or worked on.</p>
+          <a href="projects.html">View projects</a>
+        </div>
+
+        <div class="card">
+          <h2>Research / Writing</h2>
+          <p>Notes, posts, and collected thoughts.</p>
+          <a href="research.html">Read posts</a>
+        </div>
+
+        <div class="card">
+          <h2>Contacts</h2>
+          <p>How to reach me. Download my resume.</p>
+          <a href="contacts.html">Get in touch</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p><a href="#">Back to top</a></p>
+      <p>Last updated: February 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

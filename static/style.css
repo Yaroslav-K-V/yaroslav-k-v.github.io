@@ -1,0 +1,354 @@
+/* style.css */
+
+/* --- Theme colors using CSS custom properties ---
+   Light theme (default):
+     Background: #f3f1ea  Text: #222  Links: #2f5c4c  Border: #222
+   Dark theme:
+     Background: #1a1a1a  Text: #d5d3cb  Links: #7fbfae  Border: #555
+*/
+
+/* Light theme — default values */
+:root {
+  --bg: #f3f1ea;
+  --text: #222;
+  --link: #2f5c4c;
+  --border: #222;
+}
+
+/* Animate anchor scrolling instead of jumping */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Dark theme — activated by adding class="dark" to <html> */
+html.dark {
+  --bg: #1a1a1a;
+  --text: #d5d3cb;
+  --link: #7fbfae;
+  --border: #555;
+}
+
+/* Base layout and colors */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Courier New", Courier, monospace;
+  line-height: 1.7;
+  margin: 0;
+  padding: 24px;
+}
+
+/* Keep content narrow and readable */
+header, nav, main, footer {
+  max-width: 720px;
+  margin: 0 auto 20px auto;
+}
+
+/* Place site title and toggle button on the same line */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+/* --- Navigation --- */
+
+/* Remove default list bullets and spacing */
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Display nav items in a horizontal row */
+nav li {
+  display: inline;
+  margin-right: 12px;
+}
+
+/* --- Links --- */
+
+/* Accent color for all links */
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Bold the currently active nav link */
+.active {
+  font-weight: bold;
+}
+
+/* --- Content --- */
+
+/* Spacing between sections */
+section {
+  margin-bottom: 32px;
+}
+
+/* Spacing below headings */
+h2 {
+  margin-bottom: 8px;
+}
+
+/* --- Cards --- */
+
+/* Simple bordered box for cards */
+.card {
+  border: 1px solid var(--border);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+/* --- Theme toggle button --- */
+
+/* Plain text-style button that matches the document aesthetic */
+#theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.85rem;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+/* --- Forms (admin) --- */
+
+/* Text inputs and textareas match the document style */
+input[type="text"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 200px;
+  resize: vertical;
+}
+
+/* Form labels */
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+/* Form submit and delete buttons */
+button[type="submit"] {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.85rem;
+  padding: 4px 16px;
+  cursor: pointer;
+}
+
+/* Error message text */
+.error {
+  color: #c44;
+}
+
+/* Admin edit/delete action links */
+.admin-actions {
+  margin-top: 8px;
+  font-size: 0.85rem;
+}
+
+.admin-actions a {
+  margin-right: 8px;
+}
+
+/* --- Confirm modal --- */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-box {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-box p {
+  margin: 0 0 16px 0;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-actions button {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.85rem;
+  padding: 4px 16px;
+  cursor: pointer;
+}
+
+.modal-actions button:first-child {
+  border-color: #c44;
+  color: #c44;
+}
+
+.modal-actions button:hover {
+  text-decoration: underline;
+}
+
+/* --- Toast notifications --- */
+
+#toast-container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 12px 20px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9rem;
+  max-width: 360px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.toast-success {
+  border-left: 4px solid var(--link);
+}
+
+.toast-error {
+  border-left: 4px solid #c44;
+}
+
+.toast-hiding {
+  opacity: 0;
+}
+
+/* --- Form validation errors --- */
+
+.field-error {
+  display: block;
+  color: #c44;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+input.invalid,
+textarea.invalid {
+  border-color: #c44;
+}
+
+/* --- Footer --- */
+
+/* Separate footer from content with a thin line */
+footer {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  font-size: 0.95rem;
+}
+
+/* --- Small screens (mobile) ---
+   Reduce padding, shrink heading, tighten card spacing.
+*/
+@media (max-width: 600px) {
+  /* Less padding on narrow screens */
+  body {
+    padding: 16px;
+  }
+
+  /* Smaller site title on mobile */
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  /* Tighter card padding */
+  .card {
+    padding: 12px;
+  }
+
+  /* Full-width toasts on mobile */
+  #toast-container {
+    right: 8px;
+    left: 8px;
+  }
+
+  .toast {
+    max-width: 100%;
+  }
+}
+
+/* --- Print styles ---
+   Hide navigation and toggle, use black on white,
+   lighten card borders, show link URLs inline.
+*/
+@media print {
+  /* Hide nav, theme button, toasts, modals — not useful on paper */
+  nav, #theme-toggle, #toast-container, .modal-overlay {
+    display: none;
+  }
+
+  /* Override theme colors to plain black on white */
+  body {
+    background: white;
+    color: black;
+    padding: 0;
+  }
+
+  /* Lighter card borders for ink economy */
+  .card {
+    border-color: #ccc;
+  }
+
+  /* Lighter footer border */
+  footer {
+    border-color: #ccc;
+  }
+
+  /* Show the URL after each link */
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  /* Do not show URLs for hidden nav links or anchor links */
+  nav a::after, a[href^="#"]::after {
+    content: "";
+  }
+}

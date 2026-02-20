@@ -1,0 +1,70 @@
+<!-- base.html — Shared layout for all pages -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{% block description %}Personal website of Yaroslav Krupoder{% endblock %}" />
+    <meta name="author" content="Yaroslav Krupoder" />
+    <meta property="og:title" content="{% block og_title %}Yaroslav Krupoder{% endblock %}" />
+    <meta property="og:description" content="{% block og_description %}Personal website of Yaroslav Krupoder{% endblock %}" />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%232f5c4c'>Y</text></svg>" />
+    <title>{% block title %}Yaroslav Krupoder{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <header>
+      <h1>Yaroslav Krupoder</h1>
+      <button id="theme-toggle">[dark]</button>
+    </header>
+
+    <!-- Navigation — active link highlighted via Jinja -->
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}" {% if request.endpoint == 'index' %}class="active"{% endif %}>Welcome</a></li>
+        <li><a href="{{ url_for('about') }}" {% if request.endpoint == 'about' %}class="active"{% endif %}>About Me</a></li>
+        <li><a href="{{ url_for('projects') }}" {% if request.endpoint in ('projects', 'project') %}class="active"{% endif %}>Projects</a></li>
+        <li><a href="{{ url_for('research') }}" {% if request.endpoint in ('research', 'post') %}class="active"{% endif %}>Research</a></li>
+        <li><a href="{{ url_for('contacts') }}" {% if request.endpoint == 'contacts' %}class="active"{% endif %}>Contacts</a></li>
+        {% if session.get('admin') %}
+        <li><a href="{{ url_for('admin') }}" {% if 'admin' in request.endpoint %}class="active"{% endif %}>Admin</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <main>
+      <!-- Toast notification container -->
+      <div id="toast-container"></div>
+
+      <!-- Render Flask flash messages as hidden data for JS -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash-data" data-category="{{ category }}" data-message="{{ message }}" hidden></div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+      <p><a href="#">Back to top</a></p>
+      <p>Last updated: February 2026</p>
+    </footer>
+
+    <!-- Confirm modal -->
+    <div id="confirm-modal" class="modal-overlay" hidden>
+      <div class="modal-box">
+        <p id="confirm-modal-message"></p>
+        <div class="modal-actions">
+          <button id="confirm-modal-yes" type="button"></button>
+          <button id="confirm-modal-no" type="button">Скасувати</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

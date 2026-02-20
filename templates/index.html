@@ -1,0 +1,44 @@
+<!-- index.html — Welcome page -->
+{% extends "base.html" %}
+
+{% block title %}Yaroslav Krupoder{% endblock %}
+{% block description %}Personal website of Yaroslav Krupoder — software engineering student, projects, research, and writing.{% endblock %}
+{% block og_title %}Yaroslav Krupoder{% endblock %}
+{% block og_description %}Personal website of Yaroslav Krupoder — software engineering student, projects, research, and writing.{% endblock %}
+
+{% block content %}
+  <!-- Short introduction -->
+  <section>
+    <p>
+      Welcome to my website. My name is Yaroslav Krupoder.
+      Let's get acquainted.
+    </p>
+  </section>
+
+  <!-- Cards linking to other pages -->
+  <section>
+    <div class="card">
+      <h2>About Me</h2>
+      <p>Who I am and what I study.</p>
+      <a href="{{ url_for('about') }}">Read more</a>
+    </div>
+
+    <div class="card">
+      <h2>Projects</h2>
+      <p>Things I have built or worked on.</p>
+      <a href="{{ url_for('projects') }}">View projects</a>
+    </div>
+
+    <div class="card">
+      <h2>Research / Writing</h2>
+      <p>Notes, posts, and collected thoughts.</p>
+      <a href="{{ url_for('research') }}">Read posts</a>
+    </div>
+
+    <div class="card">
+      <h2>Contacts</h2>
+      <p>How to reach me. Download my resume.</p>
+      <a href="{{ url_for('contacts') }}">Get in touch</a>
+    </div>
+  </section>
+{% endblock %}
