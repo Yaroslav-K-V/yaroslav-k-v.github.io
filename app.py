@@ -18,6 +18,8 @@ from flask import (
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import check_password_hash
 
+import init_db
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -39,6 +41,12 @@ LOCKOUT_MINUTES = 60
 # Path to the SQLite database file (absolute to avoid CWD issues)
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE = BASE_DIR / "database.db"
+
+# Ensure tables and seed data exist on every startup.
+# On Render.com (and other ephemeral-filesystem hosts) the DB file is lost on
+# each redeploy, so this call re-creates it automatically before the first
+# request is served.
+init_db.init()
 
 
 # --- Database helper ---
