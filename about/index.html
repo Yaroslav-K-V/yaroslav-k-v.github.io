@@ -1,4 +1,5 @@
 <!-- about.html — About Me page -->
+<!-- base.html — Shared layout for all pages -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,7 +12,7 @@
     <meta property="og:type" content="website" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%232f5c4c'>Y</text></svg>" />
     <title>About Me — Yaroslav Krupoder</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
     <header>
@@ -21,39 +22,43 @@
 
     <nav>
       <ul>
-        <li><a href="index.html">Welcome</a></li>
-        <li><a href="about.html">About Me</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="research.html">Research</a></li>
-        <li><a href="contacts.html">Contacts</a></li>
+        <li><a href="/" >Welcome</a></li>
+        <li><a href="/about" class="active">About Me</a></li>
+        <li><a href="/projects" >Projects</a></li>
+        <li><a href="/research" >Research</a></li>
+        <li><a href="/contacts" >Contacts</a></li>
+        
       </ul>
     </nav>
 
     <main>
-      <section>
-        <h2>About Me</h2>
 
-        <p>
-          First-year Software Engineering student with practical experience
-          in Python and C#. I build real projects such as desktop applications
-          and Telegram bots, use Git and object-oriented design, and actively
-          develop my skills through hands-on practice.
-        </p>
+      
+  <section>
+    <h2>About Me</h2>
 
-        <p>
-          Seeking a software engineering internship to gain industry
-          experience and grow as a developer.
-        </p>
-      </section>
+    <p>
+      First-year Software Engineering student with practical experience
+      in Python and C#. I build real projects such as desktop applications
+      and Telegram bots, use Git and object-oriented design, and actively
+      develop my skills through hands-on practice.
+    </p>
 
-      <section>
-        <h2>Skills</h2>
-        <ul>
-          <li><strong>Languages:</strong> Python, C#, JavaScript, HTML, CSS</li>
-          <li><strong>Tools:</strong> Git, VS Code, PySide6, .NET</li>
-          <li><strong>Concepts:</strong> OOP, REST APIs, Version Control</li>
-        </ul>
-      </section>
+    <p>
+      Seeking a software engineering internship to gain industry
+      experience and grow as a developer.
+    </p>
+  </section>
+
+  <section>
+    <h2>Skills</h2>
+    <ul>
+      <li><strong>Languages:</strong> Python, C#, JavaScript, HTML, CSS</li>
+      <li><strong>Tools:</strong> Git, VS Code, PySide6, .NET</li>
+      <li><strong>Concepts:</strong> OOP, REST APIs, Version Control</li>
+    </ul>
+  </section>
+
     </main>
 
     <footer>
@@ -61,6 +66,6 @@
       <p>Last updated: February 2026</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="/static/script.js"></script>
   </body>
 </html>

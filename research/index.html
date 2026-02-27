@@ -1,17 +1,17 @@
-<!-- 404.html — Page not found -->
+<!-- research.html — Research / Writing listing page -->
 <!-- base.html — Shared layout for all pages -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Page not found — Yaroslav Krupoder" />
+    <meta name="description" content="Notes, posts, and collected thoughts by Yaroslav Krupoder." />
     <meta name="author" content="Yaroslav Krupoder" />
-    <meta property="og:title" content="Page Not Found — Yaroslav Krupoder" />
-    <meta property="og:description" content="Page not found — Yaroslav Krupoder" />
+    <meta property="og:title" content="Research — Yaroslav Krupoder" />
+    <meta property="og:description" content="Notes, posts, and collected thoughts by Yaroslav Krupoder." />
     <meta property="og:type" content="website" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%232f5c4c'>Y</text></svg>" />
-    <title>404 — Yaroslav Krupoder</title>
+    <title>Research — Yaroslav Krupoder</title>
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
@@ -25,7 +25,7 @@
         <li><a href="/" >Welcome</a></li>
         <li><a href="/about" >About Me</a></li>
         <li><a href="/projects" >Projects</a></li>
-        <li><a href="/research" >Research</a></li>
+        <li><a href="/research" class="active">Research</a></li>
         <li><a href="/contacts" >Contacts</a></li>
         
       </ul>
@@ -35,9 +35,19 @@
 
       
   <section>
-    <h2>404 — Page Not Found</h2>
-    <p>The page you are looking for does not exist or has been moved.</p>
-    <p><a href="/">Return to the welcome page</a></p>
+    <h2>Research / Writing</h2>
+
+    
+    <div class="card">
+      <h3><a href="/post/1">On Minimal Web Design</a></h3>
+      <p>Notes on why simple websites load faster, last longer, and are easier to maintain than complex ones.</p>
+    </div>
+    
+    <div class="card">
+      <h3><a href="/post/2">Learning in Public</a></h3>
+      <p>A short reflection on writing about what you learn, even when you are still a beginner.</p>
+    </div>
+    
   </section>
 
     </main>

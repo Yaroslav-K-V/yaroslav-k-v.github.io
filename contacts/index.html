@@ -1,4 +1,5 @@
 <!-- contacts.html — Contacts page -->
+<!-- base.html — Shared layout for all pages -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,7 +12,7 @@
     <meta property="og:type" content="website" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%232f5c4c'>Y</text></svg>" />
     <title>Contacts — Yaroslav Krupoder</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
     <header>
@@ -21,29 +22,33 @@
 
     <nav>
       <ul>
-        <li><a href="index.html">Welcome</a></li>
-        <li><a href="about.html">About Me</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="research.html">Research</a></li>
-        <li><a href="contacts.html">Contacts</a></li>
+        <li><a href="/" >Welcome</a></li>
+        <li><a href="/about" >About Me</a></li>
+        <li><a href="/projects" >Projects</a></li>
+        <li><a href="/research" >Research</a></li>
+        <li><a href="/contacts" class="active">Contacts</a></li>
+        
       </ul>
     </nav>
 
     <main>
-      <section>
-        <h2>Contacts</h2>
 
-        <p><strong>Name:</strong> Yaroslav Krupoder</p>
-        <p><strong>Location:</strong> Bulgaria</p>
+      
+  <section>
+    <h2>Contacts</h2>
 
-        <ul>
-          <li>Phone: <a href="tel:+3590886714772">+359 0886714772</a></li>
-          <li>Email: <a href="mailto:y.krupoder@gmail.com">y.krupoder@gmail.com</a></li>
-          <li>LinkedIn: <a href="https://www.linkedin.com/in/yaroslav-krupoder-210057187">linkedin.com/in/yaroslav-krupoder</a></li>
-          <li>GitHub: <a href="https://github.com/Yaroslav-K-V">github.com/Yaroslav-K-V</a></li>
-          <li>Resume: <a href="resume.pdf">Download PDF</a></li>
-        </ul>
-      </section>
+    <p><strong>Name:</strong> Yaroslav Krupoder</p>
+    <p><strong>Location:</strong> Bulgaria</p>
+
+    <ul>
+      <li>Phone: <a href="tel:+3590886714772">+359 0886714772</a></li>
+      <li>Email: <a href="mailto:y.krupoder@gmail.com">y.krupoder@gmail.com</a></li>
+      <li>LinkedIn: <a href="https://www.linkedin.com/in/yaroslav-krupoder-210057187">linkedin.com/in/yaroslav-krupoder</a></li>
+      <li>GitHub: <a href="https://github.com/Yaroslav-K-V">github.com/Yaroslav-K-V</a></li>
+      <li>Resume: <a href="/static/resume.pdf">Download PDF</a></li>
+    </ul>
+  </section>
+
     </main>
 
     <footer>
@@ -51,6 +56,6 @@
       <p>Last updated: February 2026</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="/static/script.js"></script>
   </body>
 </html>
