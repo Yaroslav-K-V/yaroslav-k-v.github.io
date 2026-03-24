@@ -1,0 +1,73 @@
+<!-- project.html — Single project detail page -->
+<!-- base.html — Shared layout for all pages -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Desktop application for generating and running Python unit tests with a web-based UI embedded in a native window." />
+    <meta name="author" content="Yaroslav Krupoder" />
+    <meta property="og:title" content="Unitra — Yaroslav Krupoder" />
+    <meta property="og:description" content="Desktop application for generating and running Python unit tests with a web-based UI embedded in a native window." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%232f5c4c'>Y</text></svg>" />
+    <title>Unitra — Yaroslav Krupoder</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Yaroslav Krupoder</h1>
+      <button id="theme-toggle">[dark]</button>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="/" >Welcome</a></li>
+        <li><a href="/about" >About Me</a></li>
+        <li><a href="/projects" class="active">Projects</a></li>
+        <li><a href="/research" >Research</a></li>
+        <li><a href="/contacts" >Contacts</a></li>
+      </ul>
+    </nav>
+
+    <main>
+
+  <section>
+    <h2>Unitra</h2>
+    <p>AI-powered Python Unit Test Generator — Fullstack Desktop App</p>
+    <p>Desktop application for generating and running Python unit tests with a web-based UI embedded in a native window.</p>
+
+    <h3>Features</h3>
+    <ul>
+      <li>Fullstack architecture: Flask backend + HTML/CSS/JavaScript frontend via pywebview</li>
+      <li>AST-based parsing for analyzing Python source code structure</li>
+      <li>Automatic test generation for individual functions or entire projects</li>
+      <li>AI-assisted mode using LangChain + OpenAI-compatible API</li>
+      <li>Built-in pytest runner with real-time output displayed in UI</li>
+      <li>Selective file targeting within full project scans</li>
+      <li>Interactive UI with dark mode, keyboard shortcuts, and project history</li>
+    </ul>
+
+    <h3>Architecture</h3>
+    <ul>
+      <li>Modular separation: routes / core logic / agent / UI</li>
+      <li>Flask serves the frontend inside a native desktop window via pywebview</li>
+      <li>LangChain agent handles AI-assisted test generation</li>
+    </ul>
+
+    <h3>Tech stack</h3>
+    <p>Python, Flask, HTML, CSS, JavaScript, pywebview, pytest, LangChain</p>
+
+    <p><a href="/projects">Back to Projects</a></p>
+  </section>
+
+    </main>
+
+    <footer>
+      <p><a href="#">Back to top</a></p>
+      <p>Last updated: March 2026</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>
