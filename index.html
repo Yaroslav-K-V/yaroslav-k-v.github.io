@@ -1,5 +1,4 @@
 <!-- index.html — Welcome page -->
-<!-- base.html — Shared layout for all pages -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,63 +9,59 @@
     <meta property="og:title" content="Yaroslav Krupoder" />
     <meta property="og:description" content="Personal website of Yaroslav Krupoder — software engineering student, projects, research, and writing." />
     <meta property="og:type" content="website" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%232f5c4c'>Y</text></svg>" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%231d6b55'>Y</text></svg>" />
     <title>Yaroslav Krupoder</title>
     <link rel="stylesheet" href="static/style.css" />
   </head>
   <body>
     <header>
       <h1>Yaroslav Krupoder</h1>
-      <button id="theme-toggle">[dark]</button>
+      <button id="theme-toggle">dark</button>
     </header>
 
     <nav>
       <ul>
         <li><a href="./" class="active">Welcome</a></li>
-        <li><a href="about/" >About Me</a></li>
-        <li><a href="projects/" >Projects</a></li>
-        <li><a href="research/" >Research</a></li>
-        <li><a href="contacts/" >Contacts</a></li>
+        <li><a href="about/">About Me</a></li>
+        <li><a href="projects/">Projects</a></li>
+        <li><a href="research/">Research</a></li>
+        <li><a href="contacts/">Contacts</a></li>
       </ul>
     </nav>
 
     <main>
 
+      <section class="hero">
+        <p class="hero-subtitle">Software Engineering Student</p>
+        <p class="hero-name">Building real tools<br>with Python, C#, and AI.</p>
+        <p class="hero-tagline">I design and build desktop apps, automation tools, and data projects — focused on clean architecture and practical outcomes.</p>
+        <div class="hero-actions">
+          <a href="projects/" class="btn">View Projects</a>
+          <a href="contacts/" class="btn btn-ghost">Get in Touch</a>
+        </div>
+      </section>
 
-  <!-- Short introduction -->
-  <section>
-    <p>
-      Welcome to my website. My name is Yaroslav Krupoder.
-      Let's get acquainted.
-    </p>
-  </section>
+      <section>
+        <div class="card">
+          <h3><a href="about/">About Me</a></h3>
+          <p>Who I am and what I study.</p>
+        </div>
 
-  <!-- Cards linking to other pages -->
-  <section>
-    <div class="card">
-      <h2>About Me</h2>
-      <p>Who I am and what I study.</p>
-      <a href="about/">Read more</a>
-    </div>
+        <div class="card">
+          <h3><a href="projects/">Projects</a></h3>
+          <p>Things I have built or worked on.</p>
+        </div>
 
-    <div class="card">
-      <h2>Projects</h2>
-      <p>Things I have built or worked on.</p>
-      <a href="projects/">View projects</a>
-    </div>
+        <div class="card">
+          <h3><a href="research/">Research / Writing</a></h3>
+          <p>Notes, posts, and collected thoughts.</p>
+        </div>
 
-    <div class="card">
-      <h2>Research / Writing</h2>
-      <p>Notes, posts, and collected thoughts.</p>
-      <a href="research/">Read posts</a>
-    </div>
-
-    <div class="card">
-      <h2>Contacts</h2>
-      <p>How to reach me. Download my resume.</p>
-      <a href="contacts/">Get in touch</a>
-    </div>
-  </section>
+        <div class="card">
+          <h3><a href="contacts/">Contacts</a></h3>
+          <p>How to reach me. Download my resume.</p>
+        </div>
+      </section>
 
     </main>
 
