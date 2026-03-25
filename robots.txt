@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://yaroslav-k-v.github.io/sitemap.xml

@@ -1,0 +1,101 @@
+<!-- project/index.html — Single project detail page (rendered from projects.json) -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Yaroslav Krupoder" />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%231d6b55'>Y</text></svg>" />
+    <title>Project — Yaroslav Krupoder</title>
+    <link rel="stylesheet" href="../static/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Yaroslav Krupoder</h1>
+      <button id="theme-toggle">dark</button>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="../">Welcome</a></li>
+        <li><a href="../about/">About Me</a></li>
+        <li><a href="../projects/" class="active">Projects</a></li>
+        <li><a href="../research/">Research</a></li>
+        <li><a href="../contacts/">Contacts</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section id="project-content">
+        <p>Loading...</p>
+      </section>
+    </main>
+
+    <footer>
+      <p><a href="#">Back to top</a></p>
+      <p>Last updated: March 2026</p>
+    </footer>
+
+    <script src="../static/script.js"></script>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const id = parseInt(params.get('id'));
+
+      fetch('../static/projects.json')
+        .then(r => r.json())
+        .then(projects => {
+          const project = projects.find(p => p.id === id);
+          const el = document.getElementById('project-content');
+
+          if (!project) {
+            el.innerHTML = '<h2>Project not found</h2><p><a href="../projects/">Back to Projects</a></p>';
+            return;
+          }
+
+          document.title = project.title + ' — Yaroslav Krupoder';
+          document.querySelector('meta[name="author"]').insertAdjacentHTML(
+            'afterend',
+            `<meta name="description" content="${project.description}" />
+             <meta property="og:title" content="${project.title} — Yaroslav Krupoder" />
+             <meta property="og:description" content="${project.description}" />`
+          );
+
+          const featuresHTML = project.features
+            .map(f => `<li>${f}</li>`).join('');
+
+          const architectureHTML = project.architecture
+            ? `<h3>Architecture</h3><ul>${project.architecture.map(a => `<li>${a}</li>`).join('')}</ul>`
+            : '';
+
+          const noteHTML = project.note
+            ? `<p>${project.note}</p>`
+            : '';
+
+          const techHTML = project.tech.join(', ');
+
+          const githubHTML = project.github
+            ? `<p><a href="${project.github}">View on GitHub</a></p>`
+            : '';
+
+          el.innerHTML = `
+            <h2>${project.title}</h2>
+            <p>${project.subtitle}</p>
+            <p>${project.description}</p>
+            <h3>Features</h3>
+            <ul>${featuresHTML}</ul>
+            ${noteHTML}
+            ${architectureHTML}
+            <h3>Tech stack</h3>
+            <p>${techHTML}</p>
+            ${githubHTML}
+            <p><a href="../projects/">Back to Projects</a></p>
+          `;
+        })
+        .catch(() => {
+          document.getElementById('project-content').innerHTML =
+            '<h2>Failed to load project</h2><p><a href="../projects/">Back to Projects</a></p>';
+        });
+    </script>
+  </body>
+</html>

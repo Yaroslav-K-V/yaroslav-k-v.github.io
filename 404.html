@@ -46,6 +46,13 @@
       <p>Last updated: March 2026</p>
     </footer>
 
+    <script>
+      // Redirect /path → /path/ so GitHub Pages finds index.html
+      const p = window.location.pathname;
+      if (p !== '/' && !p.endsWith('/')) {
+        window.location.replace(p + '/');
+      }
+    </script>
     <script src="static/script.js"></script>
   </body>
 </html>

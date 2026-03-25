@@ -1,0 +1,79 @@
+<!-- post/index.html — Single post page (rendered from posts.json) -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Yaroslav Krupoder" />
+    <meta property="og:type" content="article" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Courier New,monospace' fill='%231d6b55'>Y</text></svg>" />
+    <title>Post — Yaroslav Krupoder</title>
+    <link rel="stylesheet" href="../static/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Yaroslav Krupoder</h1>
+      <button id="theme-toggle">dark</button>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="../">Welcome</a></li>
+        <li><a href="../about/">About Me</a></li>
+        <li><a href="../projects/">Projects</a></li>
+        <li><a href="../research/" class="active">Research</a></li>
+        <li><a href="../contacts/">Contacts</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section id="post-content">
+        <p>Loading...</p>
+      </section>
+    </main>
+
+    <footer>
+      <p><a href="#">Back to top</a></p>
+      <p>Last updated: March 2026</p>
+    </footer>
+
+    <script src="../static/script.js"></script>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const id = parseInt(params.get('id'));
+
+      fetch('../static/posts.json')
+        .then(r => r.json())
+        .then(posts => {
+          const post = posts.find(p => p.id === id);
+          const el = document.getElementById('post-content');
+
+          if (!post) {
+            el.innerHTML = '<h2>Post not found</h2><p><a href="../research/">Back to Research</a></p>';
+            return;
+          }
+
+          document.title = post.title + ' — Yaroslav Krupoder';
+
+          const dateHTML = post.date
+            ? `<p><small>${post.date}</small></p>`
+            : '';
+
+          const bodyHTML = post.body.length
+            ? post.body.map(p => `<p>${p}</p>`).join('')
+            : '';
+
+          el.innerHTML = `
+            <h2>${post.title}</h2>
+            ${dateHTML}
+            ${bodyHTML}
+            <p><a href="../research/">Back to Research</a></p>
+          `;
+        })
+        .catch(() => {
+          document.getElementById('post-content').innerHTML =
+            '<h2>Failed to load post</h2><p><a href="../research/">Back to Research</a></p>';
+        });
+    </script>
+  </body>
+</html>
