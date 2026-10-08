@@ -1,5 +1,20 @@
 [
   {
+    "id": 8,
+    "title": "meetbadi.com",
+    "subtitle": "Live Meeting Transcription, Translation, and AI Summary Service",
+    "description": "Live meeting transcription, translation, and AI summary service for Google Meet, Zoom, and Teams.",
+    "features": [
+      "Website and Chrome extension frontend built with TypeScript and React",
+      "Desktop application layer developed with Go and Wails",
+      "Backend services, authentication, and database architecture with Supabase",
+      "LLM integration via OpenRouter for real-time translation and meeting summaries",
+      "Core technical contributor to product features and architecture decisions"
+    ],
+    "tech": ["TypeScript", "React", "Go", "Wails", "Supabase", "OpenRouter"],
+    "url": "https://meetbadi.com"
+  },
+  {
     "id": 4,
     "title": "Unitra",
     "subtitle": "AI-powered Python Unit Test Generator — Fullstack Desktop App",
@@ -68,5 +83,17 @@
     ],
     "tech": ["C#", ".NET", "WinForms"],
     "github": "https://github.com/Yaroslav-K-V/Car-Managing-Book"
+  },
+  {
+    "id": 9,
+    "title": "Expense Tracker",
+    "subtitle": "Personal Expense Tracker — Python & FastAPI Backend",
+    "description": "Personal expense tracker with a Python/FastAPI backend.",
+    "features": [
+      "RESTful API for tracking personal expenses and categories",
+      "Request validation and serialization using FastAPI and Pydantic",
+      "Lightweight backend architecture for personal financial tracking"
+    ],
+    "tech": ["Python", "FastAPI"]
   }
 ]

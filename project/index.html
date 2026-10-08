@@ -34,7 +34,7 @@
 
     <footer>
       <p><a href="#">Back to top</a></p>
-      <p>Last updated: March 2026</p>
+      <p>Last updated: September 2026</p>
     </footer>
 
     <script src="../static/script.js"></script>
@@ -76,7 +76,7 @@
 
           const githubHTML = project.github
             ? `<p><a href="${project.github}">View on GitHub</a></p>`
-            : '';
+            : (project.url ? `<p><a href="${project.url}">Visit website</a></p>` : '');
 
           el.innerHTML = `
             <h2>${project.title}</h2>
