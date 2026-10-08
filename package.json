@@ -1,0 +1,32 @@
+{
+  "name": "site_yk",
+  "version": "1.0.0",
+  "description": "A personal portfolio website. Includes public pages, a research blog.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && node scripts/copy-routes.js",
+    "preview": "vite preview"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Yaroslav-K-V/yaroslav-k-v.github.io/issues"
+  },
+  "homepage": "https://github.com/Yaroslav-K-V/yaroslav-k-v.github.io#readme",
+  "dependencies": {
+    "framer-motion": "^14.0.0",
+    "lucide-react": "^1.53.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.29",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  }
+}
