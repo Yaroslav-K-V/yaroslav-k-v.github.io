@@ -8,12 +8,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        accent: {
-          light: '#1d6b55',
-          DEFAULT: '#1d6b55',
-          dark: '#34d399',
-          hover: '#165342',
+        dark: {
+          bg: '#000000',
+          surface: '#09090b',
+          border: 'rgba(255, 255, 255, 0.08)',
+          hover: 'rgba(255, 255, 255, 0.15)',
         },
+      },
+      fontFamily: {
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
       },
     },
   },
