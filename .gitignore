@@ -8,3 +8,4 @@ database.db
 .claude/
 node_modules/
 dist/
+.superpowers/
