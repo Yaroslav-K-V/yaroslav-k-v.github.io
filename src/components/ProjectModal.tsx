@@ -58,8 +58,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
     };
   }, [project, onClose]);
 
-  if (!project) return null;
-
   const getStatusBadge = (badge: ProjectBadge) => {
     switch (badge) {
       case 'Live Service':
@@ -360,9 +358,9 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
     };
   };
 
-  const dossier = getProjectDossier(project);
-  const status = getStatusBadge(project.badge);
-  const specNumber = `SYS-SPEC-${String(project.id).padStart(2, '0')}`;
+  const dossier = project ? getProjectDossier(project) : null;
+  const status = project ? getStatusBadge(project.badge) : null;
+  const specNumber = project ? `SYS-SPEC-${String(project.id).padStart(2, '0')}` : '';
 
   const tabs: { id: ModalTab; label: string }[] = [
     { id: 'all', label: 'All Spec Sections' },
@@ -374,25 +372,29 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-        {/* Backdrop with Deep Blur */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="fixed inset-0 bg-black/80 backdrop-blur-xl transition-opacity"
-        />
+      {project && dossier && status && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+          {/* Backdrop with Deep Blur */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/80 backdrop-blur-xl transition-opacity"
+          />
 
-        {/* Modal Window: Engineering Spec Sheet Dossier */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 12 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-white/95 dark:bg-black/90 text-zinc-900 dark:text-zinc-100 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-2xl backdrop-blur-2xl z-10 overflow-hidden"
-          onClick={(e) => e.stopPropagation()}
-        >
+          {/* Modal Window: Engineering Spec Sheet Dossier */}
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="dossier-title"
+            initial={{ opacity: 0, scale: 0.96, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: 12 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-white/95 dark:bg-black/90 text-zinc-900 dark:text-zinc-100 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-2xl backdrop-blur-2xl z-10 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
           {/* Top Dossier Metadata Ribbon */}
           <div className="flex items-center justify-between px-5 sm:px-8 py-3.5 border-b border-zinc-200/80 dark:border-white/10 bg-zinc-100/60 dark:bg-zinc-950/60 font-mono text-xs">
             <div className="flex items-center gap-3">
@@ -430,7 +432,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                 <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
                   ENGINEERING SYSTEM DOSSIER
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 mt-0.5">
+                <h2
+                  id="dossier-title"
+                  className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 mt-0.5"
+                >
                   {project.title}
                 </h2>
                 <p className="text-sm sm:text-base font-medium text-zinc-600 dark:text-zinc-300 mt-1">
@@ -715,6 +720,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           </div>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   );
 };

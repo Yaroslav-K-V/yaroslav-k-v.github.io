@@ -152,7 +152,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
               >
                 <span>{opt.label}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded ${
+                  className={`text-[10px] px-1.5 py-0.5 rounded ${
                     isActive
                       ? 'bg-zinc-800 text-zinc-200 dark:bg-zinc-200 dark:text-zinc-900'
                       : 'bg-zinc-200/60 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400'
