@@ -81,7 +81,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-[#0f172a] text-gray-900 dark:text-gray-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-black text-zinc-900 dark:text-zinc-100 tech-grid transition-colors">
       <Navbar
         currentRoute={currentRoute}
         onNavigate={navigateTo}
@@ -89,7 +89,7 @@ export const App: React.FC = () => {
         onToggleTheme={toggleTheme}
       />
 
-      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 pt-6 sm:pt-8">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-16">
         <AnimatePresence mode="wait">
           {currentRoute === 'welcome' && (
             <HomeView key="welcome" onNavigate={navigateTo} />
