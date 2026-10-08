@@ -57,11 +57,15 @@ export const ResearchView: React.FC = () => {
   const handleCopyCitation = (e: React.MouseEvent, doc: ResearchDoc) => {
     e.stopPropagation();
     const citation = `Krupoder, Y. (${doc.date}). [DOC // ${doc.docIndex}] ${doc.title}. Site_YK Technical Archive, ${doc.revision}.`;
-    navigator.clipboard.writeText(citation);
-    setCopiedCitationId(doc.id);
-    setTimeout(() => {
-      setCopiedCitationId(null);
-    }, 2000);
+    navigator.clipboard
+      .writeText(citation)
+      .then(() => {
+        setCopiedCitationId(doc.id);
+        setTimeout(() => {
+          setCopiedCitationId(null);
+        }, 2000);
+      })
+      .catch(() => {});
   };
 
   const getDocStatusBadge = (status: ResearchDoc['status']) => {

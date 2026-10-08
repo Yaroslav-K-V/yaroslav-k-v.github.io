@@ -158,11 +158,20 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
           {directoryModules.map((card) => (
             <div
               key={card.route}
+              role="button"
+              tabIndex={0}
               onClick={() => {
                 onNavigate(card.route);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="glass-panel group relative p-5 sm:p-6 rounded-xl hover:border-zinc-400 dark:hover:border-white/30 hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onNavigate(card.route);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
+              className="glass-panel group relative p-5 sm:p-6 rounded-xl hover:border-zinc-400 dark:hover:border-white/30 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 transition-all duration-200 cursor-pointer flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
