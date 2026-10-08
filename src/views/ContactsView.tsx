@@ -127,23 +127,53 @@ export const ContactsView: React.FC = () => {
             </button>
           </li>
 
-          {/* Phone */}
+          {/* Phone (BG) */}
           <li className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 py-1">
             <div className="flex items-center gap-2.5">
               <Phone className="w-4 h-4 text-gray-400" />
-              <span className="font-medium text-gray-600 dark:text-gray-400">Phone:</span>
+              <span className="font-medium text-gray-600 dark:text-gray-400">Phone (BG):</span>
               <a
-                href={`tel:${contactsData.phone}`}
+                href={`tel:${contactsData.phoneBg}`}
                 className="text-emerald-700 dark:text-emerald-400 hover:underline font-mono"
               >
-                {contactsData.phone}
+                {contactsData.phoneBg}
               </a>
             </div>
             <button
-              onClick={() => handleCopy('phone', contactsData.phone)}
+              onClick={() => handleCopy('phoneBg', contactsData.phoneBg)}
               className="self-start sm:self-auto inline-flex items-center gap-1 text-xs text-gray-500 hover:text-emerald-600 dark:hover:text-emerald-400 py-0.5 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-              {copiedKey === 'phone' ? (
+              {copiedKey === 'phoneBg' ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span className="text-emerald-600 dark:text-emerald-400">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
+          </li>
+
+          {/* Phone (UA) */}
+          <li className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 py-1">
+            <div className="flex items-center gap-2.5">
+              <Phone className="w-4 h-4 text-gray-400" />
+              <span className="font-medium text-gray-600 dark:text-gray-400">Phone (UA):</span>
+              <a
+                href={`tel:${contactsData.phoneUa}`}
+                className="text-emerald-700 dark:text-emerald-400 hover:underline font-mono"
+              >
+                {contactsData.phoneUa}
+              </a>
+            </div>
+            <button
+              onClick={() => handleCopy('phoneUa', contactsData.phoneUa)}
+              className="self-start sm:self-auto inline-flex items-center gap-1 text-xs text-gray-500 hover:text-emerald-600 dark:hover:text-emerald-400 py-0.5 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              {copiedKey === 'phoneUa' ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span className="text-emerald-600 dark:text-emerald-400">Copied!</span>
