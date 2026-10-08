@@ -20,17 +20,21 @@ export const ContactsView: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const handleCopy = (key: string, value: string, label: string) => {
-    navigator.clipboard.writeText(value);
-    setCopiedKey(key);
-    setToastMessage(`[CLIPBOARD] Copied ${label} to clipboard`);
+    navigator.clipboard
+      .writeText(value)
+      .then(() => {
+        setCopiedKey(key);
+        setToastMessage(`[CLIPBOARD] Copied ${label} to clipboard`);
 
-    setTimeout(() => {
-      setCopiedKey(null);
-    }, 2000);
+        setTimeout(() => {
+          setCopiedKey(null);
+        }, 2000);
 
-    setTimeout(() => {
-      setToastMessage((current) => (current?.includes(label) ? null : current));
-    }, 3000);
+        setTimeout(() => {
+          setToastMessage((current) => (current?.includes(label) ? null : current));
+        }, 3000);
+      })
+      .catch(() => {});
   };
 
   const channelCards = [
@@ -209,7 +213,7 @@ export const ContactsView: React.FC = () => {
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 font-mono text-sm font-bold tracking-tight shadow-lg hover:shadow-xl transition-all transform active:scale-[0.98]"
             >
               <FileDown className="w-4 h-4" />
-              <span>Download Resume [PDF] ↓</span>
+              <span>Download CV [PDF] ↓</span>
             </a>
 
             <button
@@ -359,6 +363,7 @@ export const ContactsView: React.FC = () => {
               onClick={() => handleCopy('phoneBg', contactsData.phoneBg, 'Bulgaria Phone')}
               className="p-2 rounded-lg text-xs font-mono border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors text-zinc-600 dark:text-zinc-400"
               title="Copy Phone"
+              aria-label="Copy phone number"
             >
               {copiedKey === 'phoneBg' ? (
                 <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -385,6 +390,7 @@ export const ContactsView: React.FC = () => {
               onClick={() => handleCopy('phoneUa', contactsData.phoneUa, 'Ukraine Phone')}
               className="p-2 rounded-lg text-xs font-mono border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors text-zinc-600 dark:text-zinc-400"
               title="Copy Phone"
+              aria-label="Copy phone number"
             >
               {copiedKey === 'phoneUa' ? (
                 <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -403,6 +409,8 @@ export const ContactsView: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
+            role="status"
+            aria-live="polite"
             className="fixed bottom-6 right-6 z-50 pointer-events-none"
           >
             <div className="glass-panel px-4 py-3 rounded-xl shadow-2xl border border-zinc-300 dark:border-zinc-700 bg-zinc-900/90 text-white dark:bg-zinc-100/95 dark:text-zinc-950 font-mono text-xs flex items-center gap-3">

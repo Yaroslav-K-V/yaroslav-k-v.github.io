@@ -151,7 +151,7 @@ export const ResearchView: React.FC = () => {
                 >
                   <span>{cat.label}</span>
                   <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded ${
+                    className={`text-[10px] px-1.5 py-0.5 rounded ${
                       isSelected
                         ? 'bg-zinc-800 dark:bg-zinc-300 text-zinc-300 dark:text-zinc-900'
                         : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'
@@ -323,7 +323,10 @@ export const ResearchView: React.FC = () => {
                         </button>
 
                         <button
-                          onClick={() => toggleExpand(doc.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleExpand(doc.id);
+                          }}
                           className="inline-flex items-center gap-1.5 text-xs font-mono font-medium px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
                         >
                           <span>{isExpanded ? 'Collapse Spec' : 'Inspect Full Brief'}</span>
