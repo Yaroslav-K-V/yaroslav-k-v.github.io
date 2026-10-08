@@ -5,7 +5,7 @@ export const experience: ExperienceItem[] = [
     id: 'grenergy',
     role: 'AI Agent Developer Intern',
     company: 'Grenergy LLC',
-    location: 'Istanbul, Türkiye',
+    location: 'Spain / Remote',
     program: 'Erasmus+ traineeship',
     period: 'Jun 2026 – Sep 2026',
     note: 'Continuing remotely as volunteer contributor',

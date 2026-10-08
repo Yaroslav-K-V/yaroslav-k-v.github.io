@@ -8,6 +8,8 @@ export const contactsData = {
   phone: '+359 0886714772',
   linkedin: 'https://www.linkedin.com/in/yaroslav-krupoder-210057187',
   linkedinDisplay: 'linkedin.com/in/yaroslav-krupoder',
+  telegram: 'https://t.me/yaroslav_krupoder',
+  telegramDisplay: '@yaroslav_krupoder',
   github: 'https://github.com/Yaroslav-K-V',
   githubDisplay: 'github.com/Yaroslav-K-V',
   resumeUrl: 'https://drive.google.com/file/d/1NKXsgP631inObnjInSwFPNayHN7PGZUB/view?usp=sharing',
