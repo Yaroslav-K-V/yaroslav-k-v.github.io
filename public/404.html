@@ -2,14 +2,85 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Yaroslav Krupoder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101010" />
+    <meta name="color-scheme" content="dark" />
+    <title>404 — Yaroslav Krupoder</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: #101010;
+        color: #eeeeee;
+        font-family: Inter, system-ui, -apple-system, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .card {
+        max-width: 560px;
+        width: 100%;
+        border: 1px solid #3d3a39;
+        border-radius: 10px;
+        padding: 48px 40px;
+        text-align: center;
+      }
+      .hippo { max-width: 220px; margin: 0 auto 24px; display: block; }
+      .eyebrow {
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: -0.24px;
+        color: #ee6018;
+        margin-bottom: 16px;
+      }
+      h1 { font-size: 36px; font-weight: 400; letter-spacing: -1.12px; margin-bottom: 12px; }
+      p { font-size: 16px; line-height: 1.5; color: #8a8380; margin-bottom: 28px; }
+      a {
+        display: inline-block;
+        background: #fafafa;
+        color: #101010;
+        font-size: 14px;
+        padding: 10px 20px;
+        border-radius: 3px;
+        text-decoration: none;
+      }
+      .count { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; color: #8a8380; margin-top: 20px; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <img class="hippo" src="/hippo.png" alt="Hippo — lost, like this page" onerror="this.style.display='none'" />
+      <div class="eyebrow">404 // Nothing here</div>
+      <h1>This page wandered off</h1>
+      <p>The hippo couldn't find it either. Taking you back to the site…</p>
+      <a id="home-link" href="/">Back to main</a>
+      <div class="count" id="count"></div>
+    </div>
     <script>
+      // Preserve SPA routing: replay the path through /?p=...
       var path = window.location.pathname;
       var search = window.location.search;
       var hash = window.location.hash;
-      window.location.replace('/?p=' + encodeURIComponent(path) + (search ? '&' + search.slice(1) : '') + hash);
+      var home = '/?p=' + encodeURIComponent(path) + (search ? '&' + search.slice(1) : '') + hash;
+      document.getElementById('home-link').href = home;
+      var n = 5;
+      var el = document.getElementById('count');
+      el.textContent = 'redirecting in ' + n + '… (click the hippo to stay)';
+      var timer = setInterval(function () {
+        n -= 1;
+        if (n <= 0) {
+          clearInterval(timer);
+          window.location.replace(home);
+        } else {
+          el.textContent = 'redirecting in ' + n + '… (click the hippo to stay)';
+        }
+      }, 1000);
+      document.querySelector('.hippo').addEventListener('click', function () {
+        clearInterval(timer);
+        el.textContent = 'ok, staying with the hippo';
+      });
     </script>
-  </head>
-  <body>
   </body>
 </html>

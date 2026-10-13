@@ -66,6 +66,17 @@ export const App: React.FC = () => {
     }
   };
 
+  // Per-route document titles.
+  useEffect(() => {
+    const titles: Record<PageRoute, string> = {
+      welcome: 'Yaroslav Krupoder — Junior Web Developer',
+      about: 'About — Yaroslav Krupoder',
+      projects: 'Projects — Yaroslav Krupoder',
+      contacts: 'Contacts — Yaroslav Krupoder'
+    };
+    document.title = titles[currentRoute];
+  }, [currentRoute]);
+
   const toggleTheme = () => {
     // No-op: Factory theme is dark-only.
   };
