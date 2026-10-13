@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { experience } from '../data/experience';
-import { competencyMatrices } from '../data/skills';
+import { competencyMatrices, certifications } from '../data/skills';
 import {
   ExternalLink,
   Cpu,
@@ -41,85 +41,70 @@ export const AboutView: React.FC = () => {
       type: 'experience',
       role: 'AI Agent Developer Intern',
       organization: 'Grenergy LLC',
-      location: experience[0]?.location || 'Spain / Remote',
-      program: 'Erasmus+ Traineeship',
-      period: 'Jun 2026 – Sep 2026',
-      statusText: 'Continuing Remotely as Contributor',
-      statusType: 'active',
-      highlights: experience[0]?.highlights || [
-        'Contributed to meetbadi.com — live meeting transcription, translation, and AI summary service for Google Meet, Zoom, and Teams.',
-        'Developed and maintained the website and Chrome extension frontend using TypeScript and React.',
-        'Designed and integrated backend services, authentication flows, and PostgreSQL tables with Supabase.',
-        'Engineered desktop application features utilizing Go and Wails.',
-        'Implemented LLM inference workflows via OpenRouter for multi-language translation and meeting digest generation.'
-      ],
-      link: {
-        text: 'meetbadi.com',
-        url: 'https://meetbadi.com'
-      },
-      techBadges: ['TypeScript', 'React', 'Go', 'Wails', 'Supabase', 'PostgreSQL', 'OpenRouter', 'Chrome Extension']
+      location: experience[0]?.location || 'Hybrid, Istanbul',
+      program: 'Internship',
+      period: 'Jun 2026 – Aug 2026',
+      highlights: experience[0]?.highlights || [],
+      link: experience[0]?.link,
+      techBadges: ['Python', 'TypeScript/JavaScript', 'REST APIs', 'OpenRouter', 'Stripe', 'Resend', 'Supabase', 'PostgreSQL', 'Chrome Extension', 'Linux/VPS', 'CI/CD', 'Claude Code']
     },
     {
       id: 'university',
       indexTag: '[EDU // 01]',
       type: 'education',
-      role: 'B.S. in Software Engineering',
-      organization: 'University Degree in Software Engineering',
-      location: 'Bulgaria',
+      role: 'BSc Software Engineering',
+      organization: 'Varna University of Management',
+      location: 'Varna, Bulgaria',
       program: 'Undergraduate Degree Program',
-      period: '2024 – Present (Year 2)',
+      period: 'Sep 2025 – Present',
       statusText: 'In Progress // Active Enrollment',
       statusType: 'ongoing',
       highlights: [
-        'Comprehensive curriculum in computer science theory: Algorithms, Data Structures, Relational Database Theory, and Operating Systems.',
-        'In-depth study and practical application of Clean Architecture, Object-Oriented Analysis & Design (OOAD), and Design Patterns in C# and Python.',
-        'Engineered semester software engineering projects adhering to strict version control standards, automated unit testing, and design documentation.',
-        'Consistently applying industrial development workflows (branching, code reviews, continuous integration) into academic laboratory coursework.'
+        'Relevant coursework: Object-Oriented Programming, Data Structures & Algorithms, Software Design, SDLC, Agile.'
       ],
-      techBadges: ['C#', '.NET', 'Python', 'Algorithms & Data Structures', 'SQL / Relational DBs', 'Clean Architecture', 'Git']
+      techBadges: ['OOP', 'Data Structures & Algorithms', 'Software Design', 'SDLC', 'Agile']
     },
     {
-      id: 'systems-milestones',
-      indexTag: '[SYS // 01]',
+      id: 'projects-track',
+      indexTag: '[PRJ // 01]',
       type: 'engineering',
-      role: 'Applied Systems & Tooling Engineering',
-      organization: 'Independent Projects & Open Source',
-      location: 'Kyiv / Remote',
-      program: 'Systems & Research Track',
+      role: 'Independent Projects & Open Source',
+      organization: 'Unitra · PyGlow · Applied Data Science',
+      location: 'Varna, Bulgaria / Remote',
+      program: 'Project Track',
       period: '2025 – Present',
-      statusText: 'Active System Deployments',
+      statusText: 'Active Development',
       statusType: 'ongoing',
       highlights: [
-        'Architected Unitra — automated desktop diagnostics station in C# (.NET/WPF) interfacing with industrial hardware rigs with microsecond timing precision.',
-        'Developed PyGlow — high-throughput computer vision pipeline with SIMD and GPU acceleration routines for real-time frame analysis.',
-        'Implemented Python AST static analysis pipelines for deterministic test scaffolding and automatic unit test generation.',
-        'Built fullstack web and desktop applications using FastAPI, React, Supabase, and Wails.'
+        'Unitra — AI-powered desktop application that automatically generates Python unit tests from source code (AST analysis, LLM prompt construction, Flask + pywebview, pytest).',
+        'PyGlow — lightweight Python code editor built from scratch (Pygments highlighting, local LLM autocomplete, plugin-style architecture).',
+        'Applied Data Science — exploratory data analysis on real estate, retail, and student datasets with pandas, seaborn, and reproducible Jupyter Notebook reports.'
       ],
-      techBadges: ['.NET / WPF', 'Python / AST', 'FastAPI', 'Qdrant / Vector DBs', 'Wails (Go)', 'Docker', 'pytest']
+      techBadges: ['Python', 'Flask', 'pywebview', 'PySide6', 'Pygments', 'pytest', 'pandas', 'Jupyter Notebook']
     }
   ];
 
   const engineeringPillars = [
     {
       index: '01',
-      tag: '[SPEC // DETERMINISM]',
-      title: 'Deterministic State & Architecture',
+      tag: '[SPEC // PRODUCTION]',
+      title: 'Keep live systems running',
       description:
-        'Software must yield predictable outcomes under heavy traffic, hardware glitches, or degraded network states. I favor explicit state machines, strict typing, and defensive boundaries over implicit side effects.'
+        'Update layouts and features, fix bugs, and debug data and integration issues reported by users — on the web app, Chrome extension, and Supabase backend.'
     },
     {
       index: '02',
-      tag: '[SPEC // MODULARITY]',
-      title: 'Strict Domain Isolation',
+      tag: '[SPEC // AI WORKFLOW]',
+      title: 'AI-assisted, human-reviewed',
       description:
-        'Business domain rules must remain decoupled from transport protocols, external APIs, and presentation surfaces. Clean Architecture and Repository abstractions allow swapping persistence or UI with zero core logic changes.'
+        'Daily Claude Code and agentic workflows to explore codebases, plan changes, write code, and debug — with AI output reviewed for correctness before shipping.'
     },
     {
       index: '03',
-      tag: '[SPEC // OBSERVABILITY]',
-      title: 'Measurable Telemetry & Verification',
+      tag: '[SPEC // WORKFLOW]',
+      title: 'Organized GitHub delivery',
       description:
-        'Code is incomplete without automated verification and runtime observability. Every system I build includes test coverage on core workflows, structured telemetry metrics, and clear degradation modes.'
+        'Organized branches, commits, and pull requests, clear task communication, technical documentation, and CI/CD + Linux/VPS basics to deliver fixes reliably.'
     }
   ];
 
@@ -149,10 +134,10 @@ export const AboutView: React.FC = () => {
 
         <div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 mb-4">
-            Engineering Profile &amp; Provenance
+            Junior Web Developer — AI Automation
           </h1>
           <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-4xl">
-            Second-year Software Engineering student specializing in resilient systems, C#, Python, and Applied AI workflows. Demonstrated production experience through an Erasmus+ internship at Grenergy LLC contributing to meetbadi.com, engineering native desktop utilities, and architecting fullstack automated services with clean domain separation.
+            Software Engineering student and Junior Web Developer with production experience maintaining a live web platform (web app, Chrome extension, Supabase backend). Daily user of Claude Code and agentic AI workflows for exploring codebases, planning changes, writing code, and debugging. JavaScript · React · TypeScript · Node.js · Python · REST APIs.
           </p>
         </div>
 
@@ -163,10 +148,10 @@ export const AboutView: React.FC = () => {
               Academic Track
             </span>
             <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 block">
-              B.S. Software Eng.
+              BSc Software Eng.
             </span>
             <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-500 block">
-              Year 2 · In Progress
+              VUM · Sep 2025 – Present
             </span>
           </div>
 
@@ -175,10 +160,10 @@ export const AboutView: React.FC = () => {
               Industry Experience
             </span>
             <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 block">
-              Erasmus+ Trainee
+              AI Agent Intern
             </span>
             <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-500 block">
-              Grenergy LLC · meetbadi
+              Grenergy LLC · Jun–Aug 2026
             </span>
           </div>
 
@@ -187,10 +172,10 @@ export const AboutView: React.FC = () => {
               Core Languages
             </span>
             <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 block">
-              C#, Python, TS, SQL
+              JS, TS, Python
             </span>
             <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-500 block">
-              Typed &amp; Compiled
+              React · REST APIs
             </span>
           </div>
 
@@ -199,7 +184,7 @@ export const AboutView: React.FC = () => {
               Geographic Base
             </span>
             <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 block">
-              Bulgaria / Remote
+              Varna, Bulgaria
             </span>
             <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-500 block">
               Open to Relocation
@@ -220,7 +205,7 @@ export const AboutView: React.FC = () => {
             </h2>
           </div>
           <span className="text-xs font-mono text-zinc-500 dark:text-zinc-500">
-            CHRONOLOGICAL NODES · 2024 — PRESENT
+            CHRONOLOGICAL NODES · 2025 — PRESENT
           </span>
         </div>
 
@@ -361,9 +346,9 @@ export const AboutView: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {matrix.id === 'systems-languages' && <Cpu className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />}
-                    {matrix.id === 'ai-data' && <Activity className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />}
-                    {matrix.id === 'arch-tools' && <Layers className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />}
+                    {matrix.id === 'frontend' && <Cpu className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />}
+                    {matrix.id === 'backend' && <Activity className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />}
+                    {matrix.id === 'ai-workflow' && <Layers className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />}
                     <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
                       {matrix.title}
                     </h3>
@@ -427,6 +412,54 @@ export const AboutView: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Certifications */}
+      <section className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+          <div>
+            <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block mb-1">
+              [CERTS // CV] · VERIFIED CREDENTIALS
+            </span>
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              Certifications
+            </h2>
+          </div>
+          <span className="text-xs font-mono text-zinc-500 dark:text-zinc-500">
+            5 CREDENTIALS · 2026
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {certifications.map((cert) => (
+            <div
+              key={cert.title}
+              className="glass-panel p-5 rounded-2xl space-y-2 border border-zinc-200 dark:border-zinc-800/80"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 font-semibold">
+                    {cert.provider}
+                  </div>
+                  <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                    {cert.title}
+                  </h3>
+                </div>
+                <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 shrink-0">
+                  {cert.date}
+                </span>
+              </div>
+              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                {cert.detail}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="glass-panel p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 text-sm text-zinc-700 dark:text-zinc-300">
+          <span className="font-semibold">Spoken Languages: </span>
+          Ukrainian — Native · English — B2 (C1 Reading)
         </div>
       </section>
 

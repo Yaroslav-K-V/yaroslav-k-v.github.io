@@ -1,7 +1,7 @@
 {
   "name": "site_yk",
   "version": "1.0.0",
-  "description": "A personal portfolio website. Includes public pages, a research blog.",
+  "description": "A personal portfolio website. Includes public pages, projects, experience and contacts.",
   "main": "index.js",
   "scripts": {
     "dev": "vite",

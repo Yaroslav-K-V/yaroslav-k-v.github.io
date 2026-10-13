@@ -22,7 +22,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     { route: 'welcome', label: 'Welcome' },
     { route: 'about', label: 'About Me' },
     { route: 'projects', label: 'Projects' },
-    { route: 'research', label: 'Research' },
     { route: 'contacts', label: 'Contacts' }
   ];
 

@@ -92,54 +92,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
   };
 
   const getProjectDossier = (p: Project): ProjectDossierData => {
-    if (p.id === 8) {
-      // meetbadi.com
-      return {
-        problemStatement:
-          'Virtual meetings across Google Meet, Zoom, and Microsoft Teams generate extensive verbal conversations without persistent, real-time structured retention or immediate cross-language transcription. Meeting participants often miss action items or face language comprehension hurdles.',
-        scopeObjectives: [
-          'Sub-200ms real-time audio capture and streaming transcription pipeline.',
-          'Unified system spanning browser extension (DOM injection) and native desktop client (Wails + Go).',
-          'Secure PostgreSQL persistence with Row-Level Security for authenticated meeting participants.',
-          'Low-latency AI inference via OpenRouter streaming for instantaneous multilingual summaries.'
-        ],
-        keyDecisions: [
-          {
-            title: 'Go + Wails Desktop Layer vs Electron',
-            reasoning:
-              'Selected Go paired with Wails over Electron to cut idle memory consumption by ~80% (<60MB vs 300MB+ in Electron) while retaining direct low-level OS audio access.'
-          },
-          {
-            title: 'Supabase Realtime vs Custom WebSocket Fleet',
-            reasoning:
-              'Utilized Supabase PostgreSQL real-time replication channels to syndicate transcript deltas across clients with zero infrastructure maintenance overhead.'
-          },
-          {
-            title: 'Multi-Model Fallback via OpenRouter',
-            reasoning:
-              'Architected the AI pipeline on OpenRouter to achieve dynamic model routing (GPT-4o, Claude 3.5, Llama 3) ensuring low-latency streaming and zero service downtime.'
-          }
-        ],
-        stackMatrix: [
-          { category: 'Frontend / Client', items: ['TypeScript', 'React', 'Chrome Extension MV3'] },
-          { category: 'Desktop Engine', items: ['Go 1.22+', 'Wails v2', 'Native OS Bindings'] },
-          { category: 'Backend & Database', items: ['Supabase', 'PostgreSQL', 'Realtime WebSockets', 'Auth'] },
-          { category: 'AI Pipeline', items: ['OpenRouter', 'Streaming LLM APIs', 'Multi-Model Routing'] }
-        ],
-        metrics: [
-          { label: 'Streaming Latency', value: '<200ms TTFT' },
-          { label: 'Desktop Memory Footprint', value: '<60 MB' },
-          { label: 'Conferencing Support', value: 'Meet · Zoom · Teams' }
-        ],
-        architectureLayers: [
-          { name: 'Client Layer', detail: 'React + TypeScript Chrome extension & web dashboard' },
-          { name: 'Desktop Client', detail: 'Go runtime paired with Wails for native OS bindings' },
-          { name: 'Backend & Storage', detail: 'Supabase (PostgreSQL, Auth, Realtime channels)' },
-          { name: 'AI Pipeline', detail: 'OpenRouter multi-model LLM inference for low-latency translation and structured meeting minutes' }
-        ]
-      };
-    }
-
     if (p.id === 4) {
       // Unitra
       return {
@@ -163,16 +115,16 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
               'Served the modern HTML/JS interface from a local Flask server rendered in a native pywebview window, eliminating Node.js runtime bloat and reducing distribution complexity.'
           },
           {
-            title: 'LangChain AI Agent Integration',
+            title: 'LLM Integration Layer',
             reasoning:
-              'Supplied the LLM with parsed AST signatures and docstrings, allowing the agent to generate idiomatic, fixture-driven pytest suites rather than generic hallucinations.'
+              'Supplied the LLM with parsed AST signatures and docstrings, allowing prompt-engineered generation of syntactically valid, runnable pytest suites.'
           }
         ],
         stackMatrix: [
           { category: 'Core Analysis', items: ['Python 3.10+', 'AST Module', 'Static Analysis Engine'] },
           { category: 'Desktop GUI', items: ['Flask', 'pywebview', 'HTML5/CSS3', 'JavaScript'] },
           { category: 'Test Automation', items: ['pytest', 'Subprocess Runner', 'Live Output Stream'] },
-          { category: 'AI Layer', items: ['LangChain', 'OpenAI-Compatible APIs'] }
+          { category: 'AI Layer', items: ['LLM APIs', 'Prompt Engineering'] }
         ],
         metrics: [
           { label: 'AST Traversal', value: '100% Offline' },
@@ -182,7 +134,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
         architectureLayers: [
           { name: 'Modular Separation', detail: 'routes / core logic / agent / UI' },
           { name: 'Desktop Host', detail: 'Flask serves the frontend inside a native desktop window via pywebview' },
-          { name: 'AI Agent', detail: 'LangChain agent handles AI-assisted test generation' },
+          { name: 'AI Layer', detail: 'LLM integration layer with prompt engineering for pytest generation' },
           { name: 'Test Runner', detail: 'Subprocess-based pytest runner streaming stdout/stderr directly into GUI' }
         ]
       };
@@ -211,15 +163,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
               'Utilized Pygments for fast, lightweight lexical tokenization, avoiding the heavy memory footprint of full language server protocols for simple edits.'
           },
           {
-            title: 'Local Transformer Inference',
+            title: 'Local LLM Autocomplete',
             reasoning:
-              'Embedded local transformer models for private code completion, guaranteeing zero code telemetry and 100% air-gapped functionality.'
+              'Embedded optional local LLM-based inline autocomplete for private code completion while editing.'
           }
         ],
         stackMatrix: [
           { category: 'GUI Engine', items: ['PySide6 (Qt for Python)', 'Hardware Accelerated'] },
           { category: 'Syntax Highlighter', items: ['Pygments'] },
-          { category: 'Machine Learning', items: ['Transformers', 'PyTorch / ONNX Local Inference'] },
+          { category: 'Machine Learning', items: ['Local LLM', 'Inline Autocomplete'] },
           { category: 'Operating System', items: ['OS Theme Detection', 'Session Serialization'] }
         ],
         metrics: [
@@ -230,7 +182,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
         architectureLayers: [
           { name: 'Editor Viewport', detail: 'PySide6 QPlainTextEdit with custom syntax highlighter' },
           { name: 'Lexical Analysis', detail: 'Pygments tokenization with custom high-contrast color scheme' },
-          { name: 'Inference Layer', detail: 'Background thread local transformer model for non-blocking autocomplete' }
+          { name: 'Inference Layer', detail: 'Optional local LLM autocomplete triggered inline while editing' }
         ]
       };
     }
@@ -281,53 +233,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
       };
     }
 
-    if (p.id === 2) {
-      // Car Managing Book
-      return {
-        problemStatement:
-          'Vehicle owners and fleet managers frequently struggle with fragmented physical maintenance receipts, missed service milestones, and lack of historical cost analytics, leading to costly vehicle breakdowns.',
-        scopeObjectives: [
-          'Type-safe desktop application for logging and analyzing automotive maintenance history.',
-          'Multi-criteria filtering by service date range, mileage thresholds, cost, and service type.',
-          'Cost aggregation and expense forecasting engine.',
-          'Reliable persistent local storage with input validation.'
-        ],
-        keyDecisions: [
-          {
-            title: 'C# & .NET Platform',
-            reasoning:
-              'Selected .NET for strong static typing, compiled execution speed, and seamless integration with Windows desktop components.'
-          },
-          {
-            title: 'MVVM Architectural Pattern',
-            reasoning:
-              'Separated View logic from ViewModel business logic and data models, establishing testable and maintainable code architecture.'
-          },
-          {
-            title: 'Repository Data Pattern',
-            reasoning:
-              'Decoupled data access from domain logic using the Repository pattern to ensure consistent data transactions and persistence.'
-          }
-        ],
-        stackMatrix: [
-          { category: 'Platform', items: ['C#', '.NET Framework', 'WinForms'] },
-          { category: 'Architecture', items: ['MVVM Pattern', 'Repository Pattern'] },
-          { category: 'Storage', items: ['Persistent Local Storage', 'Structured Schema'] }
-        ],
-        metrics: [
-          { label: 'Architecture', value: 'MVVM Pattern' },
-          { label: 'Runtime', value: 'Type-Safe C# / .NET' },
-          { label: 'Data Integrity', value: 'Strict Input Validation' }
-        ],
-        architectureLayers: [
-          { name: 'View Layer', detail: 'WinForms UI with responsive controls and event dispatchers' },
-          { name: 'ViewModel Layer', detail: 'Business logic, record aggregation, and state manipulation' },
-          { name: 'Repository Layer', detail: 'Data persistence abstraction with structured validation' }
-        ]
-      };
-    }
-
-    // Default / Generic fallback (e.g. Expense Tracker)
+    // Default / Generic fallback
     return {
       problemStatement: p.description,
       scopeObjectives: p.features,
@@ -412,7 +318,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
 
             <div className="flex items-center gap-3">
               <span className="hidden md:inline text-[11px] text-zinc-500 dark:text-zinc-400">
-                REV: 2024.Q4 // SPEC VERIFIED
+                REV: 2026 // SPEC VERIFIED
               </span>
               <button
                 onClick={onClose}

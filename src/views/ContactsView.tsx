@@ -73,7 +73,7 @@ export const ContactsView: React.FC = () => {
       displayValue: contactsData.linkedinDisplay,
       status: 'VERIFIED IDENTITY // PROFILE',
       statusType: 'verified',
-      description: 'Professional career timeline, Erasmus+ traineeship credentials, and academic trajectory.',
+      description: 'Professional career timeline, internship credentials, and academic trajectory.',
       href: contactsData.linkedin,
       actionLabel: 'View LinkedIn',
       isExternal: true,
@@ -124,7 +124,7 @@ export const ContactsView: React.FC = () => {
             Direct Communication &amp; Inquiries
           </h1>
           <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-4xl">
-            Open to software engineering internship opportunities, technical collaborations, and systems discussions. Direct inbox and messaging channels are monitored daily with an expected response within 24 hours.
+            Open to software engineering internship opportunities, technical collaborations, and troubleshooting discussions. Based in Varna, Bulgaria — direct inbox and messaging channels are monitored daily with an expected response within 24 hours.
           </p>
         </div>
 
@@ -152,7 +152,7 @@ export const ContactsView: React.FC = () => {
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
               <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                Bulgaria · UTC+2 (EET)
+                Varna, Bulgaria · UTC+2 (EET)
               </span>
             </div>
             <span className="text-[11px] font-mono text-zinc-500 block">
@@ -193,7 +193,7 @@ export const ContactsView: React.FC = () => {
               Curriculum Vitae &amp; Engineering Dossier
             </h2>
             <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed">
-              Complete documentation covering academic foundations, Erasmus+ traineeship at Grenergy LLC, technical stack matrices, project repositories, and contact coordinates.
+              Complete documentation covering academic foundations, Grenergy LLC internship, technical skills, project repositories, and contact coordinates.
             </p>
             <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-zinc-500 pt-1">
               <span>FORMAT: PDF</span>
@@ -331,17 +331,17 @@ export const ContactsView: React.FC = () => {
         </div>
       </section>
 
-      {/* Direct Telephony & Secondary Channels */}
+      {/* Direct Telephony */}
       <section className="glass-panel p-6 sm:p-7 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div className="flex items-center gap-2">
             <Phone className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
             <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-              Direct Telephony &amp; Voice Lines
+              Direct Telephony &amp; Portfolio
             </h3>
           </div>
           <span className="text-xs font-mono text-zinc-500">
-            DIRECT CELLULAR / TELEPHONY
+            PHONE / PORTFOLIO
           </span>
         </div>
 
@@ -350,22 +350,22 @@ export const ContactsView: React.FC = () => {
           <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-900/30 flex items-center justify-between gap-3">
             <div>
               <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block">
-                Primary Line (Bulgaria)
+                Phone (Varna, Bulgaria)
               </span>
               <a
-                href={`tel:${contactsData.phoneBg}`}
+                href={`tel:${contactsData.phone}`}
                 className="text-sm font-mono font-bold text-zinc-900 dark:text-zinc-100 hover:underline"
               >
-                {contactsData.phoneBg}
+                {contactsData.phone}
               </a>
             </div>
             <button
-              onClick={() => handleCopy('phoneBg', contactsData.phoneBg, 'Bulgaria Phone')}
+              onClick={() => handleCopy('phone', contactsData.phone, 'Phone')}
               className="p-2 rounded-lg text-xs font-mono border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors text-zinc-600 dark:text-zinc-400"
               title="Copy Phone"
               aria-label="Copy phone number"
             >
-              {copiedKey === 'phoneBg' ? (
+              {copiedKey === 'phone' ? (
                 <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               ) : (
                 <Copy className="w-3.5 h-3.5" />
@@ -373,7 +373,7 @@ export const ContactsView: React.FC = () => {
             </button>
           </div>
 
-          {/* Ukraine Number */}
+          {/* Portfolio Website */}
           <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-900/30 flex items-center justify-between gap-3">
             <div>
               <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block">
@@ -389,10 +389,39 @@ export const ContactsView: React.FC = () => {
             <button
               onClick={() => handleCopy('phoneUa', contactsData.phoneUa, 'Ukraine Phone')}
               className="p-2 rounded-lg text-xs font-mono border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors text-zinc-600 dark:text-zinc-400"
-              title="Copy Phone"
-              aria-label="Copy phone number"
+              title="Copy Ukraine Phone"
+              aria-label="Copy Ukraine phone number"
             >
               {copiedKey === 'phoneUa' ? (
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              ) : (
+                <Copy className="w-3.5 h-3.5" />
+              )}
+            </button>
+          </div>
+
+          {/* Portfolio Website */}
+          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-900/30 flex items-center justify-between gap-3">
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block">
+                Portfolio Website
+              </span>
+              <a
+                href={contactsData.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-mono font-bold text-zinc-900 dark:text-zinc-100 hover:underline"
+              >
+                {contactsData.websiteDisplay}
+              </a>
+            </div>
+            <button
+              onClick={() => handleCopy('website', contactsData.website, 'Website URL')}
+              className="p-2 rounded-lg text-xs font-mono border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors text-zinc-600 dark:text-zinc-400"
+              title="Copy Website URL"
+              aria-label="Copy website URL"
+            >
+              {copiedKey === 'website' ? (
                 <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               ) : (
                 <Copy className="w-3.5 h-3.5" />

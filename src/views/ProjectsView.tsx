@@ -34,13 +34,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
   const matchesCategory = (project: Project, category: FilterCategory): boolean => {
     if (category === 'all') return true;
     if (category === 'systems') {
-      return (
-        project.categories.includes('desktop') &&
-        (project.tech.some((t) => ['C#', '.NET', 'Go', 'Wails', 'pywebview'].includes(t)) ||
-          project.id === 4 ||
-          project.id === 8 ||
-          project.id === 2)
-      );
+      return project.tech.some((t) => ['pytest', 'Flask', 'pywebview'].includes(t));
     }
     return project.categories.includes(category as ProjectCategory);
   };
@@ -86,7 +80,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
 
   // Flagship projects get prominent wide cards in the engineering grid
   const isFlagship = (project: Project): boolean => {
-    return project.id === 8 || project.id === 4; // meetbadi.com or Unitra
+    return project.id === 4; // Unitra
   };
 
   return (
@@ -125,12 +119,11 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
         {/* Title and Engineering Description */}
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Software Systems & Architectures
+            Projects
           </h1>
           <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-300 max-w-3xl leading-relaxed">
-            Desktop engines, AI-powered automation pipelines, and fullstack services. Each module is
-            built with strict modular boundaries, deterministic performance, and production reliability.
-            Click any architecture card to inspect the full engineering specification sheet.
+            Unitra test generator, PyGlow code editor, and applied data science notebooks. Each card matches the CV project descriptions and tech stacks.
+            Click any card to inspect the full specification sheet.
           </p>
         </div>
 

@@ -6,7 +6,6 @@ import { ProjectModal } from './components/ProjectModal';
 import { HomeView } from './views/HomeView';
 import { AboutView } from './views/AboutView';
 import { ProjectsView } from './views/ProjectsView';
-import { ResearchView } from './views/ResearchView';
 import { ContactsView } from './views/ContactsView';
 import { AnimatePresence } from 'framer-motion';
 
@@ -16,7 +15,7 @@ function parseRouteFromLocation(): PageRoute {
   const p = urlParams.get('p');
   if (p) {
     const cleaned = p.replace(/^\//, '').replace(/\/$/, '');
-    if (['about', 'projects', 'research', 'contacts'].includes(cleaned)) {
+    if (['about', 'projects', 'contacts'].includes(cleaned)) {
       window.history.replaceState(null, '', `/${cleaned}/`);
       return cleaned as PageRoute;
     }
@@ -25,7 +24,7 @@ function parseRouteFromLocation(): PageRoute {
   // Check hash fallback
   if (window.location.hash) {
     const hashRoute = window.location.hash.replace(/^#\/?/, '').replace(/\/$/, '');
-    if (['about', 'projects', 'research', 'contacts'].includes(hashRoute)) {
+    if (['about', 'projects', 'contacts'].includes(hashRoute)) {
       return hashRoute as PageRoute;
     }
   }
@@ -34,7 +33,6 @@ function parseRouteFromLocation(): PageRoute {
   const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
   if (path.startsWith('about')) return 'about';
   if (path.startsWith('projects')) return 'projects';
-  if (path.startsWith('research')) return 'research';
   if (path.startsWith('contacts')) return 'contacts';
   return 'welcome';
 }
@@ -101,7 +99,6 @@ export const App: React.FC = () => {
               onSelectProject={(p) => setSelectedProject(p)}
             />
           )}
-          {currentRoute === 'research' && <ResearchView key="research" />}
           {currentRoute === 'contacts' && <ContactsView key="contacts" />}
         </AnimatePresence>
       </main>

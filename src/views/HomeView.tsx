@@ -1,8 +1,7 @@
 import React from 'react';
 import { PageRoute } from '../types';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, ChevronDown } from 'lucide-react';
-import { SystemArchitecture } from '../components/SystemArchitecture';
+import { ArrowUpRight } from 'lucide-react';
 
 interface HomeViewProps {
   onNavigate: (route: PageRoute) => void;
@@ -24,41 +23,26 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       route: 'about',
       title: 'About Me',
       tag: 'BACKGROUND // BIO',
-      description: 'Education, Erasmus+ software engineering internship at Grenergy LLC, and core principles.',
-      meta: 'C# · Python · TypeScript · Systems Design'
+      description: 'Software Engineering student, Grenergy LLC internship, skills, and certifications.',
+      meta: 'JS · React · TS · Python · REST APIs'
     },
     {
       index: '02',
       route: 'projects',
       title: 'Projects',
-      tag: 'PRODUCTION SYSTEMS',
-      description: 'meetbadi.com, Unitra desktop test station, PyGlow vision pipeline, and data engineering.',
-      meta: 'FastAPI · WPF · Qdrant · React · SIMD'
+      tag: 'PROJECTS // CV',
+      description: 'Unitra test generator, PyGlow code editor, and applied data science notebooks.',
+      meta: 'Python · Flask · PySide6 · pandas'
     },
     {
       index: '03',
-      route: 'research',
-      title: 'Research / Writing',
-      tag: 'SPECIFICATIONS // NOTES',
-      description: 'Technical notes on event loops, RAG pipelines, microsecond hardware IO, and modular architecture.',
-      meta: 'Deterministic Systems · Vector Embeddings'
-    },
-    {
-      index: '04',
       route: 'contacts',
       title: 'Contacts',
       tag: 'COMMS // CHANNELS',
-      description: 'Direct email, phone, LinkedIn profile, verified public channels, and PDF resume download.',
-      meta: 'Kyiv / Remote · UTC+2 · Fast Response'
+      description: 'Direct email, phone, LinkedIn profile, GitHub, and PDF resume download.',
+      meta: 'Varna, Bulgaria · Fast Response'
     }
   ];
-
-  const scrollToArchitecture = () => {
-    const el = document.getElementById('architecture-canvas');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <motion.div
@@ -77,31 +61,34 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
           <span className="font-semibold tracking-wider uppercase">
-            SYSTEM ARCHITECTURE // SOFTWARE ENGINEERING
+            JUNIOR WEB DEVELOPER // AI AUTOMATION
           </span>
         </div>
 
         {/* Monochromatic Hero Headline */}
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.12] max-w-4xl">
-          Architecting reliable systems with{' '}
+          Junior Web Developer building with{' '}
           <span className="text-zinc-500 dark:text-zinc-400">
-            Python, C#, and Applied AI.
+            JavaScript, React, and Applied AI.
           </span>
         </h1>
 
         {/* Hero Subtitle */}
         <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 max-w-3xl leading-relaxed">
-          Specialized in resilient desktop engines, high-throughput data automation, and context-augmented AI systems. Focused on clean modular architecture, verifiable engineering, and production reliability.
+          Software Engineering student with production experience maintaining a live web platform (web app, Chrome extension, Supabase backend). Daily user of Claude Code and agentic AI workflows for exploring codebases, writing code, and debugging.
         </p>
 
         {/* Quick Navigation CTAs */}
         <div className="flex flex-wrap items-center gap-3 pt-2">
           <button
-            onClick={scrollToArchitecture}
+            onClick={() => {
+              onNavigate('about');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 font-mono text-xs sm:text-sm font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all shadow-sm group"
           >
-            <span>Explore Systems</span>
-            <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+            <span>About Me</span>
+            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </button>
 
           <button
@@ -120,22 +107,17 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         <div className="pt-4 flex flex-wrap items-center gap-4 sm:gap-8 text-[11px] font-mono text-zinc-500 dark:text-zinc-400 border-t border-zinc-200/60 dark:border-white/5">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>STACK: C# (.NET) / PYTHON / TS</span>
+            <span>STACK: JS / REACT / TS / PYTHON</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>PATTERN: CLEAN ARCHITECTURE</span>
+            <span>PATTERN: REST APIS / SUPABASE</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             <span>STATUS: OPEN FOR INTERNSHIPS</span>
           </div>
         </div>
-      </section>
-
-      {/* Embedded System Architecture Centerpiece */}
-      <section id="architecture-canvas" className="scroll-mt-20">
-        <SystemArchitecture />
       </section>
 
       {/* Directory Modules Grid */}
@@ -146,7 +128,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               DIRECTORY INDEX
             </span>
             <span className="font-mono text-[10px] text-zinc-400 dark:text-zinc-500">
-              // 04 MODULES AVAILABLE
+              // 03 MODULES AVAILABLE
             </span>
           </div>
           <span className="font-mono text-[10px] text-zinc-400 hidden sm:inline">
