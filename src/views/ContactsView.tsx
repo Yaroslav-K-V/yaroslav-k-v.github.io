@@ -331,21 +331,18 @@ export const ContactsView: React.FC = () => {
         </div>
       </section>
 
-      {/* Phone & portfolio */}
+      {/* Phone */}
       <section className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-zinc-100 dark:border-[#3d3a39] pb-3">
           <div className="flex items-center gap-2">
             <Phone className="w-4 h-4 text-[#8a8380] dark:text-[#8a8380]" />
             <h3 className="text-base font-bold text-zinc-900 dark:text-[#eeeeee]">
-              Phone & portfolio
+              Phone
             </h3>
           </div>
-          <span className="text-xs font-mono text-[#8a8380]">
-            
-          </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Bulgaria Number */}
           <div className="p-4 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39] bg-[#eeeeee]/40 dark:bg-[#1d1a18]/30 flex items-center justify-between gap-3">
             <div>
@@ -394,64 +391,6 @@ export const ContactsView: React.FC = () => {
             >
               {copiedKey === 'phoneUa' ? (
                 <Check className="w-3.5 h-3.5 text-[#ee6018] dark:text-[#ee6018]" />
-              ) : (
-                <Copy className="w-3.5 h-3.5" />
-              )}
-            </button>
-          </div>
-
-          {/* Portfolio Website */}
-          <div className="p-4 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39] bg-[#eeeeee]/40 dark:bg-[#1d1a18]/30 flex items-center justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] block">
-                Portfolio Website
-              </span>
-              <a
-                href={contactsData.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-mono font-bold text-zinc-900 dark:text-[#eeeeee] hover:underline"
-              >
-                {contactsData.websiteDisplay}
-              </a>
-            </div>
-            <button
-              onClick={() => handleCopy('website', contactsData.website, 'Website URL')}
-              className="p-2 rounded-[3px] text-xs font-mono border border-[#3d3a39] dark:border-[#3d3a39] hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors text-zinc-600 dark:text-[#8a8380]"
-              title="Copy Website URL"
-              aria-label="Copy website URL"
-            >
-              {copiedKey === 'website' ? (
-                <Check className="w-3.5 h-3.5 text-[#ee6018] dark:text-[#ee6018]" />
-              ) : (
-                <Copy className="w-3.5 h-3.5" />
-              )}
-            </button>
-          </div>
-
-          {/* Portfolio Website */}
-          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-900/30 flex items-center justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block">
-                Portfolio Website
-              </span>
-              <a
-                href={contactsData.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-mono font-bold text-zinc-900 dark:text-zinc-100 hover:underline"
-              >
-                {contactsData.websiteDisplay}
-              </a>
-            </div>
-            <button
-              onClick={() => handleCopy('website', contactsData.website, 'Website URL')}
-              className="p-2 rounded-lg text-xs font-mono border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors text-zinc-600 dark:text-zinc-400"
-              title="Copy Website URL"
-              aria-label="Copy website URL"
-            >
-              {copiedKey === 'website' ? (
-                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               ) : (
                 <Copy className="w-3.5 h-3.5" />
               )}

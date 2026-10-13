@@ -11,8 +11,6 @@ export const contactsData = {
   telegramDisplay: '@yaroslav_krupoder',
   github: 'https://github.com/Yaroslav-K-V',
   githubDisplay: 'github.com/Yaroslav-K-V',
-  website: 'https://yaroslav-k-v.github.io',
-  websiteDisplay: 'yaroslav-k-v.github.io',
   resumeUrl: 'https://drive.google.com/file/d/1NKXsgP631inObnjInSwFPNayHN7PGZUB/view?usp=sharing',
   lastUpdated: 'October 2026'
 };
