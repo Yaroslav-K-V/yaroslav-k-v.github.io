@@ -366,6 +366,17 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                     </div>
                   </div>
 
+                  {project.image && (
+                    <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
+                      <img
+                        src={project.image}
+                        alt={`${project.title} demo`}
+                        loading="lazy"
+                        className="w-full aspect-video object-cover"
+                      />
+                    </div>
+                  )}
+
                   <div>
                     <h3 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee] group-hover:text-[#ee6018] dark:group-hover:text-[#ee6018] transition-colors">
                       {project.title}

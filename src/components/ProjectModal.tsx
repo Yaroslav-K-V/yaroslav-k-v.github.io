@@ -348,8 +348,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                   {project.subtitle}
                 </p>
               </div>
-
-              {/* Action Triggers in Header */}
               <div className="flex flex-wrap items-center gap-2.5 pt-1">
                 {project.url && (
                   <a
@@ -375,6 +373,17 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                 )}
               </div>
             </div>
+
+            {project.image && (
+              <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
+                <img
+                  src={project.image}
+                  alt={`${project.title} demo`}
+                  loading="lazy"
+                  className="w-full aspect-video object-cover"
+                />
+              </div>
+            )}
 
             {/* Quick Metrics Bar */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">

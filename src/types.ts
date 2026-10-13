@@ -15,6 +15,7 @@ export interface Project {
   tech: string[];
   github?: string;
   url?: string;
+  image?: string;
 }
 
 export interface ExperienceItem {

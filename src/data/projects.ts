@@ -61,7 +61,8 @@ export const projects: Project[] = [
       'Architecture: modular plugin-style with persistent user settings'
     ],
     tech: ['Python', 'PySide6', 'Pygments', 'Local LLM'],
-    github: 'https://github.com/Yaroslav-K-V/PyGlow'
+    github: 'https://github.com/Yaroslav-K-V/PyGlow',
+    image: 'https://raw.githubusercontent.com/Yaroslav-K-V/PyGlow/main/assets/gif/demo.gif'
   },
   {
     id: 7,

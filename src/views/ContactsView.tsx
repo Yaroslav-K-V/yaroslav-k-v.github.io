@@ -11,9 +11,119 @@ import {
   ExternalLink,
   ShieldCheck,
   Clock,
-  ArrowDown
+  ArrowDown,
+  Send,
+  Loader2
 } from 'lucide-react';
 import { LinkedinIcon, GithubIcon, TelegramIcon } from '../components/Icons';
+
+type FormState = 'idle' | 'sending' | 'sent' | 'error';
+
+const ContactForm: React.FC = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [state, setState] = useState<FormState>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !email.trim() || !message.trim()) return;
+    setState('sending');
+    try {
+      const res = await fetch(`https://formspree.io/f/${contactsData.formspreeId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), message: message.trim() })
+      });
+      if (!res.ok) throw new Error('send failed');
+      setState('sent');
+      setName('');
+      setEmail('');
+      setMessage('');
+    } catch {
+      setState('error');
+    }
+  };
+
+  const inputClass =
+    'w-full px-4 py-2.5 rounded-[3px] text-sm bg-[#eeeeee]/5 dark:bg-[#eeeeee]/5 border border-[#3d3a39] text-zinc-900 dark:text-[#eeeeee] placeholder:text-[#8a8380] focus:outline-none focus:border-[#ee6018] transition-colors';
+
+  if (state === 'sent') {
+    return (
+      <div className="p-6 rounded-[3px] border border-[#ee6018]/30 bg-[#ee6018]/10 text-center space-y-2">
+        <Check className="w-6 h-6 mx-auto text-[#ee6018]" />
+        <p className="text-sm text-zinc-900 dark:text-[#eeeeee] font-medium">
+          Message sent — I usually reply within a day.
+        </p>
+        <button
+          onClick={() => setState('idle')}
+          className="text-xs font-mono text-[#8a8380] hover:text-[#eeeeee] transition-colors"
+        >
+          Send another
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Your name"
+          required
+          maxLength={100}
+          className={inputClass}
+        />
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Your email"
+          required
+          maxLength={200}
+          className={inputClass}
+        />
+      </div>
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Hi Yaroslav, …"
+        required
+        rows={4}
+        maxLength={2000}
+        className={`${inputClass} resize-y`}
+      />
+      {state === 'error' && (
+        <p className="text-xs text-[#ee6018]">
+          Couldn’t send — try email instead:{' '}
+          <a href={`mailto:${contactsData.email}`} className="underline">
+            {contactsData.email}
+          </a>
+        </p>
+      )}
+      <button
+        type="submit"
+        disabled={state === 'sending'}
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[3px] bg-[#eeeeee] text-[#101010] font-mono text-xs sm:text-sm font-semibold hover:bg-white transition-colors disabled:opacity-60"
+      >
+        {state === 'sending' ? (
+          <>
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <span>Sending…</span>
+          </>
+        ) : (
+          <>
+            <Send className="w-4 h-4" />
+            <span>Send message</span>
+          </>
+        )}
+      </button>
+    </form>
+  );
+};
 
 export const ContactsView: React.FC = () => {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -236,6 +346,20 @@ export const ContactsView: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {contactsData.formspreeId && (
+        <section className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5">
+          <div>
+            <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
+              No email app needed
+            </span>
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
+              Write me directly
+            </h2>
+          </div>
+          <ContactForm />
+        </section>
+      )}
 
       {/* Channel Cards Grid */}
       <section className="space-y-6">
