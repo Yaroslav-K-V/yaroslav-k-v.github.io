@@ -32,4 +32,4 @@ export interface ExperienceItem {
   };
 }
 
-export type PageRoute = 'welcome' | 'about' | 'projects' | 'research' | 'contacts';
+export type PageRoute = 'welcome' | 'about' | 'projects' | 'contacts';

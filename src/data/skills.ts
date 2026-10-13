@@ -16,72 +16,108 @@ export interface CompetencyMatrix {
 
 export const competencyMatrices: CompetencyMatrix[] = [
   {
-    id: 'systems-languages',
+    id: 'frontend',
     index: '01',
-    title: 'Systems & Languages',
-    tag: 'CORE // COMPILED & TYPED',
-    summary: 'Strong foundational grasp of compiled and strictly typed languages, memory paradigms, async event loops, and relational queries.',
-    primarySkills: ['C#', 'Python', 'TypeScript', 'SQL'],
-    secondarySkills: ['Go', 'JavaScript', 'HTML5 / CSS3'],
-    frameworks: ['.NET 8/9', 'FastAPI', 'Node.js', 'PostgreSQL', 'SQLite', 'Tailwind CSS']
+    title: 'Frontend',
+    tag: 'Web · client',
+    summary: 'Web interfaces, layouts, and browser tooling maintained in production.',
+    primarySkills: ['JavaScript', 'TypeScript', 'HTML/CSS', 'React (foundational)'],
+    secondarySkills: ['Chrome Extensions', 'Responsive Layouts', 'Bug Fixing'],
+    frameworks: ['React', 'Chrome Extension MV3', 'REST-backed UIs']
   },
   {
-    id: 'ai-data',
+    id: 'backend',
     index: '02',
-    title: 'AI & Applied Data',
-    tag: 'DATA // AGENTS & INFERENCE',
-    summary: 'Autonomous LLM agent orchestration, deterministic function calling, structured extraction pipelines, and vector semantic retrieval.',
-    primarySkills: ['LLM Agents', 'ETL Pipelines', 'Pandas', 'RAG Systems'],
-    secondarySkills: ['OpenRouter API', 'LangChain', 'NumPy', 'Data Analysis / EDA'],
-    frameworks: ['Qdrant', 'pgvector', 'Structured Outputs', 'Multi-Provider Fallbacks', 'Prompt Optimization']
+    title: 'Scripting & Backend',
+    tag: 'APIs & integrations',
+    summary: 'Scripting, REST integrations, and data-backed tooling views.',
+    primarySkills: ['Python', 'Flask', 'REST APIs', 'pytest'],
+    secondarySkills: ['Node.js (foundational)', 'Third-party Integrations', 'Auth & Error Handling'],
+    frameworks: ['Flask', 'Node.js', 'OpenRouter', 'Stripe', 'Resend']
   },
   {
-    id: 'arch-tools',
+    id: 'ai-workflow',
     index: '03',
-    title: 'Architecture & Tools',
-    tag: 'INFRA // PATTERNS & PIPELINES',
-    summary: 'Domain-driven modular systems, clean layered boundaries, automated testing verification, and containerized deployment pipelines.',
-    primarySkills: ['Clean Architecture', 'Docker', 'Git', 'CI/CD Workflows'],
-    secondarySkills: ['MVVM & Repository Pattern', 'Automated Testing / pytest', 'AST Parsing'],
-    frameworks: ['Supabase (Auth & RLS)', 'GitHub Actions', 'Wails (Go + Web)', 'PySide6', 'WPF / WinForms']
+    title: 'AI-Assisted Development & Hosting',
+    tag: 'Workflow & delivery',
+    summary: 'Daily agentic AI workflows plus version control and deployment basics.',
+    primarySkills: ['Claude Code (daily)', 'Agentic Workflows', 'MCP', 'Prompt Engineering'],
+    secondarySkills: ['LLM Integration', 'RAG', 'Cursor (familiar)', 'pandas'],
+    frameworks: ['Git & GitHub (branches, PRs)', 'CI/CD', 'Linux/VPS', 'Supabase', 'PostgreSQL']
   }
 ];
 
 export const skillGroups: SkillGroup[] = [
   {
-    title: 'Systems & Languages',
-    skills: ['C#', 'Python', 'TypeScript', 'SQL', 'Go', 'JavaScript', 'HTML5', 'CSS3']
+    title: 'Frontend',
+    skills: ['JavaScript', 'TypeScript', 'HTML/CSS', 'React (foundational)', 'Chrome Extensions']
   },
   {
-    title: 'AI & Applied Data',
+    title: 'Scripting & Backend',
     skills: [
-      'LLM Agents',
-      'ETL Pipelines',
-      'Pandas',
-      'RAG Architectures',
-      'OpenRouter',
-      'LangChain',
-      'Qdrant',
-      'NumPy',
-      'Vector Search',
-      'Data Analysis (EDA)'
+      'Python',
+      'Flask',
+      'Node.js (foundational)',
+      'REST APIs',
+      'Third-party integrations',
+      'pytest'
     ]
   },
   {
-    title: 'Architecture & Tooling',
+    title: 'Data & Tooling',
+    skills: ['PostgreSQL', 'Supabase', 'dashboards', 'pandas', 'Jupyter Notebook']
+  },
+  {
+    title: 'AI-Assisted Development (daily)',
     skills: [
-      'Clean Architecture',
-      'Docker',
-      'Git',
-      'CI/CD Workflows',
-      'MVVM & Repository',
-      'Supabase',
-      'PostgreSQL',
-      'pytest',
-      'AST Parsing',
-      'Wails',
-      'FastAPI',
-      'React'
+      'Claude Code',
+      'Cursor (familiar)',
+      'Agentic workflows',
+      'MCP',
+      'LLM Integration',
+      'RAG',
+      'Prompt Engineering'
     ]
+  },
+  {
+    title: 'Workflow & Hosting',
+    skills: ['Git', 'GitHub (branches, commits, pull requests)', 'CI/CD', 'Linux/VPS', 'deployment & hosting basics']
+  },
+  {
+    title: 'Spoken Languages',
+    skills: ['Ukrainian — Native', 'English — B2 (C1 Reading)']
+  }
+];
+
+export const certifications = [
+  {
+    provider: 'Vanderbilt University',
+    title: 'AI Agents with Model Context Protocol Specialization',
+    date: 'Sep 2026',
+    detail: 'Credential ID: 7GNJTGZNZJJU • Model Context Protocol (MCP), Agentic AI architectures, tool orchestration, and GenAI workflows'
+  },
+  {
+    provider: 'Vanderbilt University',
+    title: 'Generative AI Software Engineering Specialization',
+    date: 'Sep 2026',
+    detail: 'Credential ID: 8XRRZ8TGWFKL • Software engineering with LLMs, prompt patterns, software architecture & design'
+  },
+  {
+    provider: 'Sooezy Academy',
+    title: 'Agentic AI Sooezy - Season 1',
+    date: 'Aug 2026',
+    detail: 'Credential ID: SOOEZY-1E4FAF • Agentic AI development, autonomous coding workflows, Claude Code'
+  },
+  {
+    provider: 'IBM',
+    title: 'Fundamentals of AI Agents Using RAG and LangChain',
+    date: 'Mar 2026',
+    detail: 'RAG-based systems with LangChain, embeddings, vector stores, and multi-step reasoning agents'
+  },
+  {
+    provider: 'IBM',
+    title: 'Python for Data Science, AI & Development',
+    date: 'Feb 2026',
+    detail: 'Data analysis and manipulation with pandas & NumPy; REST APIs, JSON data, and Python fundamentals'
   }
 ];

@@ -6,7 +6,6 @@ import { ProjectModal } from './components/ProjectModal';
 import { HomeView } from './views/HomeView';
 import { AboutView } from './views/AboutView';
 import { ProjectsView } from './views/ProjectsView';
-import { ResearchView } from './views/ResearchView';
 import { ContactsView } from './views/ContactsView';
 import { AnimatePresence } from 'framer-motion';
 
@@ -16,7 +15,7 @@ function parseRouteFromLocation(): PageRoute {
   const p = urlParams.get('p');
   if (p) {
     const cleaned = p.replace(/^\//, '').replace(/\/$/, '');
-    if (['about', 'projects', 'research', 'contacts'].includes(cleaned)) {
+    if (['about', 'projects', 'contacts'].includes(cleaned)) {
       window.history.replaceState(null, '', `/${cleaned}/`);
       return cleaned as PageRoute;
     }
@@ -25,7 +24,7 @@ function parseRouteFromLocation(): PageRoute {
   // Check hash fallback
   if (window.location.hash) {
     const hashRoute = window.location.hash.replace(/^#\/?/, '').replace(/\/$/, '');
-    if (['about', 'projects', 'research', 'contacts'].includes(hashRoute)) {
+    if (['about', 'projects', 'contacts'].includes(hashRoute)) {
       return hashRoute as PageRoute;
     }
   }
@@ -34,7 +33,6 @@ function parseRouteFromLocation(): PageRoute {
   const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
   if (path.startsWith('about')) return 'about';
   if (path.startsWith('projects')) return 'projects';
-  if (path.startsWith('research')) return 'research';
   if (path.startsWith('contacts')) return 'contacts';
   return 'welcome';
 }
@@ -42,22 +40,14 @@ function parseRouteFromLocation(): PageRoute {
 export const App: React.FC = () => {
   const [currentRoute, setCurrentRoute] = useState<PageRoute>(parseRouteFromLocation());
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isDark, setIsDark] = useState<boolean>(() => {
-    const saved = localStorage.getItem('theme');
-    if (saved) return saved === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+  // Factory theme is dark-only.
+  const [isDark] = useState<boolean>(true);
 
-  // Theme synchronization
+  // Theme synchronization: always dark.
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [isDark]);
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  }, []);
 
   // History Popstate listener
   useEffect(() => {
@@ -77,11 +67,11 @@ export const App: React.FC = () => {
   };
 
   const toggleTheme = () => {
-    setIsDark(!isDark);
+    // No-op: Factory theme is dark-only.
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-black text-zinc-900 dark:text-zinc-100 tech-grid transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#101010] text-[#eeeeee] tech-grid transition-colors">
       <Navbar
         currentRoute={currentRoute}
         onNavigate={navigateTo}
@@ -101,7 +91,6 @@ export const App: React.FC = () => {
               onSelectProject={(p) => setSelectedProject(p)}
             />
           )}
-          {currentRoute === 'research' && <ResearchView key="research" />}
           {currentRoute === 'contacts' && <ContactsView key="contacts" />}
         </AnimatePresence>
       </main>
