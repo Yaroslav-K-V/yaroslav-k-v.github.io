@@ -9,3 +9,4 @@ database.db
 node_modules/
 dist/
 .superpowers/
+node_modules
