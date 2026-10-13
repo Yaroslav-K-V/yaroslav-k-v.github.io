@@ -4,47 +4,56 @@
 
 @layer base {
   :root {
-    --bg-page: #ffffff;
-    --text-primary: #09090b;
-    --text-muted: #71717a;
-    --border-color: #e4e4e7;
-    --card-bg: rgba(255, 255, 255, 0.8);
-  }
-
-  html.dark {
-    --bg-page: #000000;
-    --text-primary: #f4f4f5;
-    --text-muted: #a1a1aa;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --card-bg: rgba(9, 9, 11, 0.6);
+    --color-obsidian-canvas: #101010;
+    --color-carbon-lift: #1d1a18;
+    --color-ash-stroke: #3d3a39;
+    --color-graphite-mid: #4d4947;
+    --color-warm-granite: #8a8380;
+    --color-pale-stone: #b8b3b0;
+    --color-bone: #eeeeee;
+    --color-chalk: #fafafa;
+    --color-signal-orange: #ee6018;
+    --color-metric-green: #a0ca92;
+    --bg-page: #101010;
+    --text-primary: #eeeeee;
+    --text-muted: #8a8380;
+    --border-color: #3d3a39;
+    --card-bg: #1d1a18;
   }
 
   body {
     background-color: var(--bg-page);
     color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.6;
+    font-family: Geist, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
   }
+
+  h1, h2, h3 {
+    font-weight: 400;
+    letter-spacing: -0.025em;
+  }
 }
 
-/* Background engineering grid */
+/* Flat instrument grid, no glow */
 .tech-grid {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(238, 238, 238, 0.05) 1px, transparent 1px);
   background-size: 28px 28px;
 }
-html:not(.dark) .tech-grid {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-}
 
-/* Hairline borders and glass */
+/* Flat panels: contrast, not blur or shadow */
 .glass-panel {
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);
+}
+
+::selection {
+  background: #ee6018;
+  color: #101010;
 }
 
 /* Custom sleek scrollbar */
@@ -55,9 +64,6 @@ html:not(.dark) .tech-grid {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: #3d3a39;
   border-radius: 3px;
-}
-html:not(.dark) ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
 }

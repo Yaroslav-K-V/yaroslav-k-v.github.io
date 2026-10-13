@@ -2,6 +2,28 @@ import { Project } from '../types';
 
 export const projects: Project[] = [
   {
+    id: 8,
+    title: 'meetbadi.com',
+    subtitle: 'Production meeting platform — full-stack internship contribution',
+    description: 'Live web platform I helped maintain and extend during my Grenergy internship: web app, Chrome extension, and Supabase backend.',
+    categories: ['fullstack', 'ai'],
+    badge: 'Live Service',
+    features: [
+      'Updated web app layouts and features, fixed bugs, and kept existing pages and tools running.',
+      'Worked across the stack: TypeScript/JavaScript frontend and Chrome extension, Supabase/PostgreSQL data views.',
+      'Helped connect third-party services (OpenRouter, Stripe, Resend) via REST APIs with authentication and error handling.',
+      'Debugged data and integration issues reported by users; wrote docs for handover.'
+    ],
+    architecture: [
+      'Frontend: web app + Chrome extension (TypeScript/JavaScript)',
+      'Backend & data: Supabase / PostgreSQL dashboards and tooling views',
+      'Integrations: REST APIs (OpenRouter, Stripe, Resend)'
+    ],
+    note: 'Internship contribution at Grenergy LLC (Jun–Aug 2026) — not a solo project.',
+    tech: ['TypeScript', 'JavaScript', 'React', 'Supabase', 'PostgreSQL', 'REST APIs', 'OpenRouter'],
+    url: 'https://meetbadi.com'
+  },
+  {
     id: 4,
     title: 'Unitra',
     subtitle: 'AI-powered Python Unit Test Generator — Desktop App',

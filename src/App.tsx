@@ -40,22 +40,14 @@ function parseRouteFromLocation(): PageRoute {
 export const App: React.FC = () => {
   const [currentRoute, setCurrentRoute] = useState<PageRoute>(parseRouteFromLocation());
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isDark, setIsDark] = useState<boolean>(() => {
-    const saved = localStorage.getItem('theme');
-    if (saved) return saved === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+  // Factory theme is dark-only.
+  const [isDark] = useState<boolean>(true);
 
-  // Theme synchronization
+  // Theme synchronization: always dark.
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [isDark]);
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  }, []);
 
   // History Popstate listener
   useEffect(() => {
@@ -75,11 +67,11 @@ export const App: React.FC = () => {
   };
 
   const toggleTheme = () => {
-    setIsDark(!isDark);
+    // No-op: Factory theme is dark-only.
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-black text-zinc-900 dark:text-zinc-100 tech-grid transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#101010] text-[#eeeeee] tech-grid transition-colors">
       <Navbar
         currentRoute={currentRoute}
         onNavigate={navigateTo}
