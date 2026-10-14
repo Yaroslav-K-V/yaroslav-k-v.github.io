@@ -10,3 +10,5 @@ node_modules/
 dist/
 .superpowers/
 node_modules
+
+PROFILE.md
