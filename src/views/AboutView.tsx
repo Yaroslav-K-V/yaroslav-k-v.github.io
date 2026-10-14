@@ -79,7 +79,7 @@ export const AboutView: React.FC = () => {
         'Unitra — AI-powered desktop application that automatically generates Python unit tests from source code (AST analysis, LLM prompt construction, Flask + pywebview, pytest).',
         'PyGlow — lightweight Python code editor built from scratch (Pygments highlighting, local LLM autocomplete, plugin-style architecture).',
         'Applied Data Science — exploratory data analysis on real estate, retail, and student datasets with pandas, seaborn, and reproducible Jupyter Notebook reports.',
-        'HotspotGuard — macOS menu bar watchdog that monitors internet reachability and reconnects Wi-Fi hotspots (Swift, CoreWLAN, Keychain, self-tested, CI).'
+        'HotspotGuard — macOS Wi-Fi watchdog built as an agentic-development exercise (Swift, self-tested, CI).'
       ],
       techBadges: ['Python', 'Flask', 'pywebview', 'PySide6', 'Pygments', 'pytest', 'pandas', 'Jupyter Notebook']
     }

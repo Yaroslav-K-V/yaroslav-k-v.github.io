@@ -88,21 +88,22 @@ export const projects: Project[] = [
   {
     id: 3,
     title: 'HotspotGuard',
-    subtitle: 'macOS menu bar watchdog for Wi-Fi hotspots — Swift',
-    description: 'macOS menu bar app that monitors real internet reachability and reconnects to your Wi-Fi hotspot when it drops.',
+    subtitle: 'macOS Wi-Fi watchdog — built with AI agents (Swift)',
+    description: 'An exercise in agentic development: a macOS menu bar app that monitors internet reachability and reconnects Wi-Fi hotspots — specced and directed by me, implemented with AI coding agents.',
     categories: ['desktop'],
     badge: 'Open Source',
     features: [
+      'Built agentically: architecture and specs first, code via AI agents, everything reviewed and verified by me.',
       'Menu bar status icon: green (online), yellow (reconnecting), red (offline), gray (paused).',
       'Real TCP handshake probing — catches captive portals and dead uplinks that look “connected”.',
-      'Priority-ordered network list with backoff, system network-change triggers, and Keychain-stored passwords.',
-      'Self-test suite (192 checks), SwiftLint / Periphery / jscpd gates, and GitHub Actions CI on macOS runners.'
+      'Self-test suite (192 checks), SwiftLint / Periphery / jscpd gates, and GitHub Actions CI — same quality bar as hand-written code.'
     ],
     architecture: [
+      'Process: spec → agent implementation → review → tests → docs',
       'Core: Swift package with protocol-based managers, no UI dependencies in core',
-      'UI: SwiftUI MenuBarExtra app plus a CLI target sharing the same core',
       'Delivery: script-built .app bundle with versioned tag releases'
     ],
+    note: 'Agentic-build exercise, not my core stack: I can walk through every design decision, but Swift isn’t what I’d claim in an interview.',
     tech: ['Swift', 'SwiftUI', 'CoreWLAN', 'Keychain', 'SwiftPM', 'GitHub Actions'],
     github: 'https://github.com/Yaroslav-K-V/hotspot-guard'
   }
