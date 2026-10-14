@@ -77,9 +77,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
     }
   };
 
-  // The two most important entries get full-width cards, the rest share rows.
+  // The three most important entries get full-width cards, the rest share rows.
   const isFlagship = (project: Project): boolean => {
-    return project.id === 8 || project.id === 4; // meetbadi or Unitra
+    return project.id === 8 || project.id === 4 || project.id === 3;
   };
 
   return (

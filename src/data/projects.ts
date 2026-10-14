@@ -84,5 +84,26 @@ export const projects: Project[] = [
     note: 'pandas, seaborn, reproducible analysis with documented findings.',
     tech: ['Python', 'pandas', 'seaborn', 'Jupyter Notebook'],
     github: 'https://github.com/Yaroslav-K-V/applied-data-science'
+  },
+  {
+    id: 3,
+    title: 'HotspotGuard',
+    subtitle: 'macOS menu bar watchdog for Wi-Fi hotspots — Swift',
+    description: 'macOS menu bar app that monitors real internet reachability and reconnects to your Wi-Fi hotspot when it drops.',
+    categories: ['desktop'],
+    badge: 'Open Source',
+    features: [
+      'Menu bar status icon: green (online), yellow (reconnecting), red (offline), gray (paused).',
+      'Real TCP handshake probing — catches captive portals and dead uplinks that look “connected”.',
+      'Priority-ordered network list with backoff, system network-change triggers, and Keychain-stored passwords.',
+      'Self-test suite (192 checks), SwiftLint / Periphery / jscpd gates, and GitHub Actions CI on macOS runners.'
+    ],
+    architecture: [
+      'Core: Swift package with protocol-based managers, no UI dependencies in core',
+      'UI: SwiftUI MenuBarExtra app plus a CLI target sharing the same core',
+      'Delivery: script-built .app bundle with versioned tag releases'
+    ],
+    tech: ['Swift', 'SwiftUI', 'CoreWLAN', 'Keychain', 'SwiftPM', 'GitHub Actions'],
+    github: 'https://github.com/Yaroslav-K-V/hotspot-guard'
   }
 ];

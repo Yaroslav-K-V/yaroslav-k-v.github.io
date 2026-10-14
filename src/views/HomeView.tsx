@@ -31,8 +31,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       route: 'projects',
       title: 'Projects',
       tag: 'Work & code',
-      description: 'meetbadi internship work, Unitra test generator, PyGlow code editor, and data notebooks.',
-      meta: 'Full-stack · Python · Flask · PySide6 · pandas'
+      description: 'meetbadi internship work, Unitra test generator, HotspotGuard macOS utility, PyGlow editor, and data notebooks.',
+      meta: 'Full-stack · Python · Swift · pandas'
     },
     {
       index: '03',
