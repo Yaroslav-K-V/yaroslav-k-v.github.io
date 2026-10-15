@@ -374,17 +374,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
               </div>
             </div>
 
-            {project.image && (
-              <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
-                <img
-                  src={project.image}
-                  alt={`${project.title} demo`}
-                  loading="lazy"
-                  className="w-full aspect-video object-cover"
-                />
-              </div>
-            )}
-
             {/* Quick Metrics Bar */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
               {dossier.metrics.map((m, idx) => (
@@ -423,6 +412,16 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             {/* SECTION 1: PROBLEM STATEMENT & ENGINEERING SCOPE */}
             {(activeTab === 'all' || activeTab === 'overview') && (
               <section className="space-y-4">
+                {project.image && (
+                  <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
+                    <img
+                      src={project.image}
+                      alt={`${project.title} demo`}
+                      loading="lazy"
+                      className="w-full aspect-video object-cover"
+                    />
+                  </div>
+                )}
                 <div className="flex items-center justify-between border-b border-[#3d3a39]/80 dark:border-white/10 pb-2">
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white flex items-center gap-2">
                     <Terminal className="w-3.5 h-3.5 text-[#ee6018]" />
