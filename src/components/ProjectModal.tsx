@@ -62,21 +62,21 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
     switch (badge) {
       case 'Live Service':
         return {
-          label: 'PRODUCTION',
+          label: 'Live',
           className:
             'bg-[#ee6018]/10 text-[#ee6018] dark:text-[#ee6018] border-[#ee6018]/30',
           dotClass: 'bg-[#ee6018]'
         };
       case 'In Progress':
         return {
-          label: 'ACTIVE DEVELOPMENT',
+          label: 'In progress',
           className:
             'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
           dotClass: 'bg-amber-500'
         };
       case 'Open Source':
         return {
-          label: 'OPEN SOURCE',
+          label: 'Open source',
           className:
             'bg-zinc-500/10 text-zinc-700 dark:text-zinc-300 border-zinc-300 dark:border-[#3d3a39]',
           dotClass: 'bg-zinc-400'
@@ -239,14 +239,14 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
       scopeObjectives: p.features,
       keyDecisions: [
         {
-          title: 'Modular Systems Design',
+          title: 'Scope kept honest',
           reasoning:
-            'Strict separation of concerns between presentation, service layer, and data storage guarantees predictable maintenance.'
+            'Only what was actually built or touched — no padding, no borrowed credit.'
         },
         {
-          title: 'Type Safety & Validation',
+          title: 'Reviewed and documented',
           reasoning:
-            'Comprehensive type definitions and validation prevent runtime exceptions across component boundaries.'
+            'Code reviewed before shipping; docs written where handover matters.'
         }
       ],
       stackMatrix: [
@@ -254,7 +254,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
       ],
       metrics: [
         { label: 'Status', value: p.badge },
-        { label: 'Tech Stack', value: `${p.tech.length} Technologies` }
+        { label: 'Stack', value: p.tech.slice(0, 3).join(' · ') }
       ],
       architectureLayers: p.architecture
         ? p.architecture.map((a, i) => ({ name: `Layer 0${i + 1}`, detail: a }))
