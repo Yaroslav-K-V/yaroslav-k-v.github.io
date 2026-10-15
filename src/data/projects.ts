@@ -64,7 +64,8 @@ export const projects: Project[] = [
     ],
     tech: ['Python', 'PySide6', 'Pygments', 'Local LLM'],
     github: 'https://github.com/Yaroslav-K-V/PyGlow',
-    image: 'https://raw.githubusercontent.com/Yaroslav-K-V/PyGlow/main/assets/gif/demo.gif'
+    image: 'https://raw.githubusercontent.com/Yaroslav-K-V/PyGlow/main/assets/gif/demo.gif',
+    video: '/pyglow-demo.mp4'
   },
   {
     id: 7,
@@ -107,6 +108,7 @@ export const projects: Project[] = [
     ],
     tech: ['Swift', 'SwiftUI', 'CoreWLAN', 'Keychain', 'SwiftPM', 'GitHub Actions'],
     github: 'https://github.com/Yaroslav-K-V/hotspot-guard',
-    image: 'https://raw.githubusercontent.com/Yaroslav-K-V/hotspot-guard/main/docs/demo-menu.gif'
+    image: 'https://raw.githubusercontent.com/Yaroslav-K-V/hotspot-guard/main/docs/demo-menu.gif',
+    video: '/hotspot-demo.mp4'
   }
 ];
