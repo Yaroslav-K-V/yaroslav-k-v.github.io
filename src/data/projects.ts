@@ -103,7 +103,6 @@ export const projects: Project[] = [
       'Core: Swift package with protocol-based managers, no UI dependencies in core',
       'Delivery: script-built .app bundle with versioned tag releases'
     ],
-    note: 'Agentic-build exercise, not my core stack: I can walk through every design decision, but Swift isn’t what I’d claim in an interview.',
     tech: ['Swift', 'SwiftUI', 'CoreWLAN', 'Keychain', 'SwiftPM', 'GitHub Actions'],
     github: 'https://github.com/Yaroslav-K-V/hotspot-guard'
   }
