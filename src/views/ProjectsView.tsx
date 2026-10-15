@@ -252,6 +252,16 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                         {project.description}
                       </p>
 
+                      {project.image && (
+                        <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
+                          <img
+                            src={project.image}
+                            alt={`${project.title} screenshot`}
+                            loading="lazy"
+                            className="w-full aspect-video object-cover"
+                          />
+                        </div>
+                      )}
                       <div className="space-y-2">
                         <span className="text-[11px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] flex items-center gap-1.5">
                           <CheckCircle2 className="w-3.5 h-3.5 text-[#ee6018]" />

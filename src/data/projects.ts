@@ -104,6 +104,7 @@ export const projects: Project[] = [
       'Delivery: script-built .app bundle with versioned tag releases'
     ],
     tech: ['Swift', 'SwiftUI', 'CoreWLAN', 'Keychain', 'SwiftPM', 'GitHub Actions'],
-    github: 'https://github.com/Yaroslav-K-V/hotspot-guard'
+    github: 'https://github.com/Yaroslav-K-V/hotspot-guard',
+    image: 'https://raw.githubusercontent.com/Yaroslav-K-V/hotspot-guard/main/docs/screenshot-menu.png'
   }
 ];
