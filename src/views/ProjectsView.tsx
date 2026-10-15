@@ -154,7 +154,23 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
         </div>
       </section>
 
-      {/* Asymmetric Engineering Grid */}
+      {/* Project Grid */}
+      {filteredProjects.length === 0 ? (
+        <div className="glass-panel rounded-[10px] p-12 text-center space-y-3">
+          <p className="text-base font-semibold text-zinc-900 dark:text-[#eeeeee]">
+            Nothing here yet
+          </p>
+          <p className="text-xs font-mono text-[#8a8380] max-w-sm mx-auto">
+            No projects in this category — try another filter.
+          </p>
+          <button
+            onClick={() => setActiveFilter('all')}
+            className="mt-2 text-xs font-mono px-3 py-1.5 rounded-[3px] border border-[#3d3a39] text-zinc-800 dark:text-[#eeeeee] hover:bg-zinc-100 dark:hover:bg-[#eeeeee]/10 transition-colors"
+          >
+            Show all
+          </button>
+        </div>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project, index) => {
@@ -467,6 +483,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
           })}
         </AnimatePresence>
       </div>
+      )}
     </motion.div>
   );
 };
