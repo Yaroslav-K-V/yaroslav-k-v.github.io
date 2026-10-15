@@ -258,7 +258,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                             src={project.image}
                             alt={`${project.title} screenshot`}
                             loading="lazy"
-                            className="w-full aspect-video object-cover"
+                            className="w-full max-h-80 object-contain bg-[#101010]"
                           />
                         </div>
                       )}
@@ -382,7 +382,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                         src={project.image}
                         alt={`${project.title} demo`}
                         loading="lazy"
-                        className="w-full aspect-video object-cover"
+                        className="w-full max-h-80 object-contain bg-[#101010]"
                       />
                     </div>
                   )}

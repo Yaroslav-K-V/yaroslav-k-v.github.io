@@ -61,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
           </button>
 
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-[3px] border border-[#3d3a39] dark:border-white/10 text-[10px] font-mono text-zinc-600 dark:text-[#8a8380]">
+          <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded-[3px] border border-[#3d3a39] dark:border-white/10 text-[10px] font-mono text-zinc-600 dark:text-[#8a8380]">
             <span className="tracking-wide">Varna · UTC+2</span>
           </div>
         </div>
@@ -74,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 key={item.route}
                 onClick={() => handleNavClick(item.route)}
-                className={`px-3 py-1 text-xs font-mono transition-all rounded-[3px] ${
+                className={`px-3 py-1 text-xs font-mono whitespace-nowrap transition-all rounded-[3px] ${
                   isActive
                     ? 'bg-[#1d1a18] text-white dark:bg-[#eeeeee] dark:text-black font-semibold shadow-none'
                     : 'text-zinc-600 dark:text-[#8a8380] hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200/50 dark:hover:bg-[#eeeeee]/5'
