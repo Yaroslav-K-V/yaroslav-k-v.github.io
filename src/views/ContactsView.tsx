@@ -195,7 +195,7 @@ export const ContactsView: React.FC = () => {
       title: 'GitHub',
       value: contactsData.github,
       displayValue: contactsData.githubDisplay,
-      status: 'Code',
+      status: 'Open source',
       statusType: 'source',
       description: 'My code — projects, commits, and open source.',
       href: contactsData.github,
@@ -303,14 +303,10 @@ export const ContactsView: React.FC = () => {
               My resume
             </h2>
             <p className="text-sm text-zinc-600 dark:text-[#8a8380] max-w-2xl leading-relaxed">
-              Complete documentation covering academic foundations, Grenergy LLC internship, technical skills, project repositories, and contact coordinates.
+              My CV: background, Grenergy internship, skills, projects, contacts.
             </p>
             <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-[#8a8380] pt-1">
-              
-              <span>·</span>
-              
-              <span>·</span>
-              <span>UP TO DATE: October 2026</span>
+              <span>PDF · up to date: October 2026</span>
             </div>
           </div>
 
@@ -369,7 +365,7 @@ export const ContactsView: React.FC = () => {
               Contact channels
             </span>
             <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
-              Direct Contact Channels
+              Channels
             </h2>
           </div>
           <span className="text-xs font-mono text-[#8a8380]">
