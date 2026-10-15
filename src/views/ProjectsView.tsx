@@ -269,14 +269,29 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                         {project.description}
                       </p>
 
-                      {project.image && (
+                      {(project.video || project.image) && (
                         <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
-                          <img
-                            src={project.image}
-                            alt={`${project.title} screenshot`}
-                            loading="lazy"
-                            className="w-full max-h-80 object-contain bg-[#101010]"
-                          />
+                          {project.video ? (
+                            <video
+                              src={project.video}
+                              poster={project.image}
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                              preload="metadata"
+                              className="w-full max-h-80 object-contain bg-[#101010]"
+                            />
+                          ) : (
+                            project.image && (
+                              <img
+                                src={project.image}
+                                alt={`${project.title} screenshot`}
+                                loading="lazy"
+                                className="w-full max-h-80 object-contain bg-[#101010]"
+                              />
+                            )
+                          )}
                         </div>
                       )}
                       <div className="space-y-2">
@@ -393,14 +408,29 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                     </div>
                   </div>
 
-                  {project.image && (
+                  {(project.video || project.image) && (
                     <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
-                      <img
-                        src={project.image}
-                        alt={`${project.title} demo`}
-                        loading="lazy"
-                        className="w-full max-h-80 object-contain bg-[#101010]"
-                      />
+                      {project.video ? (
+                        <video
+                          src={project.video}
+                          poster={project.image}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          preload="metadata"
+                          className="w-full max-h-80 object-contain bg-[#101010]"
+                        />
+                      ) : (
+                        project.image && (
+                          <img
+                            src={project.image}
+                            alt={`${project.title} demo`}
+                            loading="lazy"
+                            className="w-full max-h-80 object-contain bg-[#101010]"
+                          />
+                        )
+                      )}
                     </div>
                   )}
 

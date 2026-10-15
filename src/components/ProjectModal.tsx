@@ -412,14 +412,29 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             {/* SECTION 1: PROBLEM STATEMENT & ENGINEERING SCOPE */}
             {(activeTab === 'all' || activeTab === 'overview') && (
               <section className="space-y-4">
-                {project.image && (
+                {(project.video || project.image) && (
                   <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
-                    <img
-                      src={project.image}
-                      alt={`${project.title} demo`}
-                      loading="lazy"
-                      className="w-full max-h-80 object-contain bg-[#101010]"
-                    />
+                    {project.video ? (
+                      <video
+                        src={project.video}
+                        poster={project.image}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        className="w-full max-h-80 object-contain bg-[#101010]"
+                      />
+                    ) : (
+                      project.image && (
+                        <img
+                          src={project.image}
+                          alt={`${project.title} demo`}
+                          loading="lazy"
+                          className="w-full max-h-80 object-contain bg-[#101010]"
+                        />
+                      )
+                    )}
                   </div>
                 )}
                 <div className="flex items-center justify-between border-b border-[#3d3a39]/80 dark:border-white/10 pb-2">

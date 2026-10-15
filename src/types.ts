@@ -16,6 +16,7 @@ export interface Project {
   github?: string;
   url?: string;
   image?: string;
+  video?: string;
 }
 
 export interface ExperienceItem {

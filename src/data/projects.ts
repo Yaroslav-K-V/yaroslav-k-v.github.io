@@ -21,7 +21,9 @@ export const projects: Project[] = [
     ],
     note: 'Internship contribution at Grenergy LLC (Jun–Aug 2026) — not a solo project.',
     tech: ['TypeScript', 'JavaScript', 'React', 'Supabase', 'PostgreSQL', 'REST APIs', 'OpenRouter'],
-    url: 'https://meetbadi.com'
+    url: 'https://meetbadi.com',
+    video: '/meetbadi-tour.mp4',
+    image: '/meetbadi-tour.gif'
   },
   {
     id: 4,
