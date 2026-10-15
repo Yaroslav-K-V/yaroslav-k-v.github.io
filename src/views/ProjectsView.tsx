@@ -77,8 +77,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
     }
   };
 
-  // The three most important entries get full-width cards, the rest share rows.
+  // Wide cards only on 'all' — filters always render a uniform grid with no holes.
   const isFlagship = (project: Project): boolean => {
+    if (activeFilter !== 'all') return false;
     return project.id === 8 || project.id === 4 || project.id === 3;
   };
 
