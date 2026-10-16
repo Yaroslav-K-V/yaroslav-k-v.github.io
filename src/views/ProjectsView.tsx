@@ -302,7 +302,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                             Stack Overview
                           </span>
                           <span className="font-mono text-[10px] text-[#8a8380]">
-                            STACK OVERVIEW
+                            {project.architecture ? `${project.architecture.length} layers` : ''}
                           </span>
                         </div>
 
@@ -332,12 +332,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                         )}
                       </div>
 
-                      {/* Flagship Metrics Badge */}
+                      {/* Flagship Marker */}
                       <div className="pt-2 border-t border-[#3d3a39]/60 dark:border-white/5 flex items-center justify-between font-mono text-[10px] text-[#8a8380] dark:text-[#8a8380]">
                         <span>FEATURED PROJECT</span>
-                        <span className="text-[#ee6018] dark:text-[#ee6018] font-medium">
-                          OPEN DETAILS →
-                        </span>
                       </div>
                     </div>
                   </div>
