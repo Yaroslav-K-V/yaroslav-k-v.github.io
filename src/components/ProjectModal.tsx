@@ -93,7 +93,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
   };
 
   const getProjectDossier = (p: Project): ProjectDossierData => {
-    if (p.id === 4) {
+    if (p.id === 2) {
       // Unitra
       return {
         problemStatement:
@@ -141,7 +141,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
       };
     }
 
-    if (p.id === 1) {
+    if (p.id === 3) {
       // PyGlow
       return {
         problemStatement:
@@ -188,7 +188,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
       };
     }
 
-    if (p.id === 7) {
+    if (p.id === 4) {
       // Applied Data Science
       return {
         problemStatement:
@@ -418,7 +418,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                     src={project.video ?? project.image ?? ''}
                     poster={project.image}
                     alt={`${project.title} demo`}
-                    frameClass="mx-auto w-full max-w-xl"
                   />
                 )}
                 <div className="flex items-center justify-between border-b border-[#3d3a39]/80 dark:border-white/10 pb-2">

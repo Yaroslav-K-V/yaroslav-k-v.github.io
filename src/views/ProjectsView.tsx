@@ -81,7 +81,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
   // Wide cards only on 'all' — filters always render a uniform grid with no holes.
   const isFlagship = (project: Project): boolean => {
     if (activeFilter !== 'all') return false;
-    return project.id === 8 || project.id === 4 || project.id === 3;
+    return project.id === 1 || project.id === 2 || project.id === 5;
   };
 
   return (
@@ -175,10 +175,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
       ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, index) => {
+          {filteredProjects.map((project) => {
             const isFeatured = isFlagship(project);
             const status = getStatusBadge(project.badge);
-            const projectTag = `[PRJ // ${String(index + 1).padStart(2, '0')}]`;
+            const projectTag = `[PRJ // ${String(project.id).padStart(2, '0')}]`;
 
             if (isFeatured) {
               // FLAGSHIP PROMINENT WIDE CARD
