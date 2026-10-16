@@ -12,6 +12,7 @@ import {
   Terminal
 } from 'lucide-react';
 import { GithubIcon } from '../components/Icons';
+import { VideoPreview } from '../components/VideoPreview';
 
 interface ProjectsViewProps {
   onSelectProject: (project: Project) => void;
@@ -270,29 +271,11 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                       </p>
 
                       {(project.video || project.image) && (
-                        <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
-                          {project.video ? (
-                            <video
-                              src={project.video}
-                              poster={project.image}
-                              autoPlay
-                              muted
-                              loop
-                              playsInline
-                              preload="metadata"
-                              className="w-full max-h-80 object-contain bg-[#101010]"
-                            />
-                          ) : (
-                            project.image && (
-                              <img
-                                src={project.image}
-                                alt={`${project.title} screenshot`}
-                                loading="lazy"
-                                className="w-full max-h-80 object-contain bg-[#101010]"
-                              />
-                            )
-                          )}
-                        </div>
+                        <VideoPreview
+                          src={project.video ?? project.image ?? ''}
+                          poster={project.image}
+                          alt={`${project.title} screenshot`}
+                        />
                       )}
                       <div className="space-y-2">
                         <span className="text-[11px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] flex items-center gap-1.5">
@@ -409,29 +392,11 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
                   </div>
 
                   {(project.video || project.image) && (
-                    <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
-                      {project.video ? (
-                        <video
-                          src={project.video}
-                          poster={project.image}
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                          preload="metadata"
-                          className="w-full max-h-80 object-contain bg-[#101010]"
-                        />
-                      ) : (
-                        project.image && (
-                          <img
-                            src={project.image}
-                            alt={`${project.title} demo`}
-                            loading="lazy"
-                            className="w-full max-h-80 object-contain bg-[#101010]"
-                          />
-                        )
-                      )}
-                    </div>
+                    <VideoPreview
+                      src={project.video ?? project.image ?? ''}
+                      poster={project.image}
+                      alt={`${project.title} demo`}
+                    />
                   )}
 
                   <div>

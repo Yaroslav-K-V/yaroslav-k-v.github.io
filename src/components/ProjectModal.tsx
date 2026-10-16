@@ -14,6 +14,7 @@ import {
   Boxes
 } from 'lucide-react';
 import { GithubIcon } from './Icons';
+import { VideoPreview } from './VideoPreview';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -413,29 +414,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             {(activeTab === 'all' || activeTab === 'overview') && (
               <section className="space-y-4">
                 {(project.video || project.image) && (
-                  <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
-                    {project.video ? (
-                      <video
-                        src={project.video}
-                        poster={project.image}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        className="w-full max-h-80 object-contain bg-[#101010]"
-                      />
-                    ) : (
-                      project.image && (
-                        <img
-                          src={project.image}
-                          alt={`${project.title} demo`}
-                          loading="lazy"
-                          className="w-full max-h-80 object-contain bg-[#101010]"
-                        />
-                      )
-                    )}
-                  </div>
+                  <VideoPreview
+                    src={project.video ?? project.image ?? ''}
+                    poster={project.image}
+                    alt={`${project.title} demo`}
+                  />
                 )}
                 <div className="flex items-center justify-between border-b border-[#3d3a39]/80 dark:border-white/10 pb-2">
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white flex items-center gap-2">
