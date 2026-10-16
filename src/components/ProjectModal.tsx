@@ -428,8 +428,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white flex items-center gap-2">
                     <Terminal className="w-3.5 h-3.5 text-[#ee6018]" />
                     <span>Section 01 // What & why</span>
-                  </h3>
-                  <span className="font-mono text-[10px] text-[#8a8380]">[PRJ-01]</span>
+                  </h3>                  
                 </div>
 
                 <div className="p-4 rounded-[10px] bg-zinc-50 dark:bg-[#1d1a18]/40 border border-[#3d3a39]/80 dark:border-white/5 space-y-3">
@@ -467,8 +466,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white flex items-center gap-2">
                     <Layers className="w-3.5 h-3.5 text-[#ee6018]" />
                     <span>Section 02 // How it’s built</span>
-                  </h3>
-                  <span className="font-mono text-[10px] text-[#8a8380]">[PRJ-02]</span>
+                  </h3>                  
                 </div>
 
                 {/* Layered System Topology */}
@@ -526,8 +524,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white flex items-center gap-2">
                     <Boxes className="w-3.5 h-3.5 text-[#ee6018]" />
                     <span>Section 03 // Tech stack</span>
-                  </h3>
-                  <span className="font-mono text-[10px] text-[#8a8380]">[PRJ-03]</span>
+                  </h3>                  
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -563,8 +560,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white flex items-center gap-2">
                     <Activity className="w-3.5 h-3.5 text-[#ee6018]" />
                     <span>Section 04 // Notes</span>
-                  </h3>
-                  <span className="font-mono text-[10px] text-[#8a8380]">[PRJ-04]</span>
+                  </h3>                  
                 </div>
 
                 <div className="space-y-2">
