@@ -376,7 +376,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             </div>
 
             {/* Quick Metrics Bar */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+            <div
+              className={`grid grid-cols-2 gap-3 pt-2 ${
+                dossier.metrics.length > 2 ? 'sm:grid-cols-3' : ''
+              }`}
+            >
               {dossier.metrics.map((m, idx) => (
                 <div
                   key={idx}
