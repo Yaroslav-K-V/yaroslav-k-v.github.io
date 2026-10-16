@@ -6,6 +6,7 @@ interface VideoPreviewProps {
   poster?: string;
   alt: string;
   className?: string;
+  frameClass?: string;
 }
 
 /**
@@ -16,7 +17,8 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
   src,
   poster,
   alt,
-  className = 'w-full max-h-80 object-contain bg-[#101010]'
+  className = 'w-full max-h-80 object-contain bg-[#101010]',
+  frameClass = ''
 }) => {
   const [tapped, setTapped] = useState(false);
   const [stillMode] = useState<boolean>(
@@ -28,7 +30,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
 
   if (!tapped && stillMode) {
     return (
-      <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
+      <div className={`overflow-hidden rounded-[3px] border border-[#3d3a39] ${frameClass}`}>
         <button
           type="button"
           onClick={(e) => {
@@ -54,7 +56,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
   }
 
   return (
-    <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
+    <div className={`overflow-hidden rounded-[3px] border border-[#3d3a39] ${frameClass}`}>
     <video
       src={src}
       poster={poster}

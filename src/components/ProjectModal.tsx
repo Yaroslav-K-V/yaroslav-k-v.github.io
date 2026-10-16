@@ -418,6 +418,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                     src={project.video ?? project.image ?? ''}
                     poster={project.image}
                     alt={`${project.title} demo`}
+                    frameClass="mx-auto w-full max-w-xl"
                   />
                 )}
                 <div className="flex items-center justify-between border-b border-[#3d3a39]/80 dark:border-white/10 pb-2">
