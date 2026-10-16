@@ -146,7 +146,7 @@ export const AboutView: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
           <div className="glass-panel p-4 rounded-[10px] space-y-1">
             <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] block">
-              Academic Track
+              Education
             </span>
             <span className="text-sm font-semibold text-zinc-900 dark:text-[#eeeeee] block">
               BSc Software Eng.
@@ -158,7 +158,7 @@ export const AboutView: React.FC = () => {
 
           <div className="glass-panel p-4 rounded-[10px] space-y-1">
             <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] block">
-              Industry Experience
+              Experience
             </span>
             <span className="text-sm font-semibold text-zinc-900 dark:text-[#eeeeee] block">
               AI Agent Intern
@@ -170,7 +170,7 @@ export const AboutView: React.FC = () => {
 
           <div className="glass-panel p-4 rounded-[10px] space-y-1">
             <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] block">
-              Core Languages
+              Languages
             </span>
             <span className="text-sm font-semibold text-zinc-900 dark:text-[#eeeeee] block">
               JS, TS, Python
@@ -182,13 +182,13 @@ export const AboutView: React.FC = () => {
 
           <div className="glass-panel p-4 rounded-[10px] space-y-1">
             <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] block">
-              Geographic Base
+              Location
             </span>
             <span className="text-sm font-semibold text-zinc-900 dark:text-[#eeeeee] block">
               Varna, Bulgaria
             </span>
             <span className="text-[11px] font-mono text-[#8a8380] dark:text-[#8a8380] block">
-              Open to Relocation
+              Open to remote
             </span>
           </div>
         </div>
