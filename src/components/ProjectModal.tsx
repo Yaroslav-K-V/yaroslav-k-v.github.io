@@ -387,7 +387,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                   className="p-2.5 rounded-[3px] bg-zinc-100/70 dark:bg-[#eeeeee]/5 border border-[#3d3a39]/60 dark:border-white/5 font-mono"
                 >
                   <div className="text-[10px] text-[#8a8380] uppercase tracking-wider">{m.label}</div>
-                  <div className="text-xs font-bold text-zinc-900 dark:text-[#eeeeee] truncate mt-0.5">
+                  <div className="text-xs font-bold text-zinc-900 dark:text-[#eeeeee] mt-0.5">
                     {m.value}
                   </div>
                 </div>
