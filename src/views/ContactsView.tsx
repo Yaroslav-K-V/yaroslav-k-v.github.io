@@ -320,11 +320,11 @@ export const ContactsView: React.FC = () => {
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-zinc-600 dark:text-[#8a8380]" />
               <span className="text-sm font-semibold text-zinc-900 dark:text-[#eeeeee]">
-                Varna, Bulgaria · UTC+2 (EET)
+                Varna, Bulgaria · UTC+2
               </span>
             </div>
             <span className="text-[11px] font-mono text-[#8a8380] block">
-              Varna, UTC+2 · open to remote
+              Open to remote
             </span>
           </div>
 
@@ -425,9 +425,6 @@ export const ContactsView: React.FC = () => {
       <section className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
           <div>
-            <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
-              Contact channels
-            </span>
             <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
               Channels
             </h2>
