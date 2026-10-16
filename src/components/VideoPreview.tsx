@@ -30,7 +30,10 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
       <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
         <button
           type="button"
-          onClick={() => setTapped(true)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setTapped(true);
+          }}
           className="relative w-full cursor-pointer"
           aria-label={`Play ${alt}`}
         >

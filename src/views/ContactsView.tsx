@@ -23,6 +23,7 @@ const ContactForm: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [gotcha, setGotcha] = useState('');
   const [state, setState] = useState<FormState>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,13 +34,19 @@ const ContactForm: React.FC = () => {
       const res = await fetch(`https://formspree.io/f/${contactsData.formspreeId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ name: name.trim(), email: email.trim(), message: message.trim() })
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          message: message.trim(),
+          _gotcha: gotcha
+        })
       });
       if (!res.ok) throw new Error('send failed');
       setState('sent');
       setName('');
       setEmail('');
       setMessage('');
+      setGotcha('');
     } catch {
       setState('error');
     }
@@ -95,6 +102,16 @@ const ContactForm: React.FC = () => {
         rows={4}
         maxLength={2000}
         className={`${inputClass} resize-y`}
+      />
+      {/* Honeypot: invisible to humans, bots fill it and get rejected */}
+      <input
+        type="text"
+        value={gotcha}
+        onChange={(e) => setGotcha(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
       />
       {state === 'error' && (
         <p className="text-xs text-[#ee6018]">
