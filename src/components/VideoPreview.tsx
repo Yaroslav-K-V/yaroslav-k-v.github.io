@@ -19,13 +19,14 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
   className = 'w-full max-h-80 object-contain bg-[#101010]'
 }) => {
   const [tapped, setTapped] = useState(false);
-  const [isMobile] = useState<boolean>(
+  const [stillMode] = useState<boolean>(
     () =>
       typeof window !== 'undefined' &&
-      window.matchMedia('(max-width: 640px)').matches
+      (window.matchMedia('(max-width: 640px)').matches ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   );
 
-  if (!tapped && isMobile) {
+  if (!tapped && stillMode) {
     return (
       <div className="overflow-hidden rounded-[3px] border border-[#3d3a39]">
         <button
@@ -34,7 +35,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
             e.stopPropagation();
             setTapped(true);
           }}
-          className="relative w-full cursor-pointer"
+          className="relative block w-full aspect-video cursor-pointer"
           aria-label={`Play ${alt}`}
         >
         {poster ? (
@@ -57,7 +58,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
     <video
       src={src}
       poster={poster}
-      autoPlay
+      autoPlay={!stillMode}
       muted
       loop
       playsInline
