@@ -22,6 +22,7 @@ type FormState = 'idle' | 'sending' | 'sent' | 'error';
 const ContactForm: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [topic, setTopic] = useState('Job offer');
   const [message, setMessage] = useState('');
   const [gotcha, setGotcha] = useState('');
   const [state, setState] = useState<FormState>('idle');
@@ -37,7 +38,9 @@ const ContactForm: React.FC = () => {
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),
+          topic,
           message: message.trim(),
+          _subject: `[Portfolio] ${topic} — ${name.trim()}`,
           _gotcha: gotcha
         })
       });
@@ -74,7 +77,7 @@ const ContactForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <input
           type="text"
           value={name}
@@ -93,6 +96,17 @@ const ContactForm: React.FC = () => {
           maxLength={200}
           className={inputClass}
         />
+        <select
+          value={topic}
+          onChange={(e) => setTopic(e.target.value)}
+          aria-label="Message topic"
+          className={`${inputClass} [color-scheme:dark]`}
+        >
+          <option>Job offer</option>
+          <option>Internship</option>
+          <option>Collaboration</option>
+          <option>Question</option>
+        </select>
       </div>
       <textarea
         value={message}
