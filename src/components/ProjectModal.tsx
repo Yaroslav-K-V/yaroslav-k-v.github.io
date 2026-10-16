@@ -303,7 +303,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             onClick={(e) => e.stopPropagation()}
           >
           {/* Top Dossier Metadata Ribbon */}
-          <div className="flex items-center justify-between px-5 sm:px-8 py-3.5 border-b border-[#3d3a39]/80 dark:border-white/10 bg-zinc-100/60 dark:bg-[#101010]/60 font-mono text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-5 sm:px-8 py-3.5 border-b border-[#3d3a39]/80 dark:border-white/10 bg-zinc-100/60 dark:bg-[#101010]/60 font-mono text-xs">
             <div className="flex items-center gap-3">
               <span className="font-bold tracking-wider text-zinc-900 dark:text-white">
                 {specNumber}
