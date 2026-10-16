@@ -11,7 +11,7 @@ export const contactsData = {
   telegramDisplay: '@yaroslav_krupoder',
   github: 'https://github.com/Yaroslav-K-V',
   githubDisplay: 'github.com/Yaroslav-K-V',
-  resumeUrl: 'https://drive.google.com/file/d/1NKXsgP631inObnjInSwFPNayHN7PGZUB/view?usp=sharing',
+  resumeUrl: '/cv.pdf',
   formspreeId: 'xkjokkkd', // Formspree contact form endpoint
   lastUpdated: 'October 2026'
 };

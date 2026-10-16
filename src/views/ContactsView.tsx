@@ -354,7 +354,13 @@ export const ContactsView: React.FC = () => {
             </a>
 
             <button
-              onClick={() => handleCopy('resume', contactsData.resumeUrl, 'Resume URL')}
+              onClick={() =>
+                handleCopy(
+                  'resume',
+                  new URL(contactsData.resumeUrl, window.location.origin).toString(),
+                  'Resume URL'
+                )
+              }
               className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-[10px] border border-zinc-300 dark:border-[#3d3a39] bg-[#eeeeee]/60 dark:bg-[#1d1a18]/60 text-zinc-800 dark:text-[#eeeeee] font-mono text-xs hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors"
               title="Copy Resume Direct Link"
             >
