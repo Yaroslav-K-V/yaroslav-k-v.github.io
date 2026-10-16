@@ -110,6 +110,7 @@ const ContactForm: React.FC = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name"
+          aria-label="Your name"
           required
           maxLength={100}
           className={inputClass}
@@ -119,6 +120,7 @@ const ContactForm: React.FC = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Your email"
+          aria-label="Your email"
           required
           maxLength={200}
           className={inputClass}
@@ -139,6 +141,7 @@ const ContactForm: React.FC = () => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Hi Yaroslav, …"
+        aria-label="Your message"
         required
         rows={4}
         maxLength={2000}

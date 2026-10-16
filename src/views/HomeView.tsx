@@ -176,7 +176,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
 
               <div className="mt-5 pt-3 border-t border-[#3d3a39]/70 dark:border-white/5 flex items-center justify-between text-[11px] font-mono text-[#8a8380] dark:text-[#8a8380]">
                 <span className="truncate">{card.meta}</span>
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#ee6018] dark:text-[#ee6018] shrink-0 ml-2 font-medium">
+                <span className="text-[#ee6018] dark:text-[#ee6018] shrink-0 ml-2 font-medium">
                   Open →
                 </span>
               </div>
