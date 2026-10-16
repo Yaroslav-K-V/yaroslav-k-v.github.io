@@ -26,11 +26,13 @@ const ContactForm: React.FC = () => {
   const [message, setMessage] = useState('');
   const [gotcha, setGotcha] = useState('');
   const [state, setState] = useState<FormState>('idle');
+  const [errorText, setErrorText] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) return;
     setState('sending');
+    setErrorText(null);
     try {
       const res = await fetch(`https://formspree.io/f/${contactsData.formspreeId}`, {
         method: 'POST',
@@ -44,14 +46,39 @@ const ContactForm: React.FC = () => {
           _gotcha: gotcha
         })
       });
-      if (!res.ok) throw new Error('send failed');
-      setState('sent');
-      setName('');
-      setEmail('');
-      setMessage('');
-      setGotcha('');
+      if (res.ok) {
+        setState('sent');
+        setName('');
+        setEmail('');
+        setMessage('');
+        setGotcha('');
+        return;
+      }
+      let detail: { errors?: { field?: string; message?: string }[] } = {};
+      try {
+        detail = await res.json();
+      } catch {
+        detail = {};
+      }
+      const fields = (detail.errors ?? [])
+        .map((er) => er.field)
+        .filter(Boolean)
+        .join(', ');
+      if (fields.includes('email')) {
+        setErrorText('That email doesn’t look right — double-check it.');
+      } else if (res.status === 422) {
+        setErrorText(
+          fields ? `Check the ${fields} field and try again.` : 'Something in the form looks off — check and try again.'
+        );
+      } else if (res.status === 403) {
+        setErrorText('Sending is blocked right now — try email instead.');
+      } else {
+        setErrorText('Couldn’t send — try again in a minute.');
+      }
+      setState('error');
     } catch {
       setState('error');
+      setErrorText('No connection — check your internet and try again.');
     }
   };
 
@@ -127,9 +154,9 @@ const ContactForm: React.FC = () => {
         aria-hidden="true"
         className="hidden"
       />
-      {state === 'error' && (
+      {state === 'error' && errorText && (
         <p className="text-xs text-[#ee6018]">
-          Couldn’t send — try email instead:{' '}
+          {errorText}{' '}
           <a href={`mailto:${contactsData.email}`} className="underline">
             {contactsData.email}
           </a>
@@ -507,7 +534,7 @@ export const ContactsView: React.FC = () => {
                 Phone (Varna, Bulgaria)
               </span>
               <a
-                href={`tel:${contactsData.phone}`}
+                href={`tel:${contactsData.phone.replace(/[^+\d]/g, '')}`}
                 className="text-sm font-mono font-bold text-zinc-900 dark:text-[#eeeeee] hover:underline"
               >
                 {contactsData.phone}
@@ -534,7 +561,7 @@ export const ContactsView: React.FC = () => {
                 Secondary Line (Ukraine)
               </span>
               <a
-                href={`tel:${contactsData.phoneUa}`}
+                href={`tel:${contactsData.phoneUa.replace(/[^+\d]/g, '')}`}
                 className="text-sm font-mono font-bold text-zinc-900 dark:text-[#eeeeee] hover:underline"
               >
                 {contactsData.phoneUa}
