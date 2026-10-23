@@ -23,7 +23,51 @@ export const projects: Project[] = [
     tech: ['TypeScript', 'JavaScript', 'React', 'Supabase', 'PostgreSQL', 'REST APIs', 'OpenRouter'],
     url: 'https://meetbadi.com',
     video: '/meetbadi-tour.mp4',
-    image: '/meetbadi-poster.jpg'
+    image: '/meetbadi-poster.jpg',
+    dossier: {
+      problemStatement:
+        'Modern video meetings and async team collaboration produce high volumes of conversational data that are easily lost or siloed. Teams require an end-to-end platform with browser-integrated context capture, reliable transcript and AI note generation, secure multi-tenant storage, and seamless billing with transactional notifications.',
+      scopeObjectives: [
+        'Production web platform & Chrome extension (MV3) development during internship at Grenergy LLC.',
+        'End-to-end full-stack feature delivery using TypeScript, React, and Supabase / PostgreSQL.',
+        'Resilient integrations with external services: OpenRouter (multi-LLM orchestration), Stripe (subscriptions), and Resend (transactional email).',
+        'Active bug triage, live data view optimizations, and engineering handover documentation.'
+      ],
+      keyDecisions: [
+        {
+          title: 'Manifest V3 Chrome Extension',
+          reasoning:
+            'Architected background service workers and content scripts adhering to Chrome MV3 security constraints, enabling low-overhead tab context and meeting capture.'
+        },
+        {
+          title: 'Supabase & PostgreSQL Row Level Security (RLS)',
+          reasoning:
+            'Enforced strict data isolation and audit controls directly in the database engine via declarative RLS policies across organization workspaces.'
+        },
+        {
+          title: 'Multi-LLM Gateway via OpenRouter',
+          reasoning:
+            'Standardized model interactions through a resilient gateway, allowing dynamic routing between Claude, GPT, and open-source models with automated retries.'
+        }
+      ],
+      stackMatrix: [
+        { category: 'Frontend & Extension', items: ['TypeScript', 'JavaScript', 'React', 'Chrome MV3 Extension'] },
+        { category: 'Backend & Database', items: ['Supabase', 'PostgreSQL', 'Row-Level Security (RLS)', 'Edge Functions'] },
+        { category: 'Cloud Integrations', items: ['OpenRouter (LLMs)', 'Stripe Billing', 'Resend Email'] },
+        { category: 'Engineering Practices', items: ['Production Bug Triage', 'REST API Design', 'Handover Documentation'] }
+      ],
+      metrics: [
+        { label: 'Status', value: 'Production live service' },
+        { label: 'Architecture', value: 'Web app + Chrome MV3' },
+        { label: 'Backend', value: 'Supabase / PostgreSQL' }
+      ],
+      architectureLayers: [
+        { name: 'Client & Extension', detail: 'React web application paired with Chrome MV3 extension for context capture' },
+        { name: 'API & Orchestration', detail: 'Edge functions and REST gateways routing requests with robust error boundaries' },
+        { name: 'Data & Auth Layer', detail: 'Supabase Auth with PostgreSQL tables protected by Row Level Security policies' },
+        { name: 'External Integrations', detail: 'Secure connectors to OpenRouter, Stripe webhooks, and Resend transactional email' }
+      ]
+    }
   },
   {
     id: 2,
@@ -43,7 +87,51 @@ export const projects: Project[] = [
       'Desktop shell: Flask backend + custom HTML/CSS/JS frontend via pywebview'
     ],
     tech: ['Python', 'Flask', 'pywebview', 'HTML', 'CSS', 'JavaScript', 'LLM APIs', 'pytest'],
-    github: 'https://github.com/Yaroslav-K-V/Unitra'
+    github: 'https://github.com/Yaroslav-K-V/Unitra',
+    dossier: {
+      problemStatement:
+        'Writing comprehensive unit test suites for complex Python codebases is repetitive, time-intensive, and prone to blind spots in branch coverage. Existing test generation tools often require heavy cloud dependencies or struggle with project-specific function contracts.',
+      scopeObjectives: [
+        'Deterministic static AST analysis without executing untrusted code.',
+        'Automated generation of robust pytest test cases for single functions or entire modules.',
+        'Native desktop application interface with live test runner output and history tracking.',
+        'Zero Node.js runtime overhead by leveraging Python pywebview.'
+      ],
+      keyDecisions: [
+        {
+          title: 'Python AST Parser vs Regex Matching',
+          reasoning:
+            'Employed Python’s native ast module to deterministically walk the Abstract Syntax Tree, accurately extracting function signatures, type annotations, and control branches.'
+        },
+        {
+          title: 'pywebview + Flask vs Electron',
+          reasoning:
+            'Served the modern HTML/JS interface from a local Flask server rendered in a native pywebview window, eliminating Node.js runtime bloat and reducing distribution complexity.'
+        },
+        {
+          title: 'LLM Integration Layer',
+          reasoning:
+            'Supplied the LLM with parsed AST signatures and docstrings, allowing prompt-engineered generation of syntactically valid, runnable pytest suites.'
+        }
+      ],
+      stackMatrix: [
+        { category: 'Core Analysis', items: ['Python 3.10+', 'AST Module', 'Static Analysis Engine'] },
+        { category: 'Desktop GUI', items: ['Flask', 'pywebview', 'HTML5/CSS3', 'JavaScript'] },
+        { category: 'Test Automation', items: ['pytest', 'Subprocess Runner', 'Live Output Stream'] },
+        { category: 'AI Layer', items: ['LLM APIs', 'Prompt Engineering'] }
+      ],
+      metrics: [
+        { label: 'Analysis', value: 'AST, no code execution' },
+        { label: 'Test runner', value: 'pytest subprocess' },
+        { label: 'Desktop shell', value: 'pywebview + Flask' }
+      ],
+      architectureLayers: [
+        { name: 'Modular Separation', detail: 'routes / core logic / agent / UI' },
+        { name: 'Desktop Host', detail: 'Flask serves the frontend inside a native desktop window via pywebview' },
+        { name: 'AI Layer', detail: 'LLM integration layer with prompt engineering for pytest generation' },
+        { name: 'Test Runner', detail: 'Subprocess-based pytest runner streaming stdout/stderr directly into GUI' }
+      ]
+    }
   },
   {
     id: 3,
@@ -65,7 +153,50 @@ export const projects: Project[] = [
     tech: ['Python', 'PySide6', 'Pygments', 'Local LLM'],
     github: 'https://github.com/Yaroslav-K-V/PyGlow',
     image: '/pyglow-poster.jpg',
-    video: '/pyglow-demo.mp4'
+    video: '/pyglow-demo.mp4',
+    dossier: {
+      problemStatement:
+        'Modern code editors (VS Code, JetBrains) consume substantial CPU and RAM, creating noticeable lag and battery drain for quick Python scripts or on low-spec hardware. Developers need a lightweight, instantaneous editor with smart features and zero telemetry.',
+      scopeObjectives: [
+        'Fast launch and low memory footprint for quick edits and low-spec hardware.',
+        'Syntax highlighting with customizable theme engine and automatic OS theme detection.',
+        'Smart editing ergonomics: auto-indent, bracket matching, line duplication, drag & drop.',
+        'Optional local AI autocomplete that keeps code on the machine.'
+      ],
+      keyDecisions: [
+        {
+          title: 'PySide6 (Qt) vs Web-Based Frameworks',
+          reasoning:
+            'Selected Qt for Python for hardware-accelerated text rendering, native OS integration, and responsive keystroke latency.'
+        },
+        {
+          title: 'Pygments Tokenizer vs Language Servers',
+          reasoning:
+            'Utilized Pygments for fast, lightweight lexical tokenization, avoiding the heavy memory footprint of full language server protocols for simple edits.'
+        },
+        {
+          title: 'Local LLM Autocomplete',
+          reasoning:
+            'Embedded optional local LLM-based inline autocomplete for private code completion while editing.'
+        }
+      ],
+      stackMatrix: [
+        { category: 'GUI Engine', items: ['PySide6 (Qt for Python)', 'Hardware Accelerated'] },
+        { category: 'Syntax Highlighter', items: ['Pygments'] },
+        { category: 'Machine Learning', items: ['Local LLM', 'Inline Autocomplete'] },
+        { category: 'Operating System', items: ['OS Theme Detection', 'Session Serialization'] }
+      ],
+      metrics: [
+        { label: 'GUI Runtime', value: 'Native Qt (PySide6)' },
+        { label: 'Highlighting', value: 'Pygments' },
+        { label: 'Autocomplete', value: 'Optional local LLM' }
+      ],
+      architectureLayers: [
+        { name: 'Editor Viewport', detail: 'PySide6 QPlainTextEdit with custom syntax highlighter' },
+        { name: 'Lexical Analysis', detail: 'Pygments tokenization with custom high-contrast color scheme' },
+        { name: 'Inference Layer', detail: 'Optional local LLM autocomplete triggered inline while editing' }
+      ]
+    }
   },
   {
     id: 4,
@@ -86,7 +217,49 @@ export const projects: Project[] = [
     ],
     note: 'pandas, seaborn, reproducible analysis with documented findings.',
     tech: ['Python', 'pandas', 'seaborn', 'Jupyter Notebook'],
-    github: 'https://github.com/Yaroslav-K-V/applied-data-science'
+    github: 'https://github.com/Yaroslav-K-V/applied-data-science',
+    dossier: {
+      problemStatement:
+        'Multidimensional real-world datasets in housing economics, retail transactions, and student career paths contain hidden relationships, non-linear pricing effects, and operational bottlenecks that require rigorous exploratory data analysis to surface.',
+      scopeObjectives: [
+        'Exploratory analysis of three real-world datasets: real estate pricing, retail sales, student performance.',
+        'Cleaning and transformation of raw data before visualization.',
+        'Charts and summaries that surface trends and correlations.',
+        'Reproducible Jupyter Notebook reports with documented findings.'
+      ],
+      keyDecisions: [
+        {
+          title: 'Vectorized NumPy/Pandas Operations',
+          reasoning:
+            'Leveraged vectorized matrix computations to ensure high performance on large datasets without iterative Python loop bottlenecks.'
+        },
+        {
+          title: 'High-Density Statistical Visualizations',
+          reasoning:
+            'Utilized Seaborn and Matplotlib for publication-grade heatmaps, density plots, and regression lines engineered for clear interpretation.'
+        },
+        {
+          title: 'Focus on Insights over Generic Plotting',
+          reasoning:
+            'Structured the notebook to extract verifiable conclusions, isolating socioeconomic and commercial drivers.'
+        }
+      ],
+      stackMatrix: [
+        { category: 'Data Analysis', items: ['Python', 'pandas', 'numpy'] },
+        { category: 'Visualization', items: ['seaborn', 'matplotlib'] },
+        { category: 'Environment', items: ['Jupyter Notebook', 'Interactive Python'] }
+      ],
+      metrics: [
+        { label: 'Datasets', value: 'Real estate · Retail · Students' },
+        { label: 'Tools', value: 'pandas · seaborn' },
+        { label: 'Output', value: 'Jupyter reports' }
+      ],
+      architectureLayers: [
+        { name: 'Ingestion & Cleaning', detail: 'Pandas data frame normalization, outlier handling, and missing data imputation' },
+        { name: 'Statistical Modeling', detail: 'Vectorized aggregations, quantile cuts, and correlation matrices' },
+        { name: 'Visualization', detail: 'Seaborn correlation heatmaps and distribution histograms' }
+      ]
+    }
   },
   {
     id: 5,
@@ -109,6 +282,50 @@ export const projects: Project[] = [
     tech: ['Swift', 'SwiftUI', 'CoreWLAN', 'Keychain', 'SwiftPM', 'GitHub Actions'],
     github: 'https://github.com/Yaroslav-K-V/hotspot-guard',
     image: '/hotspot-poster.jpg',
-    video: '/hotspot-demo.mp4'
+    video: '/hotspot-demo.mp4',
+    dossier: {
+      problemStatement:
+        'macOS built-in network status frequently reports active Wi-Fi association even when captive portals, DHCP stalls, or cellular hotspot drops silently halt all traffic. Developers and remote engineers suffer broken long-running commands and stale sessions without immediate visual alerts or automated recovery.',
+      scopeObjectives: [
+        'Autonomous macOS menu bar watchdog monitoring true end-to-end internet reachability with zero perceptible CPU or memory overhead.',
+        'Active TCP handshake probing against known endpoints to detect silent gateway drops and captive portals.',
+        'Automatic Wi-Fi cycle and reconnection routines leveraging CoreWLAN and macOS Keychain for credential storage.',
+        'Rigorous agentic engineering pipeline: spec-first architecture, AI-agent code generation, manual review, 192 self-tests, and CI automation.'
+      ],
+      keyDecisions: [
+        {
+          title: 'Active TCP Handshake vs ICMP Ping',
+          reasoning:
+            'Implemented non-blocking TCP handshakes on standard ports rather than ICMP pings to avoid ISP rate-limiting and catch portal captive redirects immediately.'
+        },
+        {
+          title: 'Protocol-Driven Core with Zero UI Coupling',
+          reasoning:
+            'Isolated the network monitor and reconnection logic into a standalone Swift package, enabling comprehensive headless verification (192 checks) without running SwiftUI.'
+        },
+        {
+          title: 'Agentic Development Methodology',
+          reasoning:
+            'Defined formal architecture contracts and constraints, delegated implementation to AI coding agents, and enforced quality via SwiftLint, Periphery, and GitHub Actions CI.'
+        }
+      ],
+      stackMatrix: [
+        { category: 'Language & UI', items: ['Swift 5.9+', 'SwiftUI Menu Bar', 'Swift Package Manager'] },
+        { category: 'macOS Frameworks', items: ['CoreWLAN', 'SystemConfiguration', 'Keychain Services'] },
+        { category: 'Quality & Testing', items: ['192 Self-Tests', 'SwiftLint', 'Periphery', 'GitHub Actions'] },
+        { category: 'Engineering Pattern', items: ['Agentic Development', 'Protocol-Oriented Design', 'Zero Memory Overhead'] }
+      ],
+      metrics: [
+        { label: 'Memory Footprint', value: '< 15MB zero overhead' },
+        { label: 'Verification', value: '192 automated checks' },
+        { label: 'Platform', value: 'macOS native menu bar' }
+      ],
+      architectureLayers: [
+        { name: 'Status Presentation', detail: 'Lightweight SwiftUI menu bar item reflecting live connection states (green/yellow/red/gray)' },
+        { name: 'Reachability Engine', detail: 'Background watchdog performing periodic asynchronous TCP handshake verification' },
+        { name: 'Reconnection Manager', detail: 'CoreWLAN integration orchestrating interface cycle and known hotspot association' },
+        { name: 'Security & Credentials', detail: 'macOS Keychain Services integration for safe hotspot credential retrieval' }
+      ]
+    }
   }
 ];

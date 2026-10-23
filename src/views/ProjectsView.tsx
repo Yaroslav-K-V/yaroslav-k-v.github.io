@@ -480,3 +480,5 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
     </motion.div>
   );
 };
+
+export default ProjectsView;

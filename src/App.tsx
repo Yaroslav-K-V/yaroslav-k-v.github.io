@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { PageRoute, Project } from './types';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
-import { ProjectModal } from './components/ProjectModal';
-import { HomeView } from './views/HomeView';
-import { AboutView } from './views/AboutView';
-import { ProjectsView } from './views/ProjectsView';
-import { ContactsView } from './views/ContactsView';
+import { RouteLoader, ModalLoader } from './components/RouteLoader';
 import { AnimatePresence } from 'framer-motion';
+
+// Code-split page views and modal to optimize initial bundle size
+const HomeView = lazy(() => import('./views/HomeView'));
+const AboutView = lazy(() => import('./views/AboutView'));
+const ProjectsView = lazy(() => import('./views/ProjectsView'));
+const ContactsView = lazy(() => import('./views/ContactsView'));
+const ProjectModal = lazy(() => import('./components/ProjectModal'));
 
 function parseRouteFromLocation(): PageRoute {
   // Check query parameter redirect first (e.g. from 404.html redirect /?p=/about)
@@ -40,6 +43,7 @@ function parseRouteFromLocation(): PageRoute {
 export const App: React.FC = () => {
   const [currentRoute, setCurrentRoute] = useState<PageRoute>(parseRouteFromLocation());
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [modalLoaded, setModalLoaded] = useState<boolean>(false);
   // Factory theme is dark-only.
   const [isDark] = useState<boolean>(true);
 
@@ -66,6 +70,17 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleSelectProject = (project: Project) => {
+    setModalLoaded(true);
+    setSelectedProject(project);
+  };
+
+  useEffect(() => {
+    if (selectedProject) {
+      setModalLoaded(true);
+    }
+  }, [selectedProject]);
+
   // Per-route document titles.
   useEffect(() => {
     const titles: Record<PageRoute, string> = {
@@ -75,6 +90,35 @@ export const App: React.FC = () => {
       contacts: 'Contacts — Yaroslav Krupoder'
     };
     document.title = titles[currentRoute];
+  }, [currentRoute]);
+
+  // Prefetch remaining views on idle so subsequent clicks transition instantly
+  useEffect(() => {
+    const prefetchRoutes = () => {
+      import('./views/HomeView');
+      import('./views/AboutView');
+      import('./views/ProjectsView');
+      import('./views/ContactsView');
+    };
+
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const idleWindow = window as unknown as {
+        requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number;
+        cancelIdleCallback: (id: number) => void;
+      };
+      const handle = idleWindow.requestIdleCallback(prefetchRoutes, { timeout: 2500 });
+      return () => idleWindow.cancelIdleCallback(handle);
+    } else {
+      const timer = setTimeout(prefetchRoutes, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // When user is on projects view, prefetch ProjectModal chunk so card clicks are instant
+  useEffect(() => {
+    if (currentRoute === 'projects') {
+      import('./components/ProjectModal');
+    }
   }, [currentRoute]);
 
   const toggleTheme = () => {
@@ -91,27 +135,33 @@ export const App: React.FC = () => {
       />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-16">
-        <AnimatePresence mode="wait">
-          {currentRoute === 'welcome' && (
-            <HomeView key="welcome" onNavigate={navigateTo} />
-          )}
-          {currentRoute === 'about' && <AboutView key="about" />}
-          {currentRoute === 'projects' && (
-            <ProjectsView
-              key="projects"
-              onSelectProject={(p) => setSelectedProject(p)}
-            />
-          )}
-          {currentRoute === 'contacts' && <ContactsView key="contacts" />}
-        </AnimatePresence>
+        <Suspense fallback={<RouteLoader />}>
+          <AnimatePresence mode="wait">
+            {currentRoute === 'welcome' && (
+              <HomeView key="welcome" onNavigate={navigateTo} />
+            )}
+            {currentRoute === 'about' && <AboutView key="about" />}
+            {currentRoute === 'projects' && (
+              <ProjectsView
+                key="projects"
+                onSelectProject={handleSelectProject}
+              />
+            )}
+            {currentRoute === 'contacts' && <ContactsView key="contacts" />}
+          </AnimatePresence>
+        </Suspense>
       </main>
 
       <Footer />
 
-      <ProjectModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      {modalLoaded && (
+        <Suspense fallback={<ModalLoader />}>
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };

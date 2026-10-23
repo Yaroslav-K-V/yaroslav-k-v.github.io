@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PageRoute } from '../types';
 import { contactsData } from '../data/contacts';
 import { FileText, Menu, X, ExternalLink } from 'lucide-react';
@@ -15,19 +15,72 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+  const prevOpenRef = useRef(false);
 
-  // Overlay mode: lock background scroll + close on Escape.
+  // Overlay mode: lock background scroll + focus trap + close on Escape.
   useEffect(() => {
-    if (!mobileMenuOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMobileMenuOpen(false);
-    };
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+
+      // Move focus to first navigation item on open
+      const timer = requestAnimationFrame(() => {
+        const menuEl = mobileMenuRef.current;
+        if (!menuEl) return;
+        const focusable = menuEl.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length > 0) {
+          focusable[0].focus();
+        }
+      });
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          setMobileMenuOpen(false);
+          return;
+        }
+
+        if (e.key === 'Tab') {
+          const menuEl = mobileMenuRef.current;
+          if (!menuEl) return;
+          const focusable = Array.from(
+            menuEl.querySelectorAll<HTMLElement>(
+              'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            )
+          );
+          if (focusable.length === 0) return;
+
+          const firstElement = focusable[0];
+          const lastElement = focusable[focusable.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === firstElement || !menuEl.contains(document.activeElement)) {
+              e.preventDefault();
+              lastElement.focus();
+            }
+          } else {
+            if (document.activeElement === lastElement || !menuEl.contains(document.activeElement)) {
+              e.preventDefault();
+              firstElement.focus();
+            }
+          }
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        cancelAnimationFrame(timer);
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    } else if (prevOpenRef.current) {
+      // Return focus to menu toggle button when closing
+      menuButtonRef.current?.focus();
+    }
+    prevOpenRef.current = mobileMenuOpen;
   }, [mobileMenuOpen]);
 
   const navItems: { route: PageRoute; label: string }[] = [
@@ -101,9 +154,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Mobile menu trigger */}
           <button
+            ref={menuButtonRef}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 rounded-[3px] border border-[#3d3a39] dark:border-white/10 text-zinc-600 dark:text-[#8a8380] hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#eeeeee]/5 transition-colors"
             aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav-menu"
           >
             {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
@@ -118,7 +174,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
-          <div className="md:hidden fixed top-16 left-0 right-0 z-40 px-4 pt-3 pb-5 space-y-3 bg-[#101010] border-b border-[#3d3a39]">
+          <div
+            id="mobile-nav-menu"
+            ref={mobileMenuRef}
+            className="md:hidden fixed top-16 left-0 right-0 z-40 px-4 pt-3 pb-5 space-y-3 bg-[#101010] border-b border-[#3d3a39]"
+          >
           <div className="flex flex-col gap-1">
             {navItems.map((item) => {
               const isActive = currentRoute === item.route;

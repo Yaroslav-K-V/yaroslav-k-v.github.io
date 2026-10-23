@@ -106,26 +106,34 @@ const ContactForm: React.FC = () => {
     <form onSubmit={handleSubmit} className="space-y-3">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <input
+          id="contact-name"
+          name="name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name"
           aria-label="Your name"
+          autoComplete="name"
           required
           maxLength={100}
           className={inputClass}
         />
         <input
+          id="contact-email"
+          name="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Your email"
           aria-label="Your email"
+          autoComplete="email"
           required
           maxLength={200}
           className={inputClass}
         />
         <select
+          id="contact-topic"
+          name="topic"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           aria-label="Message topic"
@@ -138,6 +146,8 @@ const ContactForm: React.FC = () => {
         </select>
       </div>
       <textarea
+        id="contact-message"
+        name="message"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Hi Yaroslav, …"
@@ -149,6 +159,8 @@ const ContactForm: React.FC = () => {
       />
       {/* Honeypot: invisible to humans, bots fill it and get rejected */}
       <input
+        id="contact-gotcha"
+        name="_gotcha"
         type="text"
         value={gotcha}
         onChange={(e) => setGotcha(e.target.value)}
@@ -604,3 +616,5 @@ export const ContactsView: React.FC = () => {
     </motion.div>
   );
 };
+
+export default ContactsView;

@@ -2,6 +2,15 @@ export type ProjectCategory = 'all' | 'ai' | 'fullstack' | 'desktop';
 
 export type ProjectBadge = 'Live Service' | 'Desktop App' | 'Open Source' | 'In Progress';
 
+export interface ProjectDossierData {
+  problemStatement: string;
+  scopeObjectives: string[];
+  keyDecisions: { title: string; reasoning: string }[];
+  stackMatrix: { category: string; items: string[] }[];
+  metrics: { label: string; value: string }[];
+  architectureLayers: { name: string; detail: string }[];
+}
+
 export interface Project {
   id: number;
   title: string;
@@ -17,6 +26,7 @@ export interface Project {
   url?: string;
   image?: string;
   video?: string;
+  dossier?: ProjectDossierData;
 }
 
 export interface ExperienceItem {

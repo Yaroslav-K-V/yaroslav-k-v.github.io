@@ -19,7 +19,7 @@ Personal portfolio and developer showcase for [yaroslav-k-v.github.io](https://y
 ├── src/
 │   ├── components/      # Reusable UI components (Navbar, Footer, ProjectModal, Icons)
 │   ├── data/            # Structured data (projects, experience, skills, contacts)
-│   ├── views/           # Page views (HomeView, AboutView, ProjectsView, ResearchView, ContactsView)
+│   ├── views/           # Page views (HomeView, AboutView, ProjectsView, ContactsView)
 │   ├── App.tsx          # Client-side router & theme manager
 │   ├── main.tsx         # Application entry point
 │   └── types.ts         # TypeScript definitions

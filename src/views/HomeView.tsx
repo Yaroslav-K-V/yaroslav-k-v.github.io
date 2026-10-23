@@ -187,3 +187,5 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
     </motion.div>
   );
 };
+
+export default HomeView;

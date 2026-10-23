@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Project, ProjectBadge } from '../types';
+import React, { useEffect, useState, useRef } from 'react';
+import { Project, ProjectBadge, ProjectDossierData } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
@@ -23,17 +23,13 @@ interface ProjectModalProps {
 
 type ModalTab = 'all' | 'overview' | 'architecture' | 'tech' | 'metrics';
 
-interface ProjectDossierData {
-  problemStatement: string;
-  scopeObjectives: string[];
-  keyDecisions: { title: string; reasoning: string }[];
-  stackMatrix: { category: string; items: string[] }[];
-  metrics: { label: string; value: string }[];
-  architectureLayers: { name: string; detail: string }[];
-}
-
 export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
   const [activeTab, setActiveTab] = useState<ModalTab>('all');
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   // Reset tab to 'all' whenever a new project is selected
   useEffect(() => {
@@ -42,22 +38,88 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
     }
   }, [project]);
 
-  // Keyboard Escape listener & body scroll lock
+  // Focus trap, keyboard listeners and focus restoration
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
     if (project) {
+      // 1. Save previous active element before modal opened
+      if (!triggerRef.current) {
+        triggerRef.current = document.activeElement as HTMLElement;
+      }
       document.body.style.overflow = 'hidden';
+
+      // 2. Focus on close button or modal container
+      const focusTimer = setTimeout(() => {
+        if (closeButtonRef.current) {
+          closeButtonRef.current.focus();
+        } else if (modalRef.current) {
+          modalRef.current.focus();
+        }
+      }, 50);
+
+      // 3. Tab trap and Escape handler
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          onCloseRef.current();
+          return;
+        }
+
+        if (e.key === 'Tab' && modalRef.current) {
+          const focusableSelector =
+            'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+          const focusables = modalRef.current.querySelectorAll<HTMLElement>(focusableSelector);
+          const focusableElements = Array.from(focusables).filter(
+            (el) => el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0
+          );
+
+          if (focusableElements.length === 0) {
+            e.preventDefault();
+            return;
+          }
+
+          const firstElement = focusableElements[0];
+          const lastElement = focusableElements[focusableElements.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === firstElement || !modalRef.current.contains(document.activeElement)) {
+              e.preventDefault();
+              lastElement.focus();
+            }
+          } else {
+            if (document.activeElement === lastElement || !modalRef.current.contains(document.activeElement)) {
+              e.preventDefault();
+              firstElement.focus();
+            }
+          }
+        }
+      };
+
       window.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        clearTimeout(focusTimer);
+        window.removeEventListener('keydown', handleKeyDown);
+      };
     } else {
       document.body.style.overflow = '';
+      if (triggerRef.current) {
+        const el = triggerRef.current;
+        triggerRef.current = null;
+        el.focus();
+      }
     }
+  }, [project]);
+
+  // Ensure scroll lock cleanup and focus return if unmounted while modal is open
+  useEffect(() => {
     return () => {
       document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
+      if (triggerRef.current) {
+        triggerRef.current.focus();
+        triggerRef.current = null;
+      }
     };
-  }, [project, onClose]);
+  }, []);
 
   const getStatusBadge = (badge: ProjectBadge) => {
     switch (badge) {
@@ -93,148 +155,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
   };
 
   const getProjectDossier = (p: Project): ProjectDossierData => {
-    if (p.id === 2) {
-      // Unitra
-      return {
-        problemStatement:
-          'Writing comprehensive unit test suites for complex Python codebases is repetitive, time-intensive, and prone to blind spots in branch coverage. Existing test generation tools often require heavy cloud dependencies or struggle with project-specific function contracts.',
-        scopeObjectives: [
-          'Deterministic static AST analysis without executing untrusted code.',
-          'Automated generation of robust pytest test cases for single functions or entire modules.',
-          'Native desktop application interface with live test runner output and history tracking.',
-          'Zero Node.js runtime overhead by leveraging Python pywebview.'
-        ],
-        keyDecisions: [
-          {
-            title: 'Python AST Parser vs Regex Matching',
-            reasoning:
-              'Employed Python’s native ast module to deterministically walk the Abstract Syntax Tree, accurately extracting function signatures, type annotations, and control branches.'
-          },
-          {
-            title: 'pywebview + Flask vs Electron',
-            reasoning:
-              'Served the modern HTML/JS interface from a local Flask server rendered in a native pywebview window, eliminating Node.js runtime bloat and reducing distribution complexity.'
-          },
-          {
-            title: 'LLM Integration Layer',
-            reasoning:
-              'Supplied the LLM with parsed AST signatures and docstrings, allowing prompt-engineered generation of syntactically valid, runnable pytest suites.'
-          }
-        ],
-        stackMatrix: [
-          { category: 'Core Analysis', items: ['Python 3.10+', 'AST Module', 'Static Analysis Engine'] },
-          { category: 'Desktop GUI', items: ['Flask', 'pywebview', 'HTML5/CSS3', 'JavaScript'] },
-          { category: 'Test Automation', items: ['pytest', 'Subprocess Runner', 'Live Output Stream'] },
-          { category: 'AI Layer', items: ['LLM APIs', 'Prompt Engineering'] }
-        ],
-        metrics: [
-          { label: 'Analysis', value: 'AST, no code execution' },
-          { label: 'Test runner', value: 'pytest subprocess' },
-          { label: 'Desktop shell', value: 'pywebview + Flask' }
-        ],
-        architectureLayers: [
-          { name: 'Modular Separation', detail: 'routes / core logic / agent / UI' },
-          { name: 'Desktop Host', detail: 'Flask serves the frontend inside a native desktop window via pywebview' },
-          { name: 'AI Layer', detail: 'LLM integration layer with prompt engineering for pytest generation' },
-          { name: 'Test Runner', detail: 'Subprocess-based pytest runner streaming stdout/stderr directly into GUI' }
-        ]
-      };
+    if (p.dossier) {
+      return p.dossier;
     }
 
-    if (p.id === 3) {
-      // PyGlow
-      return {
-        problemStatement:
-          'Modern code editors (VS Code, JetBrains) consume substantial CPU and RAM, creating noticeable lag and battery drain for quick Python scripts or on low-spec hardware. Developers need a lightweight, instantaneous editor with smart features and zero telemetry.',
-        scopeObjectives: [
-          'Fast launch and low memory footprint for quick edits and low-spec hardware.',
-          'Syntax highlighting with customizable theme engine and automatic OS theme detection.',
-          'Smart editing ergonomics: auto-indent, bracket matching, line duplication, drag & drop.',
-          'Optional local AI autocomplete that keeps code on the machine.'
-        ],
-        keyDecisions: [
-          {
-            title: 'PySide6 (Qt) vs Web-Based Frameworks',
-            reasoning:
-              'Selected Qt for Python for hardware-accelerated text rendering, native OS integration, and responsive keystroke latency.'
-          },
-          {
-            title: 'Pygments Tokenizer vs Language Servers',
-            reasoning:
-              'Utilized Pygments for fast, lightweight lexical tokenization, avoiding the heavy memory footprint of full language server protocols for simple edits.'
-          },
-          {
-            title: 'Local LLM Autocomplete',
-            reasoning:
-              'Embedded optional local LLM-based inline autocomplete for private code completion while editing.'
-          }
-        ],
-        stackMatrix: [
-          { category: 'GUI Engine', items: ['PySide6 (Qt for Python)', 'Hardware Accelerated'] },
-          { category: 'Syntax Highlighter', items: ['Pygments'] },
-          { category: 'Machine Learning', items: ['Local LLM', 'Inline Autocomplete'] },
-          { category: 'Operating System', items: ['OS Theme Detection', 'Session Serialization'] }
-        ],
-        metrics: [
-          { label: 'GUI Runtime', value: 'Native Qt (PySide6)' },
-          { label: 'Highlighting', value: 'Pygments' },
-          { label: 'Autocomplete', value: 'Optional local LLM' }
-        ],
-        architectureLayers: [
-          { name: 'Editor Viewport', detail: 'PySide6 QPlainTextEdit with custom syntax highlighter' },
-          { name: 'Lexical Analysis', detail: 'Pygments tokenization with custom high-contrast color scheme' },
-          { name: 'Inference Layer', detail: 'Optional local LLM autocomplete triggered inline while editing' }
-        ]
-      };
-    }
-
-    if (p.id === 4) {
-      // Applied Data Science
-      return {
-        problemStatement:
-          'Multidimensional real-world datasets in housing economics, retail transactions, and student career paths contain hidden relationships, non-linear pricing effects, and operational bottlenecks that require rigorous exploratory data analysis to surface.',
-        scopeObjectives: [
-          'Exploratory analysis of three real-world datasets: real estate pricing, retail sales, student performance.',
-          'Cleaning and transformation of raw data before visualization.',
-          'Charts and summaries that surface trends and correlations.',
-          'Reproducible Jupyter Notebook reports with documented findings.'
-        ],
-        keyDecisions: [
-          {
-            title: 'Vectorized NumPy/Pandas Operations',
-            reasoning:
-              'Leveraged vectorized matrix computations to ensure high performance on large datasets without iterative Python loop bottlenecks.'
-          },
-          {
-            title: 'High-Density Statistical Visualizations',
-            reasoning:
-              'Utilized Seaborn and Matplotlib for publication-grade heatmaps, density plots, and regression lines engineered for clear interpretation.'
-          },
-          {
-            title: 'Focus on Insights over Generic Plotting',
-            reasoning:
-              'Structured the notebook to extract verifiable conclusions, isolating socioeconomic and commercial drivers.'
-          }
-        ],
-        stackMatrix: [
-          { category: 'Data Analysis', items: ['Python', 'pandas', 'numpy'] },
-          { category: 'Visualization', items: ['seaborn', 'matplotlib'] },
-          { category: 'Environment', items: ['Jupyter Notebook', 'Interactive Python'] }
-        ],
-        metrics: [
-          { label: 'Datasets', value: 'Real estate · Retail · Students' },
-          { label: 'Tools', value: 'pandas · seaborn' },
-          { label: 'Output', value: 'Jupyter reports' }
-        ],
-        architectureLayers: [
-          { name: 'Ingestion & Cleaning', detail: 'Pandas data frame normalization, outlier handling, and missing data imputation' },
-          { name: 'Statistical Modeling', detail: 'Vectorized aggregations, quantile cuts, and correlation matrices' },
-          { name: 'Visualization', detail: 'Seaborn correlation heatmaps and distribution histograms' }
-        ]
-      };
-    }
-
-    // Default / Generic fallback
     return {
       problemStatement: p.description,
       scopeObjectives: p.features,
@@ -292,6 +216,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
 
           {/* Modal Window: Engineering Spec Sheet Dossier */}
           <motion.div
+            ref={modalRef}
+            tabIndex={-1}
             role="dialog"
             aria-modal="true"
             aria-labelledby="dossier-title"
@@ -299,7 +225,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#eeeeee]/95 dark:bg-[#101010]/90 text-zinc-900 dark:text-[#eeeeee] rounded-[10px] border border-[#3d3a39] dark:border-white/10 shadow-none backdrop-blur-2xl z-10 overflow-hidden"
+            className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#eeeeee]/95 dark:bg-[#101010]/90 text-zinc-900 dark:text-[#eeeeee] rounded-[10px] border border-[#3d3a39] dark:border-white/10 shadow-none backdrop-blur-2xl z-10 overflow-hidden outline-none"
             onClick={(e) => e.stopPropagation()}
           >
           {/* Top Dossier Metadata Ribbon */}
@@ -322,6 +248,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                 REV: 2026
               </span>
               <button
+                ref={closeButtonRef}
                 onClick={onClose}
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-zinc-600 dark:text-[#8a8380] hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-[#eeeeee]/10 transition-colors text-xs font-mono"
                 aria-label="Close specification sheet"
@@ -636,3 +563,5 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
     </AnimatePresence>
   );
 };
+
+export default ProjectModal;

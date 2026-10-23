@@ -508,3 +508,5 @@ export const AboutView: React.FC = () => {
     </motion.div>
   );
 };
+
+export default AboutView;
