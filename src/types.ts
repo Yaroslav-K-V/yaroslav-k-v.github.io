@@ -13,6 +13,7 @@ export interface ProjectDossierData {
 
 export interface Project {
   id: number;
+  slug: string;
   title: string;
   subtitle: string;
   description: string;

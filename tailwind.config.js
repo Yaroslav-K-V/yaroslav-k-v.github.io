@@ -16,8 +16,8 @@ export default {
         },
       },
       fontFamily: {
-        mono: ['"Geist Mono"', '"JetBrains Mono"', '"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
-        sans: ['Geist', 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
+        sans: ['"Geist Sans"', 'system-ui', 'sans-serif'],
       },
     },
   },

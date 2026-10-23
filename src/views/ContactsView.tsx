@@ -260,6 +260,7 @@ export const ContactsView: React.FC = () => {
       href: contactsData.linkedin,
       actionLabel: 'Open',
       isExternal: true,
+      rel: 'me noopener noreferrer',
       icon: <LinkedinIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
     },
     {
@@ -274,6 +275,7 @@ export const ContactsView: React.FC = () => {
       href: contactsData.github,
       actionLabel: 'Open',
       isExternal: true,
+      rel: 'me noopener noreferrer',
       icon: <GithubIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
     }
   ];
@@ -511,7 +513,7 @@ export const ContactsView: React.FC = () => {
                 <a
                   href={channel.href}
                   target={channel.isExternal ? '_blank' : undefined}
-                  rel={channel.isExternal ? 'noopener noreferrer' : undefined}
+                  rel={channel.rel || (channel.isExternal ? 'noopener noreferrer' : undefined)}
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[10px] text-xs font-mono font-semibold bg-zinc-100 dark:bg-[#3d3a39] text-zinc-900 dark:text-[#eeeeee] hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
                 >
                   <span>{channel.actionLabel}</span>

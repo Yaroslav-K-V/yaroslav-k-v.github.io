@@ -3,6 +3,7 @@ import { Project } from '../types';
 export const projects: Project[] = [
   {
     id: 1,
+    slug: 'meetbadi',
     title: 'meetbadi.com',
     subtitle: 'Production meeting platform — full-stack internship contribution',
     description: 'Live web platform I helped maintain and extend during my Grenergy internship: web app, Chrome extension, and Supabase backend.',
@@ -71,6 +72,7 @@ export const projects: Project[] = [
   },
   {
     id: 2,
+    slug: 'unitra',
     title: 'Unitra',
     subtitle: 'AI-powered Python Unit Test Generator — Desktop App',
     description: 'AI-powered desktop application that automatically generates Python unit tests from source code.',
@@ -135,6 +137,7 @@ export const projects: Project[] = [
   },
   {
     id: 3,
+    slug: 'pyglow',
     title: 'PyGlow',
     subtitle: 'Minimal Python Code Editor with Local AI Autocomplete',
     description: 'Lightweight Python code editor built from scratch with syntax highlighting, search/replace, auto-indent, and multiple themes.',
@@ -200,6 +203,7 @@ export const projects: Project[] = [
   },
   {
     id: 4,
+    slug: 'applied-data-science',
     title: 'Applied Data Science',
     subtitle: 'Exploratory Data Analysis with Python — Jupyter Notebook',
     description: 'Conducted exploratory data analysis on real estate pricing, retail sales, and student performance datasets.',
@@ -263,6 +267,7 @@ export const projects: Project[] = [
   },
   {
     id: 5,
+    slug: 'hotspotguard',
     title: 'HotspotGuard',
     subtitle: 'macOS Wi-Fi watchdog — built with AI agents (Swift)',
     description: 'An exercise in agentic development: a macOS menu bar app that monitors internet reachability and reconnects Wi-Fi hotspots — specced and directed by me, implemented with AI coding agents.',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { projects } from '../data/projects';
 import { Project, ProjectCategory } from '../types';
@@ -16,12 +16,74 @@ import { VideoPreview } from '../components/VideoPreview';
 
 interface ProjectsViewProps {
   onSelectProject: (project: Project) => void;
+  initialProjectSlug?: string | null;
 }
 
 type FilterCategory = 'all' | 'fullstack' | 'ai' | 'desktop' | 'systems';
 
-export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) => {
-  const [activeFilter, setActiveFilter] = useState<FilterCategory>('all');
+const VALID_FILTERS: FilterCategory[] = ['all', 'fullstack', 'ai', 'desktop', 'systems'];
+
+const getInitialFilter = (): FilterCategory => {
+  if (typeof window === 'undefined') return 'all';
+  const params = new URLSearchParams(window.location.search);
+  const filterParam = params.get('filter');
+  if (filterParam && VALID_FILTERS.includes(filterParam as FilterCategory)) {
+    return filterParam as FilterCategory;
+  }
+  return 'all';
+};
+
+export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, initialProjectSlug }) => {
+  const [activeFilter, setActiveFilter] = useState<FilterCategory>(getInitialFilter);
+
+  const handleFilterChange = (category: FilterCategory) => {
+    setActiveFilter(category);
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    if (category === 'all') {
+      url.searchParams.delete('filter');
+    } else {
+      url.searchParams.set('filter', category);
+    }
+    window.history.pushState(null, '', url.pathname + (url.search || '') + (url.hash || ''));
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const filterParam = params.get('filter');
+      if (filterParam && VALID_FILTERS.includes(filterParam as FilterCategory)) {
+        setActiveFilter(filterParam as FilterCategory);
+      } else {
+        setActiveFilter('all');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    if (initialProjectSlug) {
+      const found = projects.find((p) => p.slug.toLowerCase() === initialProjectSlug.toLowerCase());
+      if (found) {
+        onSelectProject(found);
+        return;
+      }
+    }
+
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const projectParam = params.get('project') || params.get('p');
+      const hash = window.location.hash.replace(/^#\/?/, '').replace(/\/$/, '');
+      const slug = projectParam || (hash && projects.some((p) => p.slug.toLowerCase() === hash.toLowerCase()) ? hash : null);
+      if (slug) {
+        const found = projects.find((p) => p.slug.toLowerCase() === slug.toLowerCase());
+        if (found) {
+          onSelectProject(found);
+        }
+      }
+    }
+  }, [initialProjectSlug, onSelectProject]);
 
   const filterOptions: { id: FilterCategory; label: string }[] = [
     { id: 'all', label: 'All' },
@@ -133,7 +195,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
             return (
               <button
                 key={opt.id}
-                onClick={() => setActiveFilter(opt.id)}
+                onClick={() => handleFilterChange(opt.id)}
                 className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-[3px] text-xs font-mono transition-all whitespace-nowrap border ${
                   isActive
                     ? 'bg-[#1d1a18] dark:bg-[#eeeeee] text-white dark:text-zinc-950 border-zinc-900 dark:border-white font-semibold shadow-none'
@@ -166,7 +228,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject }) =
             No projects in this category — try another filter.
           </p>
           <button
-            onClick={() => setActiveFilter('all')}
+            onClick={() => handleFilterChange('all')}
             className="mt-2 text-xs font-mono px-3 py-1.5 rounded-[3px] border border-[#3d3a39] text-zinc-800 dark:text-[#eeeeee] hover:bg-zinc-100 dark:hover:bg-[#eeeeee]/10 transition-colors"
           >
             Show all

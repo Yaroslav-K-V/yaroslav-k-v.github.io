@@ -1,5 +1,7 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { PageRoute, Project } from './types';
+import { projects } from './data/projects';
+import { parseRoute, parseProjectSlug, getProjectBySlug } from './utils/routes';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { RouteLoader, ModalLoader } from './components/RouteLoader';
@@ -13,39 +15,64 @@ const ContactsView = lazy(() => import('./views/ContactsView'));
 const ProjectModal = lazy(() => import('./components/ProjectModal'));
 
 function parseRouteFromLocation(): PageRoute {
+  if (typeof window === 'undefined') return 'welcome';
+
   // Check query parameter redirect first (e.g. from 404.html redirect /?p=/about)
   const urlParams = new URLSearchParams(window.location.search);
   const p = urlParams.get('p');
   if (p) {
     const cleaned = p.replace(/^\//, '').replace(/\/$/, '');
     if (['about', 'projects', 'contacts'].includes(cleaned)) {
-      window.history.replaceState(null, '', `/${cleaned}/`);
+      urlParams.delete('p');
+      const remaining = urlParams.toString();
+      const target = `/${cleaned}/${remaining ? `?${remaining}` : ''}${window.location.hash}`;
+      window.history.replaceState(null, '', target);
       return cleaned as PageRoute;
     }
-  }
-
-  // Check hash fallback
-  if (window.location.hash) {
-    const hashRoute = window.location.hash.replace(/^#\/?/, '').replace(/\/$/, '');
-    if (['about', 'projects', 'contacts'].includes(hashRoute)) {
-      return hashRoute as PageRoute;
+    // If ?p=slug where slug matches one of our projects
+    if (projects.some((proj) => proj.slug.toLowerCase() === cleaned.toLowerCase())) {
+      urlParams.delete('p');
+      urlParams.set('project', cleaned);
+      const remaining = urlParams.toString();
+      const target = `/projects/${remaining ? `?${remaining}` : ''}${window.location.hash}`;
+      window.history.replaceState(null, '', target);
+      return 'projects';
     }
   }
 
-  // Check pathname
-  const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
-  if (path.startsWith('about')) return 'about';
-  if (path.startsWith('projects')) return 'projects';
-  if (path.startsWith('contacts')) return 'contacts';
-  return 'welcome';
+  return parseRoute({
+    pathname: window.location.pathname,
+    search: window.location.search,
+    hash: window.location.hash,
+  });
+}
+
+function parseProjectFromLocation(): Project | null {
+  if (typeof window === 'undefined') return null;
+  const slug = parseProjectSlug({
+    pathname: window.location.pathname,
+    search: window.location.search,
+    hash: window.location.hash,
+  });
+  return slug ? getProjectBySlug(slug) ?? null : null;
 }
 
 export const App: React.FC = () => {
-  const [currentRoute, setCurrentRoute] = useState<PageRoute>(parseRouteFromLocation());
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [modalLoaded, setModalLoaded] = useState<boolean>(false);
-  // Factory theme is dark-only.
-  const [isDark] = useState<boolean>(true);
+  const [currentRoute, setCurrentRoute] = useState<PageRoute>(parseRouteFromLocation);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(() => {
+    const route = parseRouteFromLocation();
+    if (route === 'projects') {
+      return parseProjectFromLocation();
+    }
+    return null;
+  });
+  const [modalLoaded, setModalLoaded] = useState<boolean>(() => {
+    const route = parseRouteFromLocation();
+    if (route === 'projects') {
+      return parseProjectFromLocation() !== null;
+    }
+    return false;
+  });
 
   // Theme synchronization: always dark.
   useEffect(() => {
@@ -56,7 +83,17 @@ export const App: React.FC = () => {
   // History Popstate listener
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentRoute(parseRouteFromLocation());
+      const route = parseRouteFromLocation();
+      setCurrentRoute(route);
+      if (route === 'projects') {
+        const proj = parseProjectFromLocation();
+        setSelectedProject(proj);
+        if (proj) {
+          setModalLoaded(true);
+        }
+      } else {
+        setSelectedProject(null);
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -68,11 +105,32 @@ export const App: React.FC = () => {
     if (window.location.pathname !== targetPath) {
       window.history.pushState(null, '', targetPath);
     }
+    if (route !== 'projects' && selectedProject) {
+      setSelectedProject(null);
+    }
   };
 
   const handleSelectProject = (project: Project) => {
     setModalLoaded(true);
     setSelectedProject(project);
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('project', project.slug);
+    url.searchParams.delete('p');
+    window.history.pushState({ projectSlug: project.slug }, '', url.pathname + (url.search || '') + (url.hash || ''));
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProject(null);
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete('project');
+    url.searchParams.delete('p');
+    const hash = window.location.hash.replace(/^#\/?/, '').replace(/\/$/, '');
+    if (projects.some((p) => p.slug.toLowerCase() === hash.toLowerCase())) {
+      url.hash = '';
+    }
+    window.history.pushState(null, '', url.pathname + (url.search || '') + (url.hash || ''));
   };
 
   useEffect(() => {
@@ -121,17 +179,11 @@ export const App: React.FC = () => {
     }
   }, [currentRoute]);
 
-  const toggleTheme = () => {
-    // No-op: Factory theme is dark-only.
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-[#101010] text-[#eeeeee] tech-grid transition-colors">
       <Navbar
         currentRoute={currentRoute}
         onNavigate={navigateTo}
-        isDark={isDark}
-        onToggleTheme={toggleTheme}
       />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-16">
@@ -145,6 +197,7 @@ export const App: React.FC = () => {
               <ProjectsView
                 key="projects"
                 onSelectProject={handleSelectProject}
+                initialProjectSlug={selectedProject?.slug}
               />
             )}
             {currentRoute === 'contacts' && <ContactsView key="contacts" />}
@@ -158,7 +211,7 @@ export const App: React.FC = () => {
         <Suspense fallback={<ModalLoader />}>
           <ProjectModal
             project={selectedProject}
-            onClose={() => setSelectedProject(null)}
+            onClose={handleCloseModal}
           />
         </Suspense>
       )}

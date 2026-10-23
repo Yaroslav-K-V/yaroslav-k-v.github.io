@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
             <a
               href={contactsData.github}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="me noopener noreferrer"
               className="inline-flex items-center gap-1.5 hover:text-zinc-950 dark:hover:text-white transition-colors"
               aria-label="GitHub Profile"
             >
@@ -28,7 +28,7 @@ export const Footer: React.FC = () => {
             <a
               href={contactsData.linkedin}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="me noopener noreferrer"
               className="inline-flex items-center gap-1.5 hover:text-zinc-950 dark:hover:text-white transition-colors"
               aria-label="LinkedIn Profile"
             >
