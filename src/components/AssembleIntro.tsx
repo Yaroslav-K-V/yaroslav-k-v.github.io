@@ -9,19 +9,21 @@ export const ASSEMBLE_ENABLED = true;
 // Tunable constants
 // ---------------------------------------------------------------------------
 const CELL_SIZE = 28; // px, must match .tech-grid step
-const SKIP_FRACTION = 0.32; // ~30-35% cells skipped for ragged edges
-const BLOCK_STAGGER_MS = 180; // delay between consecutive blocks
-const BLOCK_REVEAL_MS = 600; // how long a block takes to fade in
-const CELL_FLASH_MS = 450; // total flash duration of one cell
-const CELL_RISE_MS = 180; // ease-in (>=150ms per WCAG)
-const CELL_FALL_MS = 270; // ease-out
+const SKIP_FRACTION = 0.38; // ~30-40% cells skipped for ragged edges
+const BLOCK_STAGGER_MS = 220; // delay between consecutive blocks
+const BLOCK_REVEAL_MS = 700; // how long a block takes to fade in
+const CELL_FLASH_MS = 520; // total flash duration of one cell
+const CELL_RISE_MS = 200; // ease-in (>=150ms per WCAG)
+const CELL_FALL_MS = 320; // ease-out
 const CELL_PEAK_OPACITY = 0.6; // max cell opacity (orange ~ red)
 // Base session key; suffixed with the current route at runtime.
-const MAX_WAIT_MS = 3000;
+const MAX_WAIT_MS = 5000;
 
 interface Block {
   el: HTMLElement;
   order: number;
+  children: HTMLElement[];
+  useChildren: boolean;
 }
 
 function easeInOut(t: number): number {
@@ -71,6 +73,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
     let ctx: CanvasRenderingContext2D | null = null;
     let rafId = 0;
     let blocks: Block[] = [];
+    const extraCanvases: HTMLCanvasElement[] = [];
     let cleanupListeners: () => void = () => {};
 
     const finish = () => {
@@ -84,9 +87,17 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         canvas = null;
       }
       blocks.forEach((b) => {
-        b.el.style.opacity = "1";
-        b.el.style.transform = "";
-        b.el.style.transition = "";
+        if (b.useChildren) {
+          b.children.forEach((c) => {
+            c.style.opacity = "1";
+            c.style.transform = "";
+            c.style.transition = "";
+          });
+        } else {
+          b.el.style.opacity = "1";
+          b.el.style.transform = "";
+          b.el.style.transition = "";
+        }
       });
       sessionStorage.setItem(sessionKey, "1");
       onCompleteRef.current?.();
@@ -102,14 +113,14 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         const obs = new MutationObserver(() => schedule());
         const schedule = () => {
           const els = found();
-          if (els.length === 0) return;
+          if (els.length < 2) return; // wait for at least nav + one block
           if (els.length !== lastCount) {
             lastCount = els.length;
             if (stableTimer) window.clearTimeout(stableTimer);
             stableTimer = window.setTimeout(() => {
               obs.disconnect();
               resolve(found());
-            }, 300);
+            }, 600);
           }
         };
         obs.observe(document.body, { childList: true, subtree: true });
@@ -125,10 +136,19 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
     waitForBlocks().then((els) => {
       if (cancelled) return;
       blocks = els
-        .map((el, i) => ({
-          el,
-          order: parseInt(el.getAttribute("data-assemble") || String(i), 10),
-        }))
+        .map((el, i) => {
+          const childEls = Array.from(el.children).filter(
+            (n): n is HTMLElement => n instanceof HTMLElement,
+          );
+          const useChildren =
+            childEls.length >= 2 && !/^H[1-6]$/.test(el.tagName);
+          return {
+            el,
+            order: parseFloat(el.getAttribute("data-assemble") || String(i)),
+            children: useChildren ? childEls : [],
+            useChildren,
+          };
+        })
         .sort(
           (a, b) =>
             (isNaN(a.order) ? 0 : a.order) - (isNaN(b.order) ? 0 : b.order),
@@ -143,8 +163,15 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
       const skipFraction = window.innerWidth < 640 ? 0.5 : SKIP_FRACTION;
 
       blocks.forEach((b) => {
-        b.el.style.opacity = "0";
-        b.el.style.transform = "translateY(8px)";
+        if (b.useChildren) {
+          b.children.forEach((c) => {
+            c.style.opacity = "0";
+            c.style.transform = "translateY(10px) scale(0.985)";
+          });
+        } else {
+          b.el.style.opacity = "0";
+          b.el.style.transform = "translateY(10px) scale(0.985)";
+        }
       });
 
       // Split blocks into in-view (animated now) and deferred (revealed on scroll).
@@ -163,7 +190,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
       canvas = document.createElement("canvas");
       canvas.setAttribute("aria-hidden", "true");
       canvas.style.cssText =
-        "position:fixed;inset:0;pointer-events:none;z-index:9999;";
+        "position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:9999;";
       document.body.appendChild(canvas);
       ctx = canvas.getContext("2d");
 
@@ -183,6 +210,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         x: number;
         y: number;
         start: number;
+        intensity: number;
       }
       const cells: Cell[] = [];
 
@@ -197,27 +225,140 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
           1,
           Math.ceil((rect.right - rect.left) / CELL_SIZE),
         );
+        const blockHeight = Math.max(1, y1 - y0);
+        const blockCenterY = y0 + blockHeight / 2;
 
         for (let y = y0; y < y1; y += CELL_SIZE) {
           for (let x = x0; x < x1; x += CELL_SIZE) {
             if (Math.random() < skipFraction) continue;
             const col = Math.round((x - x0) / CELL_SIZE);
             const waveDelay =
-              (col / Math.max(cols - 1, 1)) * (CELL_FLASH_MS * 0.55);
-            cells.push({ x, y, start: blockStart + waveDelay });
+              (col / Math.max(cols - 1, 1)) * (CELL_FLASH_MS * 0.7);
+            // Vertical gradient: center brighter, edges dimmer.
+            const cellCenterY = y + CELL_SIZE / 2;
+            const dist = Math.abs(cellCenterY - blockCenterY) / (blockHeight / 2);
+            const intensity = Math.max(0.35, 1 - dist * 0.65);
+            cells.push({ x, y, start: blockStart + waveDelay, intensity });
           }
         }
 
-        // Schedule block reveal.
-        window.setTimeout(() => {
-          if (cancelled) return;
-          b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-          b.el.style.opacity = "1";
-          b.el.style.transform = "translateY(0)";
-        }, blockStart);
+        // Schedule block reveal (children stagger if applicable).
+        if (b.useChildren) {
+          b.children.forEach((c, ci) => {
+            window.setTimeout(() => {
+              if (cancelled) return;
+              c.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+              c.style.opacity = "1";
+              c.style.transform = "translateY(0) scale(1)";
+            }, blockStart + ci * 90);
+          });
+        } else {
+          window.setTimeout(() => {
+            if (cancelled) return;
+            b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+            b.el.style.opacity = "1";
+            b.el.style.transform = "translateY(0) scale(1)";
+          }, blockStart);
+        }
       });
 
-      // Deferred blocks: reveal when scrolled into view.
+      const flashBlock = (b: Block) => {
+        if (reducedMQ.matches || !enabled) {
+          if (b.useChildren) {
+            b.children.forEach((c) => {
+              c.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+              c.style.opacity = "1";
+              c.style.transform = "translateY(0) scale(1)";
+            });
+          } else {
+            b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+            b.el.style.opacity = "1";
+            b.el.style.transform = "translateY(0) scale(1)";
+          }
+          return;
+        }
+        const rect = b.el.getBoundingClientRect();
+        if (b.useChildren) {
+          b.children.forEach((c, ci) => {
+            window.setTimeout(() => {
+              c.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+              c.style.opacity = "1";
+              c.style.transform = "translateY(0) scale(1)";
+            }, ci * 90);
+          });
+        } else {
+          b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+          b.el.style.opacity = "1";
+          b.el.style.transform = "translateY(0) scale(1)";
+        }
+
+        // Mini brick flash for the block.
+        const c = document.createElement("canvas");
+        c.setAttribute("aria-hidden", "true");
+        c.style.cssText =
+          "position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:9999;";
+        document.body.appendChild(c);
+        extraCanvases.push(c);
+        const cctx = c.getContext("2d");
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        c.width = window.innerWidth * dpr;
+        c.height = window.innerHeight * dpr;
+        c.style.width = window.innerWidth + "px";
+        c.style.height = window.innerHeight + "px";
+        if (cctx) cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const x0 = Math.floor(rect.left / CELL_SIZE) * CELL_SIZE;
+        const y0 = Math.floor(rect.top / CELL_SIZE) * CELL_SIZE;
+        const x1 = Math.ceil(rect.right / CELL_SIZE) * CELL_SIZE;
+        const y1 = Math.ceil(rect.bottom / CELL_SIZE) * CELL_SIZE;
+        const cols = Math.max(1, Math.ceil((rect.right - rect.left) / CELL_SIZE));
+        const blockHeight = Math.max(1, y1 - y0);
+        const blockCenterY = y0 + blockHeight / 2;
+        interface MiniCell { x:number; y:number; start:number; intensity:number }
+        const miniCells: MiniCell[] = [];
+        for (let y = y0; y < y1; y += CELL_SIZE) {
+          for (let x = x0; x < x1; x += CELL_SIZE) {
+            if (Math.random() < skipFraction) continue;
+            const col = Math.round((x - x0) / CELL_SIZE);
+            const waveDelay = (col / Math.max(cols - 1, 1)) * (CELL_FLASH_MS * 0.7);
+            const cellCenterY = y + CELL_SIZE / 2;
+            const dist = Math.abs(cellCenterY - blockCenterY) / (blockHeight / 2);
+            const intensity = Math.max(0.35, 1 - dist * 0.65);
+            miniCells.push({ x, y, start: waveDelay, intensity });
+          }
+        }
+
+        const flashStart = performance.now();
+        const tick = (now: number) => {
+          if (!cctx) return;
+          const t = now - flashStart;
+          cctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+          for (const cell of miniCells) {
+            const local = t - cell.start;
+            if (local < 0 || local > CELL_FLASH_MS) continue;
+            let opacity = 0;
+            if (local < CELL_RISE_MS) {
+              opacity = easeInOut(local / CELL_RISE_MS) * CELL_PEAK_OPACITY;
+            } else {
+              const fallLocal = local - CELL_RISE_MS;
+              if (fallLocal > CELL_FALL_MS) continue;
+              opacity = (1 - easeInOut(fallLocal / CELL_FALL_MS)) * CELL_PEAK_OPACITY;
+            }
+            opacity = opacity * cell.intensity;
+            if (opacity <= 0.01) continue;
+            cctx.fillStyle = `rgba(238, 96, 24, ${opacity})`;
+            cctx.fillRect(cell.x + 1, cell.y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+          }
+          if (t < CELL_FLASH_MS + 100) {
+            requestAnimationFrame(tick);
+          } else {
+            c.remove();
+          }
+        };
+        requestAnimationFrame(tick);
+      };
+
+      // Deferred blocks: reveal (with brick flash) when scrolled into view.
       let io: IntersectionObserver | null = null;
       if (deferredBlocks.length > 0 && "IntersectionObserver" in window) {
         io = new IntersectionObserver(
@@ -225,9 +366,8 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
             entries.forEach((entry) => {
               if (!entry.isIntersecting) return;
               const el = entry.target as HTMLElement;
-              el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-              el.style.opacity = "1";
-              el.style.transform = "translateY(0)";
+              const block = deferredBlocks.find((b) => b.el === el);
+              if (block) flashBlock(block);
               io?.unobserve(el);
             });
           },
@@ -236,9 +376,19 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         deferredBlocks.forEach((b) => io?.observe(b.el));
       } else {
         deferredBlocks.forEach((b) => {
-          b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-          b.el.style.opacity = "1";
-          b.el.style.transform = "translateY(0)";
+          if (b.useChildren) {
+            b.children.forEach((c, ci) => {
+              window.setTimeout(() => {
+                c.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+                c.style.opacity = "1";
+                c.style.transform = "translateY(0) scale(1)";
+              }, ci * 90);
+            });
+          } else {
+            b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+            b.el.style.opacity = "1";
+            b.el.style.transform = "translateY(0) scale(1)";
+          }
         });
       }
 
@@ -309,8 +459,11 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
               (1 - easeInOut(fallLocal / CELL_FALL_MS)) * CELL_PEAK_OPACITY;
           }
           if (opacity <= 0.01) continue;
+          opacity = opacity * cell.intensity;
+          if (opacity <= 0.01) continue;
           ctx.fillStyle = `rgba(238, 96, 24, ${opacity})`;
-          ctx.fillRect(cell.x, cell.y, CELL_SIZE, CELL_SIZE);
+          // Brick look: 1px gap around each cell.
+          ctx.fillRect(cell.x + 1, cell.y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
         }
         if (t < TOTAL) {
           rafId = requestAnimationFrame(tick);
@@ -326,10 +479,19 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
       if (rafId) cancelAnimationFrame(rafId);
       cleanupListeners();
       if (canvas) canvas.remove();
+      extraCanvases.forEach((c) => c.remove());
       blocks.forEach((b) => {
-        b.el.style.opacity = "1";
-        b.el.style.transform = "";
-        b.el.style.transition = "";
+        if (b.useChildren) {
+          b.children.forEach((c) => {
+            c.style.opacity = "1";
+            c.style.transform = "";
+            c.style.transition = "";
+          });
+        } else {
+          b.el.style.opacity = "1";
+          b.el.style.transform = "";
+          b.el.style.transition = "";
+        }
       });
     };
   }, [enabled]);

@@ -136,6 +136,16 @@ export const App: React.FC = () => {
 
   const handleAssembleComplete = useCallback(() => setAssembleDone(true), []);
 
+  useEffect(() => {
+    const handler = () => {
+      const slug = window.location.pathname.split('/').filter(Boolean).join('-') || 'home';
+      sessionStorage.removeItem(`yk:assemble:played:v1:${slug}`);
+      setAssembleReplayKey((k) => k + 1);
+    };
+    window.addEventListener('yk:replay-assemble', handler);
+    return () => window.removeEventListener('yk:replay-assemble', handler);
+  }, []);
+
   const navigateTo = (route: PageRoute) => {
     setCurrentRoute(route);
     const targetPath = route === 'welcome' ? '/' : `/${route}/`;

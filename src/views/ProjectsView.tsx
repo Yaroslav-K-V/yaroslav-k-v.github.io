@@ -220,7 +220,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
 
       {/* Project Grid */}
       {filteredProjects.length === 0 ? (
-        <div className="glass-panel rounded-[10px] p-12 text-center space-y-3">
+        <div data-assemble="2" className="glass-panel rounded-[10px] p-12 text-center space-y-3">
           <p className="text-base font-semibold text-zinc-900 dark:text-[#eeeeee]">
             Nothing here yet
           </p>
@@ -235,7 +235,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
           </button>
         </div>
       ) : (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div data-assemble="2" className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project) => {
             const isFeatured = isFlagship(project);

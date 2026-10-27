@@ -42,6 +42,12 @@ export const Footer: React.FC = () => {
               <span>Back to top</span>
               <ArrowUp className="w-3.5 h-3.5" />
             </button>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('yk:replay-assemble'))}
+              className="inline-flex items-center gap-1.5 hover:text-zinc-950 dark:hover:text-white transition-colors"
+            >
+              <span>Replay intro</span>
+            </button>
           </div>
         </div>
       </div>
