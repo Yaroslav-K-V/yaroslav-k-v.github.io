@@ -73,7 +73,6 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
     let ctx: CanvasRenderingContext2D | null = null;
     let rafId = 0;
     let blocks: Block[] = [];
-    const extraCanvases: HTMLCanvasElement[] = [];
     let cleanupListeners: () => void = () => {};
 
     const finish = () => {
@@ -262,22 +261,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         }
       });
 
-      const flashBlock = (b: Block) => {
-        if (reducedMQ.matches || !enabled) {
-          if (b.useChildren) {
-            b.children.forEach((c) => {
-              c.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-              c.style.opacity = "1";
-              c.style.transform = "translateY(0) scale(1)";
-            });
-          } else {
-            b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-            b.el.style.opacity = "1";
-            b.el.style.transform = "translateY(0) scale(1)";
-          }
-          return;
-        }
-        const rect = b.el.getBoundingClientRect();
+      const revealBlock = (b: Block) => {
         if (b.useChildren) {
           b.children.forEach((c, ci) => {
             window.setTimeout(() => {
@@ -291,71 +275,6 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
           b.el.style.opacity = "1";
           b.el.style.transform = "translateY(0) scale(1)";
         }
-
-        // Mini brick flash for the block.
-        const c = document.createElement("canvas");
-        c.setAttribute("aria-hidden", "true");
-        c.style.cssText =
-          "position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:9999;";
-        document.body.appendChild(c);
-        extraCanvases.push(c);
-        const cctx = c.getContext("2d");
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        c.width = window.innerWidth * dpr;
-        c.height = window.innerHeight * dpr;
-        c.style.width = window.innerWidth + "px";
-        c.style.height = window.innerHeight + "px";
-        if (cctx) cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        const x0 = Math.floor(rect.left / CELL_SIZE) * CELL_SIZE;
-        const y0 = Math.floor(rect.top / CELL_SIZE) * CELL_SIZE;
-        const x1 = Math.ceil(rect.right / CELL_SIZE) * CELL_SIZE;
-        const y1 = Math.ceil(rect.bottom / CELL_SIZE) * CELL_SIZE;
-        const cols = Math.max(1, Math.ceil((rect.right - rect.left) / CELL_SIZE));
-        const blockHeight = Math.max(1, y1 - y0);
-        const blockCenterY = y0 + blockHeight / 2;
-        interface MiniCell { x:number; y:number; start:number; intensity:number }
-        const miniCells: MiniCell[] = [];
-        for (let y = y0; y < y1; y += CELL_SIZE) {
-          for (let x = x0; x < x1; x += CELL_SIZE) {
-            if (Math.random() < skipFraction) continue;
-            const col = Math.round((x - x0) / CELL_SIZE);
-            const waveDelay = (col / Math.max(cols - 1, 1)) * (CELL_FLASH_MS * 0.7);
-            const cellCenterY = y + CELL_SIZE / 2;
-            const dist = Math.abs(cellCenterY - blockCenterY) / (blockHeight / 2);
-            const intensity = Math.max(0.35, 1 - dist * 0.65);
-            miniCells.push({ x, y, start: waveDelay, intensity });
-          }
-        }
-
-        const flashStart = performance.now();
-        const tick = (now: number) => {
-          if (!cctx) return;
-          const t = now - flashStart;
-          cctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-          for (const cell of miniCells) {
-            const local = t - cell.start;
-            if (local < 0 || local > CELL_FLASH_MS) continue;
-            let opacity = 0;
-            if (local < CELL_RISE_MS) {
-              opacity = easeInOut(local / CELL_RISE_MS) * CELL_PEAK_OPACITY;
-            } else {
-              const fallLocal = local - CELL_RISE_MS;
-              if (fallLocal > CELL_FALL_MS) continue;
-              opacity = (1 - easeInOut(fallLocal / CELL_FALL_MS)) * CELL_PEAK_OPACITY;
-            }
-            opacity = opacity * cell.intensity;
-            if (opacity <= 0.01) continue;
-            cctx.fillStyle = `rgba(238, 96, 24, ${opacity})`;
-            cctx.fillRect(cell.x + 1, cell.y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
-          }
-          if (t < CELL_FLASH_MS + 100) {
-            requestAnimationFrame(tick);
-          } else {
-            c.remove();
-          }
-        };
-        requestAnimationFrame(tick);
       };
 
       // Deferred blocks: reveal (with brick flash) when scrolled into view.
@@ -367,7 +286,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
               if (!entry.isIntersecting) return;
               const el = entry.target as HTMLElement;
               const block = deferredBlocks.find((b) => b.el === el);
-              if (block) flashBlock(block);
+              if (block) revealBlock(block);
               io?.unobserve(el);
             });
           },
@@ -479,7 +398,6 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
       if (rafId) cancelAnimationFrame(rafId);
       cleanupListeners();
       if (canvas) canvas.remove();
-      extraCanvases.forEach((c) => c.remove());
       blocks.forEach((b) => {
         if (b.useChildren) {
           b.children.forEach((c) => {
