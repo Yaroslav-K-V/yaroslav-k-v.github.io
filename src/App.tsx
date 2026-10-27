@@ -71,12 +71,33 @@ export const App: React.FC = () => {
   const [assembleDone, setAssembleDone] = useState(false);
   const [animationsEnabled, setAnimationsEnabled] = useState(() => {
     if (typeof window === 'undefined') return true;
-    return localStorage.getItem('yk:animations:enabled') !== '0';
+    const userPref = localStorage.getItem('yk:animations:user');
+    if (userPref !== null) {
+      return localStorage.getItem('yk:animations:enabled') !== '0';
+    }
+    // Auto-detect: disable on reduced motion, low-end devices, or data-saver.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    const nav = navigator as Navigator & {
+      deviceMemory?: number;
+      hardwareConcurrency?: number;
+      connection?: { saveData?: boolean };
+    };
+    if (typeof nav.deviceMemory === 'number' && nav.deviceMemory < 2) return false;
+    if (typeof nav.hardwareConcurrency === 'number' && nav.hardwareConcurrency < 2) return false;
+    if (nav.connection && nav.connection.saveData) return false;
+    return true;
   });
+  const [assembleReplayKey, setAssembleReplayKey] = useState(0);
   const toggleAnimations = useCallback(() => {
     setAnimationsEnabled((prev) => {
       const next = !prev;
+      localStorage.setItem('yk:animations:user', '1');
       localStorage.setItem('yk:animations:enabled', next ? '1' : '0');
+      // When turning animations back on, replay the assemble intro.
+      if (next) {
+        sessionStorage.removeItem('yk:assemble:played:v1');
+        setAssembleReplayKey((k) => k + 1);
+      }
       return next;
     });
   }, []);
@@ -241,6 +262,7 @@ export const App: React.FC = () => {
 
       {currentRoute === 'welcome' && (
         <AssembleIntro
+          key={assembleReplayKey}
           enabled={animationsEnabled}
           onComplete={handleAssembleComplete}
         />
