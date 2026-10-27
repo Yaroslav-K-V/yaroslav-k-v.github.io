@@ -128,8 +128,8 @@ export const LiveGrid: React.FC<LiveGridProps> = ({ enabled }) => {
         opacity: 0,
         transition: `opacity ${FADE_MS}ms ease`,
         background:
-          "radial-gradient(rgba(238, 96, 24, 0.6) 1px, transparent 1px)",
-        backgroundSize: "28px 28px",
+          "radial-gradient(rgba(238, 96, 24, 0.6) 1px, transparent 1px), linear-gradient(to right, rgba(238, 96, 24, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(238, 96, 24, 0.12) 1px, transparent 1px)",
+        backgroundSize: "28px 28px, 28px 28px, 28px 28px",
         WebkitMaskImage: `radial-gradient(circle ${GLOW_RADIUS}px at var(--lx, -9999px) var(--ly, -9999px), black 0%, transparent 100%)`,
         maskImage: `radial-gradient(circle ${GLOW_RADIUS}px at var(--lx, -9999px) var(--ly, -9999px), black 0%, transparent 100%)`,
       }}

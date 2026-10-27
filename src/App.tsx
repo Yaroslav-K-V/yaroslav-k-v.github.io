@@ -69,6 +69,17 @@ export const App: React.FC = () => {
     return null;
   });
   const [assembleDone, setAssembleDone] = useState(false);
+  const [animationsEnabled, setAnimationsEnabled] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return localStorage.getItem('yk:animations:enabled') !== '0';
+  });
+  const toggleAnimations = useCallback(() => {
+    setAnimationsEnabled((prev) => {
+      const next = !prev;
+      localStorage.setItem('yk:animations:enabled', next ? '1' : '0');
+      return next;
+    });
+  }, []);
   const [modalLoaded, setModalLoaded] = useState<boolean>(() => {
     const route = parseRouteFromLocation();
     if (route === 'projects') {
@@ -199,10 +210,12 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#101010] text-[#eeeeee] tech-grid transition-colors">
-      <LiveGrid enabled={assembleDone} />
+      <LiveGrid enabled={assembleDone && animationsEnabled} />
       <Navbar
         currentRoute={currentRoute}
         onNavigate={navigateTo}
+        animationsEnabled={animationsEnabled}
+        onToggleAnimations={toggleAnimations}
       />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-16">
@@ -227,7 +240,10 @@ export const App: React.FC = () => {
       <Footer />
 
       {currentRoute === 'welcome' && (
-        <AssembleIntro onComplete={handleAssembleComplete} />
+        <AssembleIntro
+          enabled={animationsEnabled}
+          onComplete={handleAssembleComplete}
+        />
       )}
 
       {modalLoaded && (

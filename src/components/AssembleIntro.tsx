@@ -32,22 +32,25 @@ function easeInOut(t: number): number {
 
 export interface AssembleIntroProps {
   onComplete?: () => void;
+  enabled?: boolean;
 }
 
-export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete }) => {
+export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enabled = true }) => {
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
   useEffect(() => {
-    if (!ASSEMBLE_ENABLED) {
+    if (!ASSEMBLE_ENABLED || !enabled) {
       onCompleteRef.current?.();
       return;
     }
 
     const reducedMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    // Already played this session -> skip.
-    if (sessionStorage.getItem(SESSION_KEY) === "1") {
+    const replay = new URLSearchParams(window.location.search).has('replay');
+
+    // Already played this session -> skip (unless ?replay is present).
+    if (!replay && sessionStorage.getItem(SESSION_KEY) === "1") {
       onCompleteRef.current?.();
       return;
     }
@@ -79,6 +82,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete }) => {
       }
       blocks.forEach((b) => {
         b.el.style.opacity = "1";
+        b.el.style.transform = "";
         b.el.style.transition = "";
       });
       sessionStorage.setItem(SESSION_KEY, "1");
@@ -126,8 +130,11 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete }) => {
       }
 
       // Hide content visually (opacity only, no layout shift).
+      const skipFraction = window.innerWidth < 640 ? 0.5 : SKIP_FRACTION;
+
       blocks.forEach((b) => {
         b.el.style.opacity = "0";
+        b.el.style.transform = "translateY(8px)";
       });
 
       // Build canvas overlay.
@@ -171,7 +178,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete }) => {
 
         for (let y = y0; y < y1; y += CELL_SIZE) {
           for (let x = x0; x < x1; x += CELL_SIZE) {
-            if (Math.random() < SKIP_FRACTION) continue;
+            if (Math.random() < skipFraction) continue;
             const col = Math.round((x - x0) / CELL_SIZE);
             const waveDelay =
               (col / Math.max(cols - 1, 1)) * (CELL_FLASH_MS * 0.55);
@@ -182,8 +189,9 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete }) => {
         // Schedule block reveal.
         window.setTimeout(() => {
           if (cancelled) return;
-          b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease`;
+          b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
           b.el.style.opacity = "1";
+          b.el.style.transform = "translateY(0)";
         }, blockStart);
       });
 
@@ -255,10 +263,11 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete }) => {
       if (canvas) canvas.remove();
       blocks.forEach((b) => {
         b.el.style.opacity = "1";
+        b.el.style.transform = "";
         b.el.style.transition = "";
       });
     };
-  }, []);
+  }, [enabled]);
 
   return null;
 };

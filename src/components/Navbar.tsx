@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PageRoute } from '../types';
 import { contactsData } from '../data/contacts';
-import { FileText, Menu, X, ExternalLink } from 'lucide-react';
+import { FileText, Menu, X, ExternalLink, Eye, EyeOff } from 'lucide-react';
 
 interface NavbarProps {
   currentRoute: PageRoute;
   onNavigate: (route: PageRoute) => void;
+  animationsEnabled?: boolean;
+  onToggleAnimations?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentRoute,
-  onNavigate
+  onNavigate,
+  animationsEnabled = true,
+  onToggleAnimations
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -139,6 +143,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Actions: Resume */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {onToggleAnimations && (
+            <button
+              onClick={onToggleAnimations}
+              className="inline-flex items-center justify-center w-8 h-8 rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-white/30 hover:bg-[#eeeeee]/5 transition-all"
+              aria-label={animationsEnabled ? 'Disable animations' : 'Enable animations'}
+              title={animationsEnabled ? 'Disable animations' : 'Enable animations'}
+            >
+              {animationsEnabled ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+            </button>
+          )}
           <a
             href={contactsData.resumeUrl}
             target="_blank"
