@@ -4,8 +4,8 @@ import React, { useEffect, useRef } from "react";
 export const LIVE_GRID_ENABLED = true;
 
 const MIN_WIDTH = 1024;
-const GLOW_RADIUS = 110;
-const MAX_OPACITY = 0.3;
+const GLOW_RADIUS = 130;
+const MAX_OPACITY = 0.45;
 const FADE_MS = 400;
 
 export interface LiveGridProps {
@@ -128,7 +128,7 @@ export const LiveGrid: React.FC<LiveGridProps> = ({ enabled }) => {
         opacity: 0,
         transition: `opacity ${FADE_MS}ms ease`,
         background:
-          "radial-gradient(rgba(238, 96, 24, 0.35) 1px, transparent 1px)",
+          "radial-gradient(rgba(238, 96, 24, 0.6) 1px, transparent 1px)",
         backgroundSize: "28px 28px",
         WebkitMaskImage: `radial-gradient(circle ${GLOW_RADIUS}px at var(--lx, -9999px) var(--ly, -9999px), black 0%, transparent 100%)`,
         maskImage: `radial-gradient(circle ${GLOW_RADIUS}px at var(--lx, -9999px) var(--ly, -9999px), black 0%, transparent 100%)`,

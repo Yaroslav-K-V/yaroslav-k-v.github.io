@@ -10,11 +10,11 @@ export const ASSEMBLE_ENABLED = true;
 // ---------------------------------------------------------------------------
 const CELL_SIZE = 28; // px, must match .tech-grid step
 const SKIP_FRACTION = 0.32; // ~30-35% cells skipped for ragged edges
-const BLOCK_STAGGER_MS = 130; // delay between consecutive blocks
-const BLOCK_REVEAL_MS = 450; // how long a block takes to fade in
-const CELL_FLASH_MS = 360; // total flash duration of one cell
-const CELL_RISE_MS = 160; // ease-in (>=150ms per WCAG)
-const CELL_FALL_MS = 220; // ease-out
+const BLOCK_STAGGER_MS = 180; // delay between consecutive blocks
+const BLOCK_REVEAL_MS = 600; // how long a block takes to fade in
+const CELL_FLASH_MS = 450; // total flash duration of one cell
+const CELL_RISE_MS = 180; // ease-in (>=150ms per WCAG)
+const CELL_FALL_MS = 270; // ease-out
 const CELL_PEAK_OPACITY = 0.6; // max cell opacity (orange ~ red)
 const SESSION_KEY = "yk:assemble:played:v1";
 const MAX_WAIT_MS = 3000;
