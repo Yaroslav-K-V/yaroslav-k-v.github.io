@@ -147,6 +147,18 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         b.el.style.transform = "translateY(8px)";
       });
 
+      // Split blocks into in-view (animated now) and deferred (revealed on scroll).
+      const inViewBlocks: Block[] = [];
+      const deferredBlocks: Block[] = [];
+      blocks.forEach((b) => {
+        const rect = b.el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          inViewBlocks.push(b);
+        } else {
+          deferredBlocks.push(b);
+        }
+      });
+
       // Build canvas overlay.
       canvas = document.createElement("canvas");
       canvas.setAttribute("aria-hidden", "true");
@@ -166,7 +178,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
       };
       resizeCanvas();
 
-      // Generate cells per block.
+      // Generate cells per in-view block.
       interface Cell {
         x: number;
         y: number;
@@ -174,7 +186,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
       }
       const cells: Cell[] = [];
 
-      blocks.forEach((b, idx) => {
+      inViewBlocks.forEach((b, idx) => {
         const blockStart = idx * BLOCK_STAGGER_MS;
         const rect = b.el.getBoundingClientRect();
         const x0 = Math.floor(rect.left / CELL_SIZE) * CELL_SIZE;
@@ -205,6 +217,38 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         }, blockStart);
       });
 
+      // Deferred blocks: reveal when scrolled into view.
+      let io: IntersectionObserver | null = null;
+      if (deferredBlocks.length > 0 && "IntersectionObserver" in window) {
+        io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target as HTMLElement;
+              el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+              el.style.opacity = "1";
+              el.style.transform = "translateY(0)";
+              io?.unobserve(el);
+            });
+          },
+          { rootMargin: "0px 0px -10% 0px", threshold: 0.05 },
+        );
+        deferredBlocks.forEach((b) => io?.observe(b.el));
+      } else {
+        deferredBlocks.forEach((b) => {
+          b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+          b.el.style.opacity = "1";
+          b.el.style.transform = "translateY(0)";
+        });
+      }
+
+      // Extend cleanup to disconnect observer.
+      const prevCleanupIO = cleanupListeners;
+      cleanupListeners = () => {
+        prevCleanupIO();
+        if (io) io.disconnect();
+      };
+
       // Interaction / resize -> finish immediately.
       const onInteract = () => finish();
       const onResize = () => finish();
@@ -230,10 +274,21 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         reducedMQ.removeEventListener("change", onMqChange);
       };
 
+      // If nothing is in view, skip the canvas animation but keep scroll reveals.
+      if (inViewBlocks.length === 0) {
+        if (canvas) {
+          canvas.remove();
+          canvas = null;
+        }
+        sessionStorage.setItem(sessionKey, "1");
+        onCompleteRef.current?.();
+        return;
+      }
+
       // rAF draw loop.
       const startTime = performance.now();
       const TOTAL =
-        (blocks.length - 1) * BLOCK_STAGGER_MS +
+        (inViewBlocks.length - 1) * BLOCK_STAGGER_MS +
         BLOCK_REVEAL_MS +
         CELL_FLASH_MS;
 
