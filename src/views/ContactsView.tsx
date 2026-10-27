@@ -289,7 +289,7 @@ export const ContactsView: React.FC = () => {
       className="space-y-14"
     >
       {/* Dossier Header */}
-      <section className="space-y-6">
+      <section data-assemble="1" className="space-y-6">
         <div className="flex flex-wrap items-center gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018] dark:text-[#ee6018]">
             <span className="relative flex h-2 w-2">
@@ -363,7 +363,7 @@ export const ContactsView: React.FC = () => {
       </section>
 
       {/* High-Visibility Resume Download Trigger Section */}
-      <section className="glass-panel p-6 sm:p-8 rounded-[10px] border-2 border-zinc-900/10 dark:border-zinc-100/10 bg-gradient-to-br from-zinc-50/80 via-white to-zinc-100/50 dark:from-zinc-900/80 dark:via-zinc-950 dark:to-zinc-900/50 space-y-5">
+      <section data-assemble="2" className="glass-panel p-6 sm:p-8 rounded-[10px] border-2 border-zinc-900/10 dark:border-zinc-100/10 bg-gradient-to-br from-zinc-50/80 via-white to-zinc-100/50 dark:from-zinc-900/80 dark:via-zinc-950 dark:to-zinc-900/50 space-y-5">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
@@ -425,7 +425,7 @@ export const ContactsView: React.FC = () => {
       </section>
 
       {contactsData.formspreeId && (
-        <section className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5">
+        <section data-assemble="3" className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5">
           <div>
             <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
               No email app needed
@@ -439,7 +439,7 @@ export const ContactsView: React.FC = () => {
       )}
 
       {/* Channel Cards Grid */}
-      <section className="space-y-6">
+      <section data-assemble="4" className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
@@ -530,7 +530,7 @@ export const ContactsView: React.FC = () => {
       </section>
 
       {/* Phone */}
-      <section className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5">
+      <section data-assemble="5" className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-zinc-100 dark:border-[#3d3a39] pb-3">
           <div className="flex items-center gap-2">
             <Phone className="w-4 h-4 text-[#8a8380] dark:text-[#8a8380]" />

@@ -118,7 +118,7 @@ export const AboutView: React.FC = () => {
       className="space-y-16"
     >
       {/* Overview Header */}
-      <section className="space-y-6">
+      <section data-assemble="1" className="space-y-6">
         <div className="flex flex-wrap items-center gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018] dark:text-[#ee6018]">
             <span className="relative flex h-2 w-2">
@@ -195,7 +195,7 @@ export const AboutView: React.FC = () => {
       </section>
 
       {/* Engineering Milestone Timeline */}
-      <section className="space-y-8">
+      <section data-assemble="2" className="space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
           <div>
             <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
@@ -314,7 +314,7 @@ export const AboutView: React.FC = () => {
       </section>
 
       {/* Core Competencies: Technical Matrices */}
-      <section className="space-y-8">
+      <section data-assemble="3" className="space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
           <div>
             <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
@@ -417,7 +417,7 @@ export const AboutView: React.FC = () => {
       </section>
 
       {/* Certifications */}
-      <section className="space-y-6">
+      <section data-assemble="4" className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
           <div>
             <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
@@ -463,7 +463,7 @@ export const AboutView: React.FC = () => {
       </section>
 
       {/* Engineering Philosophy & Rigor Section */}
-      <section className="space-y-6">
+      <section data-assemble="5" className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
           <div>
             <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">

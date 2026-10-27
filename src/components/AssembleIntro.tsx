@@ -16,7 +16,7 @@ const CELL_FLASH_MS = 450; // total flash duration of one cell
 const CELL_RISE_MS = 180; // ease-in (>=150ms per WCAG)
 const CELL_FALL_MS = 270; // ease-out
 const CELL_PEAK_OPACITY = 0.6; // max cell opacity (orange ~ red)
-const SESSION_KEY = "yk:assemble:played:v1";
+// Base session key; suffixed with the current route at runtime.
 const MAX_WAIT_MS = 3000;
 
 interface Block {
@@ -49,15 +49,18 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
 
     const replay = new URLSearchParams(window.location.search).has('replay');
 
+    const routeSlug = window.location.pathname.split("/").filter(Boolean).join("-") || "home";
+    const sessionKey = `yk:assemble:played:v1:${routeSlug}`;
+
     // Already played this session -> skip (unless ?replay is present).
-    if (!replay && sessionStorage.getItem(SESSION_KEY) === "1") {
+    if (!replay && sessionStorage.getItem(sessionKey) === "1") {
       onCompleteRef.current?.();
       return;
     }
 
     // Reduced motion: no assemble, content stays visible.
     if (reducedMQ.matches) {
-      sessionStorage.setItem(SESSION_KEY, "1");
+      sessionStorage.setItem(sessionKey, "1");
       onCompleteRef.current?.();
       return;
     }
@@ -85,7 +88,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         b.el.style.transform = "";
         b.el.style.transition = "";
       });
-      sessionStorage.setItem(SESSION_KEY, "1");
+      sessionStorage.setItem(sessionKey, "1");
       onCompleteRef.current?.();
     };
 
@@ -94,19 +97,26 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
       return new Promise((resolve) => {
         const found = () =>
           Array.from(document.querySelectorAll<HTMLElement>("[data-assemble]"));
-        const obs = new MutationObserver(() => check());
-        const check = () => {
-          // Wait until the Home view's h1 (data-assemble="2") has rendered,
-          // so all annotated blocks exist before we measure them.
-          if (document.querySelector('[data-assemble="2"]')) {
-            obs.disconnect();
-            window.setTimeout(() => resolve(found()), 50);
+        let lastCount = -1;
+        let stableTimer = 0;
+        const obs = new MutationObserver(() => schedule());
+        const schedule = () => {
+          const els = found();
+          if (els.length === 0) return;
+          if (els.length !== lastCount) {
+            lastCount = els.length;
+            if (stableTimer) window.clearTimeout(stableTimer);
+            stableTimer = window.setTimeout(() => {
+              obs.disconnect();
+              resolve(found());
+            }, 300);
           }
         };
         obs.observe(document.body, { childList: true, subtree: true });
-        check();
+        schedule();
         window.setTimeout(() => {
           obs.disconnect();
+          if (stableTimer) window.clearTimeout(stableTimer);
           resolve(found());
         }, MAX_WAIT_MS);
       });

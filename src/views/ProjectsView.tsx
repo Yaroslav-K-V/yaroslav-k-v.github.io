@@ -155,7 +155,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
       className="space-y-10"
     >
       {/* Header Section */}
-      <section className="space-y-4 pt-2">
+      <section data-assemble="1" className="space-y-4 pt-2">
         {/* System Registry Eyebrow */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#3d3a39]/80 dark:border-white/10 pb-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018] dark:text-[#ee6018]">

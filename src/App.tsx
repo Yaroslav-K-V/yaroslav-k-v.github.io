@@ -260,13 +260,11 @@ export const App: React.FC = () => {
 
       <Footer />
 
-      {currentRoute === 'welcome' && (
-        <AssembleIntro
-          key={assembleReplayKey}
-          enabled={animationsEnabled}
-          onComplete={handleAssembleComplete}
-        />
-      )}
+      <AssembleIntro
+        key={`${assembleReplayKey}-${currentRoute}`}
+        enabled={animationsEnabled}
+        onComplete={handleAssembleComplete}
+      />
 
       {modalLoaded && (
         <Suspense fallback={<ModalLoader />}>
