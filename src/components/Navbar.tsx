@@ -95,7 +95,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-[#101010]/70 border-b border-white/10 transition-colors">
+    <header data-assemble="0" className="sticky top-0 z-40 w-full backdrop-blur-xl bg-[#101010]/70 border-b border-white/10 transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Monogram & Live Status */}
         <div className="flex items-center gap-2 sm:gap-3">

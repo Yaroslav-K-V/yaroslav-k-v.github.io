@@ -1,9 +1,11 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy, useCallback } from 'react';
 import { PageRoute, Project } from './types';
 import { projects } from './data/projects';
 import { parseRoute, parseProjectSlug, getProjectBySlug } from './utils/routes';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
+import { AssembleIntro } from './components/AssembleIntro';
+import { LiveGrid } from './components/LiveGrid';
 import { RouteLoader, ModalLoader } from './components/RouteLoader';
 import { AnimatePresence } from 'framer-motion';
 
@@ -66,6 +68,7 @@ export const App: React.FC = () => {
     }
     return null;
   });
+  const [assembleDone, setAssembleDone] = useState(false);
   const [modalLoaded, setModalLoaded] = useState<boolean>(() => {
     const route = parseRouteFromLocation();
     if (route === 'projects') {
@@ -98,6 +101,8 @@ export const App: React.FC = () => {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  const handleAssembleComplete = useCallback(() => setAssembleDone(true), []);
 
   const navigateTo = (route: PageRoute) => {
     setCurrentRoute(route);
@@ -138,6 +143,19 @@ export const App: React.FC = () => {
       setModalLoaded(true);
     }
   }, [selectedProject]);
+
+  // Enable live grid once assemble has completed (or when not on home).
+  useEffect(() => {
+    if (sessionStorage.getItem('yk:assemble:played:v1') === '1') {
+      setAssembleDone(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (currentRoute !== 'welcome') {
+      setAssembleDone(true);
+    }
+  }, [currentRoute]);
 
   // Per-route document titles.
   useEffect(() => {
@@ -181,6 +199,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#101010] text-[#eeeeee] tech-grid transition-colors">
+      <LiveGrid enabled={assembleDone} />
       <Navbar
         currentRoute={currentRoute}
         onNavigate={navigateTo}
@@ -206,6 +225,10 @@ export const App: React.FC = () => {
       </main>
 
       <Footer />
+
+      {currentRoute === 'welcome' && (
+        <AssembleIntro onComplete={handleAssembleComplete} />
+      )}
 
       {modalLoaded && (
         <Suspense fallback={<ModalLoader />}>
