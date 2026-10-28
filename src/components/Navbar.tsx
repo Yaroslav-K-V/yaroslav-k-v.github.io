@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PageRoute } from '../types';
 import { contactsData } from '../data/contacts';
-import { FileText, Menu, X, ExternalLink, Eye, EyeOff } from 'lucide-react';
+import { FileText, Menu, X, ExternalLink, Eye, EyeOff, Mail, Check } from 'lucide-react';
 
 interface NavbarProps {
   currentRoute: PageRoute;
@@ -17,9 +17,30 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleAnimations
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
   const prevOpenRef = useRef(false);
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(contactsData.email);
+      setCopiedEmail(true);
+      window.setTimeout(() => setCopiedEmail(false), 2000);
+    } catch {
+      // Fallback in case clipboard API fails
+      const textarea = document.createElement('textarea');
+      textarea.value = contactsData.email;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      setCopiedEmail(true);
+      window.setTimeout(() => setCopiedEmail(false), 2000);
+    }
+  };
 
   // Overlay mode: lock background scroll + focus trap + close on Escape.
   useEffect(() => {
@@ -153,11 +174,32 @@ export const Navbar: React.FC<NavbarProps> = ({
               {animationsEnabled ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
             </button>
           )}
+          <button
+            onClick={handleCopyEmail}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-[#ee6018]/50 hover:bg-[#ee6018]/10 transition-all"
+            title={`Copy email (${contactsData.email})`}
+            aria-label="Copy email address"
+          >
+            {copiedEmail ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-[#ee6018]" />
+                <span className="text-[#ee6018] font-semibold">Copied!</span>
+              </>
+            ) : (
+              <>
+                <Mail className="w-3.5 h-3.5 text-[#ee6018]" />
+                <span>Copy Email</span>
+              </>
+            )}
+          </button>
+
           <a
             href={contactsData.resumeUrl}
             target="_blank"
             rel="noopener noreferrer"
+            download="Yaroslav_Krupoder_CV.pdf"
             className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-white/30 hover:bg-[#eeeeee]/5 transition-all"
+            title="Download Yaroslav Krupoder CV"
           >
             <FileText className="w-3.5 h-3.5" />
             <span>Resume</span>
@@ -210,17 +252,37 @@ export const Navbar: React.FC<NavbarProps> = ({
               })}
             </div>
 
-            <div className="pt-2 border-t border-white/10 flex items-center justify-between">
-              <a
-                href={contactsData.resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:bg-[#eeeeee]/5"
-              >
-                <FileText className="w-3.5 h-3.5" />
-                <span>View Resume</span>
-                <ExternalLink className="w-3 h-3 opacity-60" />
-              </a>
+            <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleCopyEmail}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-[#ee6018]/50 hover:bg-[#ee6018]/10"
+                >
+                  {copiedEmail ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-[#ee6018]" />
+                      <span className="text-[#ee6018] font-semibold">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Mail className="w-3.5 h-3.5 text-[#ee6018]" />
+                      <span>Copy Email</span>
+                    </>
+                  )}
+                </button>
+
+                <a
+                  href={contactsData.resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download="Yaroslav_Krupoder_CV.pdf"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:bg-[#eeeeee]/5"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>Resume</span>
+                  <ExternalLink className="w-3 h-3 opacity-60" />
+                </a>
+              </div>
 
               <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[10px] font-mono text-[#ee6018]">
                 <span className="w-1.5 h-1.5 rounded-[3px] bg-[#ee6018] animate-pulse" />

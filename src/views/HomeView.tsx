@@ -39,7 +39,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       route: 'contacts',
       title: 'Contacts',
       tag: 'Get in touch',
-      description: 'Direct email, phone, LinkedIn profile, GitHub, and PDF resume download.',
+      description: 'Direct email, LinkedIn profile, GitHub, and PDF resume download.',
       meta: 'Varna, Bulgaria · Fast Response'
     }
   ];

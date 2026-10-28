@@ -16,7 +16,6 @@ const CELL_FLASH_MS = 520; // total flash duration of one cell
 const CELL_RISE_MS = 200; // ease-in (>=150ms per WCAG)
 const CELL_FALL_MS = 320; // ease-out
 const CELL_PEAK_OPACITY = 0.6; // max cell opacity (orange ~ red)
-// Base session key; suffixed with the current route at runtime.
 const MAX_WAIT_MS = 5000;
 
 interface Block {
@@ -52,6 +51,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
     const replay = new URLSearchParams(window.location.search).has('replay');
 
     const routeSlug = window.location.pathname.split("/").filter(Boolean).join("-") || "home";
+    // Base session key; suffixed with the current route at runtime.
     const sessionKey = `yk:assemble:played:v1:${routeSlug}`;
 
     // Already played this session -> skip (unless ?replay is present).
@@ -74,12 +74,38 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
     let rafId = 0;
     let blocks: Block[] = [];
     let cleanupListeners: () => void = () => {};
+    let completed = false;
+    const timers: number[] = [];
+
+    // Combine cleanups instead of overwriting the previous one.
+    const addCleanup = (fn: () => void) => {
+      const prev = cleanupListeners;
+      cleanupListeners = () => {
+        prev();
+        fn();
+      };
+    };
+    const later = (fn: () => void, ms: number) => {
+      timers.push(window.setTimeout(fn, ms));
+    };
+    const clearTimers = () => {
+      timers.forEach((id) => window.clearTimeout(id));
+      timers.length = 0;
+    };
+    // Mark the intro as done (once): session flag + onComplete.
+    const complete = () => {
+      if (completed) return;
+      completed = true;
+      sessionStorage.setItem(sessionKey, "1");
+      onCompleteRef.current?.();
+    };
 
     const finish = () => {
       if (finishCalled) return;
       finishCalled = true;
       cancelled = true;
       if (rafId) cancelAnimationFrame(rafId);
+      clearTimers();
       cleanupListeners();
       if (canvas) {
         canvas.remove();
@@ -98,8 +124,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
           b.el.style.transition = "";
         }
       });
-      sessionStorage.setItem(sessionKey, "1");
-      onCompleteRef.current?.();
+      complete();
     };
 
     // Wait for annotated blocks to appear in the DOM (lazy-loaded view).
@@ -120,11 +145,13 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
               obs.disconnect();
               resolve(found());
             }, 600);
+            timers.push(stableTimer);
           }
         };
         obs.observe(document.body, { childList: true, subtree: true });
+        addCleanup(() => obs.disconnect());
         schedule();
-        window.setTimeout(() => {
+        later(() => {
           obs.disconnect();
           if (stableTimer) window.clearTimeout(stableTimer);
           resolve(found());
@@ -185,37 +212,34 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
         }
       });
 
-      // Build canvas overlay.
-      canvas = document.createElement("canvas");
-      canvas.setAttribute("aria-hidden", "true");
-      canvas.style.cssText =
-        "position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:9999;";
-      document.body.appendChild(canvas);
-      ctx = canvas.getContext("2d");
-
+      // Canvas overlay is created lazily and removed when no flash is active.
+      interface Cell {
+        x: number;
+        y: number;
+        start: number; // absolute performance.now() timestamp
+        intensity: number;
+      }
+      let cells: Cell[] = [];
+      let introEnd = 0; // absolute time when the initial animation ends
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const resizeCanvas = () => {
-        if (!canvas) return;
+
+      const ensureCanvas = () => {
+        if (canvas) return;
+        canvas = document.createElement("canvas");
+        canvas.setAttribute("aria-hidden", "true");
+        canvas.style.cssText =
+          "position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:9999;";
         canvas.width = window.innerWidth * dpr;
         canvas.height = window.innerHeight * dpr;
         canvas.style.width = window.innerWidth + "px";
         canvas.style.height = window.innerHeight + "px";
+        document.body.appendChild(canvas);
+        ctx = canvas.getContext("2d");
         if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       };
-      resizeCanvas();
 
-      // Generate cells per in-view block.
-      interface Cell {
-        x: number;
-        y: number;
-        start: number;
-        intensity: number;
-      }
-      const cells: Cell[] = [];
-
-      inViewBlocks.forEach((b, idx) => {
-        const blockStart = idx * BLOCK_STAGGER_MS;
-        const rect = b.el.getBoundingClientRect();
+      // Generate brick cells for one block rect, starting at `baseStart`.
+      const addCells = (rect: DOMRect, baseStart: number) => {
         const x0 = Math.floor(rect.left / CELL_SIZE) * CELL_SIZE;
         const y0 = Math.floor(rect.top / CELL_SIZE) * CELL_SIZE;
         const x1 = Math.ceil(rect.right / CELL_SIZE) * CELL_SIZE;
@@ -237,136 +261,19 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
             const cellCenterY = y + CELL_SIZE / 2;
             const dist = Math.abs(cellCenterY - blockCenterY) / (blockHeight / 2);
             const intensity = Math.max(0.35, 1 - dist * 0.65);
-            cells.push({ x, y, start: blockStart + waveDelay, intensity });
+            cells.push({ x, y, start: baseStart + waveDelay, intensity });
           }
         }
-
-        // Schedule block reveal (children stagger if applicable).
-        if (b.useChildren) {
-          b.children.forEach((c, ci) => {
-            window.setTimeout(() => {
-              if (cancelled) return;
-              c.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-              c.style.opacity = "1";
-              c.style.transform = "translateY(0) scale(1)";
-            }, blockStart + ci * 90);
-          });
-        } else {
-          window.setTimeout(() => {
-            if (cancelled) return;
-            b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-            b.el.style.opacity = "1";
-            b.el.style.transform = "translateY(0) scale(1)";
-          }, blockStart);
-        }
-      });
-
-      const revealBlock = (b: Block) => {
-        if (b.useChildren) {
-          b.children.forEach((c, ci) => {
-            window.setTimeout(() => {
-              c.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-              c.style.opacity = "1";
-              c.style.transform = "translateY(0) scale(1)";
-            }, ci * 90);
-          });
-        } else {
-          b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-          b.el.style.opacity = "1";
-          b.el.style.transform = "translateY(0) scale(1)";
-        }
       };
-
-      // Deferred blocks: reveal (with brick flash) when scrolled into view.
-      let io: IntersectionObserver | null = null;
-      if (deferredBlocks.length > 0 && "IntersectionObserver" in window) {
-        io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              const el = entry.target as HTMLElement;
-              const block = deferredBlocks.find((b) => b.el === el);
-              if (block) revealBlock(block);
-              io?.unobserve(el);
-            });
-          },
-          { rootMargin: "0px 0px -10% 0px", threshold: 0.05 },
-        );
-        deferredBlocks.forEach((b) => io?.observe(b.el));
-      } else {
-        deferredBlocks.forEach((b) => {
-          if (b.useChildren) {
-            b.children.forEach((c, ci) => {
-              window.setTimeout(() => {
-                c.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-                c.style.opacity = "1";
-                c.style.transform = "translateY(0) scale(1)";
-              }, ci * 90);
-            });
-          } else {
-            b.el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
-            b.el.style.opacity = "1";
-            b.el.style.transform = "translateY(0) scale(1)";
-          }
-        });
-      }
-
-      // Extend cleanup to disconnect observer.
-      const prevCleanupIO = cleanupListeners;
-      cleanupListeners = () => {
-        prevCleanupIO();
-        if (io) io.disconnect();
-      };
-
-      // Interaction / resize -> finish immediately.
-      const onInteract = () => finish();
-      const onResize = () => finish();
-      window.addEventListener("click", onInteract);
-      window.addEventListener("scroll", onInteract, { passive: true });
-      window.addEventListener("keydown", onInteract);
-      window.addEventListener("resize", onResize);
-      cleanupListeners = () => {
-        window.removeEventListener("click", onInteract);
-        window.removeEventListener("scroll", onInteract);
-        window.removeEventListener("keydown", onInteract);
-        window.removeEventListener("resize", onResize);
-      };
-
-      // Reduced-motion change during animation.
-      const onMqChange = (e: MediaQueryListEvent) => {
-        if (e.matches) finish();
-      };
-      reducedMQ.addEventListener("change", onMqChange);
-      const prevCleanup = cleanupListeners;
-      cleanupListeners = () => {
-        prevCleanup();
-        reducedMQ.removeEventListener("change", onMqChange);
-      };
-
-      // If nothing is in view, skip the canvas animation but keep scroll reveals.
-      if (inViewBlocks.length === 0) {
-        if (canvas) {
-          canvas.remove();
-          canvas = null;
-        }
-        sessionStorage.setItem(sessionKey, "1");
-        onCompleteRef.current?.();
-        return;
-      }
-
-      // rAF draw loop.
-      const startTime = performance.now();
-      const TOTAL =
-        (inViewBlocks.length - 1) * BLOCK_STAGGER_MS +
-        BLOCK_REVEAL_MS +
-        CELL_FLASH_MS;
 
       const tick = (now: number) => {
-        if (cancelled || !ctx || !canvas) return;
-        const t = now - startTime;
+        rafId = 0;
+        if (cancelled) return;
+        if (!canvas || !ctx) ensureCanvas();
+        if (!canvas || !ctx) return;
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         for (const cell of cells) {
-          const local = t - cell.start;
+          const local = now - cell.start;
           if (local < 0 || local > CELL_FLASH_MS) continue;
           let opacity = 0;
           if (local < CELL_RISE_MS) {
@@ -384,18 +291,120 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
           // Brick look: 1px gap around each cell.
           ctx.fillRect(cell.x + 1, cell.y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
         }
-        if (t < TOTAL) {
+        // Drop cells whose flash is over.
+        cells = cells.filter((c) => now - c.start <= CELL_FLASH_MS);
+        if (now >= introEnd) complete();
+        if (cells.length > 0 || now < introEnd) {
           rafId = requestAnimationFrame(tick);
-        } else {
-          finish();
+        } else if (canvas) {
+          // Nothing left to flash; remove canvas (recreated on demand).
+          canvas.remove();
+          canvas = null;
+          ctx = null;
         }
       };
-      rafId = requestAnimationFrame(tick);
+      const startLoop = () => {
+        if (!rafId && !cancelled) rafId = requestAnimationFrame(tick);
+      };
+
+      const revealBlock = (b: Block, baseDelay = 0) => {
+        if (cancelled) return;
+        const apply = (el: HTMLElement) => {
+          if (cancelled) return;
+          el.style.transition = `opacity ${BLOCK_REVEAL_MS}ms ease, transform ${BLOCK_REVEAL_MS}ms ease`;
+          el.style.opacity = "1";
+          el.style.transform = "translateY(0) scale(1)";
+        };
+        if (b.useChildren) {
+          b.children.forEach((c, ci) => {
+            later(() => apply(c), baseDelay + ci * 90);
+          });
+        } else {
+          later(() => apply(b.el), baseDelay);
+        }
+      };
+
+      const startTime = performance.now();
+      inViewBlocks.forEach((b, idx) => {
+        const blockStart = idx * BLOCK_STAGGER_MS;
+        addCells(b.el.getBoundingClientRect(), startTime + blockStart);
+        // Schedule block reveal (children stagger if applicable).
+        revealBlock(b, blockStart);
+      });
+      introEnd =
+        inViewBlocks.length > 0
+          ? startTime +
+            (inViewBlocks.length - 1) * BLOCK_STAGGER_MS +
+            BLOCK_REVEAL_MS +
+            CELL_FLASH_MS
+          : 0;
+
+      // Deferred blocks: reveal (with brick flash) when scrolled into view.
+      // The observer keeps running after the intro animation ends.
+      let io: IntersectionObserver | null = null;
+      if (deferredBlocks.length > 0 && "IntersectionObserver" in window) {
+        io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (cancelled || !entry.isIntersecting) return;
+              const el = entry.target as HTMLElement;
+              const block = deferredBlocks.find((b) => b.el === el);
+              if (block) {
+                addCells(el.getBoundingClientRect(), performance.now());
+                ensureCanvas();
+                startLoop();
+                revealBlock(block);
+              }
+              io?.unobserve(el);
+            });
+          },
+          { rootMargin: "0px 0px -10% 0px", threshold: 0.05 },
+        );
+        deferredBlocks.forEach((b) => io?.observe(b.el));
+      } else {
+        deferredBlocks.forEach((b) => revealBlock(b));
+      }
+
+      // Extend cleanup to disconnect observer.
+      addCleanup(() => {
+        if (io) io.disconnect();
+      });
+
+      // Interaction / resize -> finish immediately (scroll is intentionally
+      // excluded so deferred blocks can be revealed by the IntersectionObserver).
+      const onInteract = () => finish();
+      const onResize = () => finish();
+      window.addEventListener("click", onInteract);
+      window.addEventListener("keydown", onInteract);
+      window.addEventListener("resize", onResize);
+      addCleanup(() => {
+        window.removeEventListener("click", onInteract);
+        window.removeEventListener("keydown", onInteract);
+        window.removeEventListener("resize", onResize);
+      });
+
+      // Reduced-motion change during animation.
+      const onMqChange = (e: MediaQueryListEvent) => {
+        if (e.matches) finish();
+      };
+      reducedMQ.addEventListener("change", onMqChange);
+      addCleanup(() => reducedMQ.removeEventListener("change", onMqChange));
+
+      // If nothing is in view, skip the canvas animation but keep scroll reveals.
+      if (inViewBlocks.length === 0) {
+        complete();
+        return;
+      }
+
+      // rAF draw loop.
+      ensureCanvas();
+      startLoop();
     });
 
     return () => {
       cancelled = true;
       if (rafId) cancelAnimationFrame(rafId);
+      clearTimers();
       cleanupListeners();
       if (canvas) canvas.remove();
       blocks.forEach((b) => {
