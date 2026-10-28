@@ -155,7 +155,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
       className="space-y-10"
     >
       {/* Header Section */}
-      <section className="space-y-4 pt-2">
+      <section data-assemble="1" className="space-y-4 pt-2">
         {/* System Registry Eyebrow */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#3d3a39]/80 dark:border-white/10 pb-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018] dark:text-[#ee6018]">
@@ -220,7 +220,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
 
       {/* Project Grid */}
       {filteredProjects.length === 0 ? (
-        <div className="glass-panel rounded-[10px] p-12 text-center space-y-3">
+        <div data-assemble="2" className="glass-panel rounded-[10px] p-12 text-center space-y-3">
           <p className="text-base font-semibold text-zinc-900 dark:text-[#eeeeee]">
             Nothing here yet
           </p>
@@ -235,7 +235,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
           </button>
         </div>
       ) : (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div data-assemble="2" className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project) => {
             const isFeatured = isFlagship(project);
@@ -415,10 +415,38 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
                       ))}
                     </div>
 
-                    <span className="text-xs font-mono text-[#8a8380] group-hover:text-zinc-900 dark:group-hover:text-white transition-colors flex items-center gap-1">
-                      <span>Open details</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </span>
+                    <div className="flex items-center gap-2.5">
+                      {project.url && (
+                        <a
+                          href={project.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[3px] text-xs font-mono border border-[#ee6018]/35 bg-[#ee6018]/10 text-[#ee6018] hover:bg-[#ee6018]/20 transition-all font-medium"
+                          title="Visit live site"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          <span>Live Demo</span>
+                        </a>
+                      )}
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[3px] text-xs font-mono border border-white/10 bg-[#eeeeee]/5 text-zinc-300 hover:text-white hover:border-white/30 transition-all"
+                          title="View GitHub repository"
+                        >
+                          <GithubIcon className="w-3.5 h-3.5" />
+                          <span>Code</span>
+                        </a>
+                      )}
+                      <span className="text-xs font-mono text-[#8a8380] group-hover:text-zinc-900 dark:group-hover:text-white transition-colors flex items-center gap-1">
+                        <span>Details</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </span>
+                    </div>
                   </div>
                 </motion.article>
               );
@@ -496,7 +524,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
                   </div>
 
                   <div
-                    className="flex items-center justify-between pt-1"
+                    className="flex flex-wrap items-center justify-between gap-2 pt-1"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="flex items-center gap-2">
@@ -505,10 +533,11 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
                           href={project.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 rounded text-[#8a8380] hover:text-zinc-900 dark:hover:text-[#eeeeee] hover:bg-zinc-100 dark:hover:bg-[#3d3a39] transition-colors"
-                          title="Visit live link"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[3px] text-xs font-mono border border-[#ee6018]/35 bg-[#ee6018]/10 text-[#ee6018] hover:bg-[#ee6018]/20 transition-all font-medium"
+                          title="Visit live site"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
+                          <span>Demo</span>
                         </a>
                       )}
                       {project.github && (
@@ -516,17 +545,18 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
                           href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 rounded text-[#8a8380] hover:text-zinc-900 dark:hover:text-[#eeeeee] hover:bg-zinc-100 dark:hover:bg-[#3d3a39] transition-colors"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[3px] text-xs font-mono border border-white/10 bg-[#eeeeee]/5 text-zinc-300 hover:text-white hover:border-white/30 hover:bg-[#eeeeee]/10 transition-all"
                           title="View GitHub repository"
                         >
                           <GithubIcon className="w-3.5 h-3.5" />
+                          <span>Code</span>
                         </a>
                       )}
                     </div>
 
                     <button
                       onClick={() => onSelectProject(project)}
-                      className="inline-flex items-center gap-1 text-xs font-mono text-zinc-600 dark:text-[#8a8380] group-hover:text-zinc-900 dark:group-hover:text-white transition-colors"
+                      className="inline-flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-white transition-colors ml-auto"
                     >
                       <span>Details</span>
                       <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

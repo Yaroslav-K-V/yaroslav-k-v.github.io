@@ -1,9 +1,11 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy, useCallback } from 'react';
 import { PageRoute, Project } from './types';
 import { projects } from './data/projects';
 import { parseRoute, parseProjectSlug, getProjectBySlug } from './utils/routes';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
+import { AssembleIntro } from './components/AssembleIntro';
+import { LiveGrid } from './components/LiveGrid';
 import { RouteLoader, ModalLoader } from './components/RouteLoader';
 import { AnimatePresence } from 'framer-motion';
 
@@ -66,6 +68,39 @@ export const App: React.FC = () => {
     }
     return null;
   });
+  const [assembleDone, setAssembleDone] = useState(false);
+  const [animationsEnabled, setAnimationsEnabled] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const userPref = localStorage.getItem('yk:animations:user');
+    if (userPref !== null) {
+      return localStorage.getItem('yk:animations:enabled') !== '0';
+    }
+    // Auto-detect: disable on reduced motion, low-end devices, or data-saver.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    const nav = navigator as Navigator & {
+      deviceMemory?: number;
+      hardwareConcurrency?: number;
+      connection?: { saveData?: boolean };
+    };
+    if (typeof nav.deviceMemory === 'number' && nav.deviceMemory < 2) return false;
+    if (typeof nav.hardwareConcurrency === 'number' && nav.hardwareConcurrency < 2) return false;
+    if (nav.connection && nav.connection.saveData) return false;
+    return true;
+  });
+  const [assembleReplayKey, setAssembleReplayKey] = useState(0);
+  const toggleAnimations = useCallback(() => {
+    setAnimationsEnabled((prev) => {
+      const next = !prev;
+      localStorage.setItem('yk:animations:user', '1');
+      localStorage.setItem('yk:animations:enabled', next ? '1' : '0');
+      // When turning animations back on, replay the assemble intro.
+      if (next) {
+        sessionStorage.removeItem('yk:assemble:played:v1');
+        setAssembleReplayKey((k) => k + 1);
+      }
+      return next;
+    });
+  }, []);
   const [modalLoaded, setModalLoaded] = useState<boolean>(() => {
     const route = parseRouteFromLocation();
     if (route === 'projects') {
@@ -97,6 +132,18 @@ export const App: React.FC = () => {
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleAssembleComplete = useCallback(() => setAssembleDone(true), []);
+
+  useEffect(() => {
+    const handler = () => {
+      const slug = window.location.pathname.split('/').filter(Boolean).join('-') || 'home';
+      sessionStorage.removeItem(`yk:assemble:played:v1:${slug}`);
+      setAssembleReplayKey((k) => k + 1);
+    };
+    window.addEventListener('yk:replay-assemble', handler);
+    return () => window.removeEventListener('yk:replay-assemble', handler);
   }, []);
 
   const navigateTo = (route: PageRoute) => {
@@ -138,6 +185,19 @@ export const App: React.FC = () => {
       setModalLoaded(true);
     }
   }, [selectedProject]);
+
+  // Enable live grid once assemble has completed (or when not on home).
+  useEffect(() => {
+    if (sessionStorage.getItem('yk:assemble:played:v1') === '1') {
+      setAssembleDone(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (currentRoute !== 'welcome') {
+      setAssembleDone(true);
+    }
+  }, [currentRoute]);
 
   // Per-route document titles.
   useEffect(() => {
@@ -181,9 +241,12 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#101010] text-[#eeeeee] tech-grid transition-colors">
+      <LiveGrid enabled={assembleDone && animationsEnabled} />
       <Navbar
         currentRoute={currentRoute}
         onNavigate={navigateTo}
+        animationsEnabled={animationsEnabled}
+        onToggleAnimations={toggleAnimations}
       />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-16">
@@ -206,6 +269,12 @@ export const App: React.FC = () => {
       </main>
 
       <Footer />
+
+      <AssembleIntro
+        key={`${assembleReplayKey}-${currentRoute}`}
+        enabled={animationsEnabled}
+        onComplete={handleAssembleComplete}
+      />
 
       {modalLoaded && (
         <Suspense fallback={<ModalLoader />}>

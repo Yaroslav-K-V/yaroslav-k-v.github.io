@@ -39,7 +39,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       route: 'contacts',
       title: 'Contacts',
       tag: 'Get in touch',
-      description: 'Direct email, phone, LinkedIn profile, GitHub, and PDF resume download.',
+      description: 'Direct email, LinkedIn profile, GitHub, and PDF resume download.',
       meta: 'Varna, Bulgaria · Fast Response'
     }
   ];
@@ -55,7 +55,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       {/* Hero Section */}
       <section className="pt-4 sm:pt-10 pb-2 space-y-6">
         {/* Eyebrow badge with live pulse */}
-        <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018] dark:text-[#ee6018]">
+        <div data-assemble="1" className="inline-flex items-center gap-2.5 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018] dark:text-[#ee6018]">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-[3px] bg-[#ee6018] opacity-75" />
             <span className="relative inline-flex rounded-[3px] h-2 w-2 bg-[#ee6018]" />
@@ -66,7 +66,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
 
         {/* Monochromatic Hero Headline */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.12] max-w-4xl">
+        <h1 data-assemble="2" className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.12] max-w-4xl">
           Junior Web Developer building with{' '}
           <span className="text-[#8a8380] dark:text-[#8a8380]">
             JavaScript, React, and Applied AI.
@@ -74,12 +74,12 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </h1>
 
         {/* Hero Subtitle */}
-        <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 max-w-3xl leading-relaxed">
+        <p data-assemble="3" className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 max-w-3xl leading-relaxed">
           Software Engineering student with production experience maintaining a live web platform (web app, Chrome extension, Supabase backend). Daily user of Claude Code and agentic AI workflows for exploring codebases, writing code, and debugging.
         </p>
 
         {/* Quick Navigation CTAs */}
-        <div className="flex flex-wrap items-center gap-3 pt-2">
+        <div data-assemble="4" className="flex flex-wrap items-center gap-3 pt-2">
           <button
             onClick={() => {
               onNavigate('about');
@@ -104,7 +104,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
 
         {/* Engineering Stack / Meta-spec Row */}
-        <div className="pt-4 flex flex-wrap items-center gap-4 sm:gap-8 text-[11px] font-mono text-[#8a8380] dark:text-[#8a8380] border-t border-[#3d3a39]/60 dark:border-white/5">
+        <div data-assemble="5" className="pt-4 flex flex-wrap items-center gap-4 sm:gap-8 text-[11px] font-mono text-[#8a8380] dark:text-[#8a8380] border-t border-[#3d3a39]/60 dark:border-white/5">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-[3px] bg-[#ee6018]" />
             <span>JavaScript · React · TypeScript · Python</span>
@@ -134,9 +134,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {directoryModules.map((card) => (
+          {directoryModules.map((card, i) => (
             <div
               key={card.route}
+              data-assemble={String(6 + i)}
               role="button"
               tabIndex={0}
               onClick={() => {

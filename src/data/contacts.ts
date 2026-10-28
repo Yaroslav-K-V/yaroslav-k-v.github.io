@@ -3,8 +3,6 @@ export const contactsData = {
   location: 'Varna, Bulgaria',
   status: 'Open to internship opportunities',
   email: 'y.krupoder@gmail.com',
-  phone: '+359 88 671 4772',
-  phoneUa: '+380 73 238 1811',
   linkedin: 'https://www.linkedin.com/in/yaroslav-krupoder-210057187',
   linkedinDisplay: 'linkedin.com/in/yaroslav-krupoder',
   telegram: 'https://t.me/yaroslav_krupoder',
