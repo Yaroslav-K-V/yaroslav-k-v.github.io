@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { GithubIcon } from './Icons';
 import { VideoPreview } from './VideoPreview';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -24,6 +25,7 @@ interface ProjectModalProps {
 type ModalTab = 'all' | 'overview' | 'architecture' | 'tech' | 'metrics';
 
 export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<ModalTab>('all');
   const triggerRef = useRef<HTMLElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -194,17 +196,17 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
   const specNumber = project ? `PRJ-${String(project.id).padStart(2, '0')}` : '';
 
   const tabs: { id: ModalTab; label: string }[] = [
-    { id: 'all', label: 'All Sections' },
-    { id: 'overview', label: '01 // Overview' },
-    { id: 'architecture', label: '02 // Structure' },
-    { id: 'tech', label: '03 // Tech stack' },
-    { id: 'metrics', label: '04 // Notes' }
+    { id: 'all', label: t.modal.tabAll },
+    { id: 'overview', label: `01 // ${t.modal.tabOverview}` },
+    { id: 'architecture', label: `02 // ${t.modal.tabArchitecture}` },
+    { id: 'tech', label: `03 // ${t.modal.tabTech}` },
+    { id: 'metrics', label: `04 // ${t.modal.tabMetrics}` }
   ];
 
   return (
     <AnimatePresence>
       {project && dossier && status && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 overflow-y-auto">
           {/* Backdrop with Deep Blur */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -225,7 +227,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#eeeeee]/95 dark:bg-[#101010]/90 text-zinc-900 dark:text-[#eeeeee] rounded-[10px] border border-[#3d3a39] dark:border-white/10 shadow-none backdrop-blur-2xl z-10 overflow-hidden outline-none"
+            className="relative w-full max-w-4xl max-h-[90dvh] sm:max-h-[88dvh] flex flex-col bg-[#eeeeee]/95 dark:bg-[#101010]/90 text-zinc-900 dark:text-[#eeeeee] rounded-t-[14px] sm:rounded-[10px] border border-[#3d3a39] dark:border-white/10 shadow-none backdrop-blur-2xl z-10 overflow-hidden outline-none"
             onClick={(e) => e.stopPropagation()}
           >
           {/* Top Dossier Metadata Ribbon */}
@@ -250,7 +252,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
               <button
                 ref={closeButtonRef}
                 onClick={onClose}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-zinc-600 dark:text-[#8a8380] hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-[#eeeeee]/10 transition-colors text-xs font-mono"
+                className="inline-flex items-center justify-center gap-1 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2.5 py-1 rounded-md text-zinc-600 dark:text-[#8a8380] hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-[#eeeeee]/10 transition-colors text-xs font-mono"
                 aria-label="Close specification sheet"
               >
                 <span>[ESC]</span>
@@ -284,7 +286,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-[3px] bg-[#1d1a18] dark:bg-[#eeeeee] text-white dark:text-zinc-950 font-mono text-xs font-semibold hover:bg-[#3d3a39] dark:hover:bg-zinc-200 transition-colors shadow-none"
                   >
-                    <span>Visit Live Service</span>
+                    <span>{t.modal.openService}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 )}
@@ -296,7 +298,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                     className="inline-flex items-center gap-2 px-3.5 py-2 rounded-[3px] border border-[#3d3a39] dark:border-white/10 bg-zinc-100/60 dark:bg-[#1d1a18]/60 text-zinc-800 dark:text-[#eeeeee] font-mono text-xs font-medium hover:bg-zinc-200/80 dark:hover:bg-[#eeeeee]/10 transition-colors"
                   >
                     <GithubIcon className="w-3.5 h-3.5" />
-                    <span>View Repository</span>
+                    <span>{t.modal.openGithub}</span>
                   </a>
                 )}
               </div>
@@ -322,12 +324,12 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex items-center gap-2 overflow-x-auto pt-2 scrollbar-none border-t border-[#3d3a39]/60 dark:border-white/5">
+            <div className="flex items-center gap-2 overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 pt-2 pb-1 scrollbar-none border-t border-[#3d3a39]/60 dark:border-white/5">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-mono whitespace-nowrap transition-all border ${
+                  className={`px-3 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-md text-xs font-mono whitespace-nowrap transition-all border ${
                     activeTab === tab.id
                       ? 'bg-[#1d1a18] dark:bg-[#eeeeee] text-white dark:text-zinc-950 border-zinc-900 dark:border-white font-semibold'
                       : 'bg-transparent text-zinc-600 dark:text-[#8a8380] border-transparent hover:text-zinc-900 dark:hover:text-[#eeeeee] hover:bg-zinc-100 dark:hover:bg-[#eeeeee]/5'
@@ -347,6 +349,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                 {(project.video || project.image) && (
                   <VideoPreview
                     src={project.video ?? project.image ?? ''}
+                    webm={project.webm}
                     poster={project.image}
                     alt={`${project.title} demo`}
                   />

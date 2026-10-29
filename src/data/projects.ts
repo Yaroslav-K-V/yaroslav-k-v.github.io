@@ -24,6 +24,7 @@ export const projects: Project[] = [
     tech: ['TypeScript', 'JavaScript', 'React', 'Supabase', 'PostgreSQL', 'REST APIs', 'OpenRouter'],
     url: 'https://meetbadi.com',
     video: '/meetbadi-tour.mp4',
+    webm: '/meetbadi-tour.webm',
     image: '/meetbadi-poster.jpg',
     dossier: {
       problemStatement:
@@ -157,6 +158,7 @@ export const projects: Project[] = [
     github: 'https://github.com/Yaroslav-K-V/PyGlow',
     image: '/pyglow-poster.jpg',
     video: '/pyglow-demo.mp4',
+    webm: '/pyglow-demo.webm',
     dossier: {
       problemStatement:
         'Modern code editors (VS Code, JetBrains) consume substantial CPU and RAM, creating noticeable lag and battery drain for quick Python scripts or on low-spec hardware. Developers need a lightweight, instantaneous editor with smart features and zero telemetry.',
@@ -288,6 +290,7 @@ export const projects: Project[] = [
     github: 'https://github.com/Yaroslav-K-V/hotspot-guard',
     image: '/hotspot-poster.jpg',
     video: '/hotspot-demo.mp4',
+    webm: '/hotspot-demo.webm',
     dossier: {
       problemStatement:
         'macOS built-in network status frequently reports active Wi-Fi association even when captive portals, DHCP stalls, or cellular hotspot drops silently halt all traffic. Developers and remote engineers suffer broken long-running commands and stale sessions without immediate visual alerts or automated recovery.',

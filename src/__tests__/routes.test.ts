@@ -54,6 +54,13 @@ describe('Route Validation & Parsing Engine', () => {
       expect(parseRoute('/welcome/')).toBe('welcome');
     });
 
+    it('resolves project pathname to "projects" and extracts project slug', () => {
+      expect(parseRoute('/projects/unitra')).toBe('projects');
+      expect(parseRoute('/projects/unitra/')).toBe('projects');
+      expect(parseProjectSlug('/projects/unitra')).toBe('unitra');
+      expect(parseProjectSlug('/projects/meetbadi/')).toBe('meetbadi');
+    });
+
     it('resolves about paths to "about"', () => {
       expect(parseRoute('/about')).toBe('about');
       expect(parseRoute('/about/')).toBe('about');

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PageRoute } from '../types';
 import { contactsData } from '../data/contacts';
-import { FileText, Menu, X, ExternalLink, Eye, EyeOff, Mail, Check } from 'lucide-react';
+import { FileText, Menu, X, ExternalLink, Eye, EyeOff, Mail, Check, Globe, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
+import { Locale } from '../i18n/translations';
 
 interface NavbarProps {
   currentRoute: PageRoute;
@@ -10,17 +12,46 @@ interface NavbarProps {
   onToggleAnimations?: () => void;
 }
 
+const LANGUAGES: { code: Locale; label: string; full: string }[] = [
+  { code: 'en', label: 'EN', full: 'English' },
+  { code: 'ua', label: 'UA', full: 'Українська' },
+  { code: 'bg', label: 'BG', full: 'Български' }
+];
+
 export const Navbar: React.FC<NavbarProps> = ({
   currentRoute,
   onNavigate,
   animationsEnabled = true,
   onToggleAnimations
 }) => {
+  const { locale, setLocale, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const langDropdownRef = useRef<HTMLDivElement | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
   const prevOpenRef = useRef(false);
+
+  useEffect(() => {
+    if (!langOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setLangOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [langOpen]);
 
   const handleCopyEmail = async () => {
     try {
@@ -107,10 +138,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, [mobileMenuOpen]);
 
   const navItems: { route: PageRoute; label: string }[] = [
-    { route: 'welcome', label: 'Welcome' },
-    { route: 'about', label: 'About Me' },
-    { route: 'projects', label: 'Projects' },
-    { route: 'contacts', label: 'Contacts' }
+    { route: 'welcome', label: t.nav.welcome },
+    { route: 'about', label: t.nav.about },
+    { route: 'projects', label: t.nav.projects },
+    { route: 'contacts', label: t.nav.contacts }
   ];
 
   const handleNavClick = (route: PageRoute) => {
@@ -162,14 +193,70 @@ export const Navbar: React.FC<NavbarProps> = ({
           })}
         </nav>
 
-        {/* Right Actions: Resume */}
+        {/* Right Actions: Resume & Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Language Dropdown */}
+          <div ref={langDropdownRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setLangOpen((prev) => !prev)}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[3px] border border-white/15 bg-[#1d1a18]/70 hover:bg-[#3d3a39] text-zinc-300 hover:text-white text-xs font-mono transition-all"
+              aria-label="Select language"
+              aria-expanded={langOpen}
+              aria-haspopup="listbox"
+            >
+              <Globe className="w-3.5 h-3.5 text-[#ee6018]" />
+              <span className="font-semibold uppercase tracking-wider">{locale}</span>
+              <ChevronDown
+                className={`w-3 h-3 text-[#8a8380] transition-transform duration-200 ${
+                  langOpen ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+
+            {langOpen && (
+              <div
+                role="listbox"
+                aria-label="Languages"
+                className="absolute right-0 mt-1.5 w-40 py-1 rounded-[4px] bg-[#101010] border border-[#3d3a39] shadow-2xl z-50"
+              >
+                {LANGUAGES.map((item) => {
+                  const isSelected = locale === item.code;
+                  return (
+                    <button
+                      key={item.code}
+                      role="option"
+                      aria-selected={isSelected}
+                      onClick={() => {
+                        setLocale(item.code);
+                        setLangOpen(false);
+                      }}
+                      className={`w-full text-left px-3 py-1.5 text-xs font-mono flex items-center justify-between transition-colors ${
+                        isSelected
+                          ? 'bg-[#ee6018]/15 text-[#ee6018] font-bold'
+                          : 'text-zinc-300 hover:bg-[#eeeeee]/10 hover:text-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold uppercase text-[#8a8380]">
+                          {item.label}
+                        </span>
+                        <span>{item.full}</span>
+                      </div>
+                      {isSelected && <Check className="w-3.5 h-3.5 text-[#ee6018]" />}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
           {onToggleAnimations && (
             <button
               onClick={onToggleAnimations}
               className="inline-flex items-center justify-center w-8 h-8 rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-white/30 hover:bg-[#eeeeee]/5 transition-all"
-              aria-label={animationsEnabled ? 'Disable animations' : 'Enable animations'}
-              title={animationsEnabled ? 'Disable animations' : 'Enable animations'}
+              aria-label={animationsEnabled ? t.nav.animationsOff : t.nav.animationsOn}
+              title={animationsEnabled ? t.nav.animationsOff : t.nav.animationsOn}
             >
               {animationsEnabled ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
             </button>
@@ -183,12 +270,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             {copiedEmail ? (
               <>
                 <Check className="w-3.5 h-3.5 text-[#ee6018]" />
-                <span className="text-[#ee6018] font-semibold">Copied!</span>
+                <span className="text-[#ee6018] font-semibold hidden lg:inline">{t.nav.emailCopied}</span>
               </>
             ) : (
               <>
                 <Mail className="w-3.5 h-3.5 text-[#ee6018]" />
-                <span>Copy Email</span>
+                <span className="hidden lg:inline">{t.nav.copyEmail}</span>
               </>
             )}
           </button>
@@ -202,8 +289,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             title="Download Yaroslav Krupoder CV"
           >
             <FileText className="w-3.5 h-3.5" />
-            <span>Resume</span>
-            <ExternalLink className="w-3 h-3 opacity-60" />
+            <span className="hidden lg:inline">{t.nav.resume}</span>
+            <ExternalLink className="w-3 h-3 opacity-60 hidden lg:inline" />
           </a>
 
           {/* Mobile menu trigger */}
@@ -231,7 +318,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div
             id="mobile-nav-menu"
             ref={mobileMenuRef}
-            className="md:hidden fixed top-16 left-0 right-0 z-40 px-4 pt-3 pb-5 space-y-3 bg-[#101010] border-b border-[#3d3a39]"
+            className="md:hidden fixed top-16 left-0 right-0 z-40 px-4 pt-3 pb-[max(1.25rem,env(safe-area-inset-bottom))] space-y-3 bg-[#101010] border-b border-[#3d3a39]"
           >
             <div className="flex flex-col gap-1">
               {navItems.map((item) => {
@@ -253,6 +340,28 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
+              {/* Mobile Language Switcher */}
+              <div className="flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-[#ee6018]" />
+                <div className="inline-flex items-center p-0.5 rounded-[3px] border border-white/15 bg-[#1d1a18]/70 text-[10px] font-mono">
+                  {LANGUAGES.map((l) => (
+                    <button
+                      key={l.code}
+                      type="button"
+                      onClick={() => setLocale(l.code)}
+                      className={`px-2 py-0.5 rounded-[2px] uppercase transition-colors ${
+                        locale === l.code
+                          ? 'bg-[#ee6018] text-white font-bold'
+                          : 'text-[#8a8380] hover:text-white'
+                      }`}
+                      aria-label={`Switch language to ${l.full}`}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleCopyEmail}
@@ -261,12 +370,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {copiedEmail ? (
                     <>
                       <Check className="w-3.5 h-3.5 text-[#ee6018]" />
-                      <span className="text-[#ee6018] font-semibold">Copied!</span>
+                      <span className="text-[#ee6018] font-semibold">{t.nav.emailCopied}</span>
                     </>
                   ) : (
                     <>
                       <Mail className="w-3.5 h-3.5 text-[#ee6018]" />
-                      <span>Copy Email</span>
+                      <span>{t.nav.copyEmail}</span>
                     </>
                   )}
                 </button>
@@ -279,7 +388,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:bg-[#eeeeee]/5"
                 >
                   <FileText className="w-3.5 h-3.5" />
-                  <span>Resume</span>
+                  <span>{t.nav.resume}</span>
                   <ExternalLink className="w-3 h-3 opacity-60" />
                 </a>
               </div>

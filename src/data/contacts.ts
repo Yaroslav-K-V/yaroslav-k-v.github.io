@@ -3,6 +3,7 @@ export const contactsData = {
   location: 'Varna, Bulgaria',
   status: 'Open to internship opportunities',
   email: 'y.krupoder@gmail.com',
+  bookingUrl: 'https://calendar.app.google/VDUTS3bvEqBCY99Y6',
   linkedin: 'https://www.linkedin.com/in/yaroslav-krupoder-210057187',
   linkedinDisplay: 'linkedin.com/in/yaroslav-krupoder',
   telegram: 'https://t.me/yaroslav_krupoder',

@@ -12,13 +12,16 @@ import {
   Clock,
   ArrowDown,
   Send,
-  Loader2
+  Loader2,
+  Calendar
 } from 'lucide-react';
 import { LinkedinIcon, GithubIcon, TelegramIcon } from '../components/Icons';
+import { useLanguage } from '../i18n/LanguageContext';
 
 type FormState = 'idle' | 'sending' | 'sent' | 'error';
 
 const ContactForm: React.FC = () => {
+  const { t } = useLanguage();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [topic, setTopic] = useState('Job offer');
@@ -82,20 +85,20 @@ const ContactForm: React.FC = () => {
   };
 
   const inputClass =
-    'w-full px-4 py-2.5 rounded-[3px] text-sm bg-[#eeeeee]/5 dark:bg-[#eeeeee]/5 border border-[#3d3a39] text-zinc-900 dark:text-[#eeeeee] placeholder:text-[#8a8380] focus:outline-none focus:border-[#ee6018] transition-colors';
+    'w-full px-4 py-2.5 rounded-[3px] text-base sm:text-sm bg-[#eeeeee]/5 dark:bg-[#eeeeee]/5 border border-[#3d3a39] text-zinc-900 dark:text-[#eeeeee] placeholder:text-[#8a8380] focus:outline-none focus:border-[#ee6018] transition-colors';
 
   if (state === 'sent') {
     return (
       <div className="p-6 rounded-[3px] border border-[#ee6018]/30 bg-[#ee6018]/10 text-center space-y-2">
         <Check className="w-6 h-6 mx-auto text-[#ee6018]" />
         <p className="text-sm text-zinc-900 dark:text-[#eeeeee] font-medium">
-          Message sent — I usually reply within a day.
+          {t.contacts.formSentSuccess}
         </p>
         <button
           onClick={() => setState('idle')}
           className="text-xs font-mono text-[#8a8380] hover:text-[#eeeeee] transition-colors"
         >
-          Send another
+          {t.contacts.formSendAnother}
         </button>
       </div>
     );
@@ -110,8 +113,8 @@ const ContactForm: React.FC = () => {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
-          aria-label="Your name"
+          placeholder={t.contacts.formName}
+          aria-label={t.contacts.formName}
           autoComplete="name"
           required
           maxLength={100}
@@ -123,8 +126,8 @@ const ContactForm: React.FC = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Your email"
-          aria-label="Your email"
+          placeholder={t.contacts.formEmail}
+          aria-label={t.contacts.formEmail}
           autoComplete="email"
           required
           maxLength={200}
@@ -135,13 +138,13 @@ const ContactForm: React.FC = () => {
           name="topic"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          aria-label="Message topic"
+          aria-label={t.contacts.formTopic}
           className={`${inputClass} [color-scheme:dark]`}
         >
-          <option>Job offer</option>
-          <option>Internship</option>
-          <option>Collaboration</option>
-          <option>Question</option>
+          <option>{t.contacts.formTopicJob}</option>
+          <option>{t.contacts.formTopicInternship}</option>
+          <option>{t.contacts.formTopicCollab}</option>
+          <option>{t.contacts.formTopicQuestion}</option>
         </select>
       </div>
       <textarea
@@ -149,8 +152,8 @@ const ContactForm: React.FC = () => {
         name="message"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Hi Yaroslav, …"
-        aria-label="Your message"
+        placeholder={t.contacts.formMessage}
+        aria-label={t.contacts.formMessage}
         required
         rows={4}
         maxLength={2000}
@@ -184,12 +187,12 @@ const ContactForm: React.FC = () => {
         {state === 'sending' ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
-            <span>Sending…</span>
+            <span>{t.contacts.formSending}</span>
           </>
         ) : (
           <>
             <Send className="w-4 h-4" />
-            <span>Send message</span>
+            <span>{t.contacts.formSend}</span>
           </>
         )}
       </button>
@@ -198,6 +201,7 @@ const ContactForm: React.FC = () => {
 };
 
 export const ContactsView: React.FC = () => {
+  const { t } = useLanguage();
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -295,20 +299,20 @@ export const ContactsView: React.FC = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-[3px] bg-[#ee6018] opacity-75" />
               <span className="relative inline-flex rounded-[3px] h-2 w-2 bg-[#ee6018]" />
             </span>
-            <span>Contacts</span>
+            <span>{t.contacts.badge}</span>
           </div>
 
           <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380]">
-            Get in touch
+            {t.contacts.subtitle}
           </span>
         </div>
 
         <div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-[#eeeeee] mb-4">
-            Contacts
+            {t.contacts.title}
           </h1>
           <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-4xl">
-            Open to Junior Web Developer roles, internships, and technical collaborations. Based in Varna, Bulgaria — direct inbox and messaging channels are monitored daily with an expected response within 24 hours.
+            {t.contacts.statusAvailable}
           </p>
         </div>
 
@@ -367,20 +371,20 @@ export const ContactsView: React.FC = () => {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] font-semibold">
-                Resume
+                {t.contacts.cvTitle}
               </span>
               <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#ee6018]/10 text-[#ee6018] dark:text-[#ee6018] border border-[#ee6018]/20">
                 PDF
               </span>
             </div>
             <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-[#eeeeee] tracking-tight">
-              My resume
+              {t.contacts.cvTitle}
             </h2>
             <p className="text-sm text-zinc-600 dark:text-[#8a8380] max-w-2xl leading-relaxed">
-              My CV: background, Grenergy internship, skills, projects, contacts.
+              {t.contacts.cvDesc}
             </p>
             <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-[#8a8380] pt-1">
-              <span>PDF · up to date: October 2026</span>
+              <span>PDF · {contactsData.lastUpdated}</span>
             </div>
           </div>
 
@@ -393,7 +397,7 @@ export const ContactsView: React.FC = () => {
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-[10px] bg-[#1d1a18] hover:bg-[#3d3a39] text-white dark:bg-zinc-100 dark:hover:bg-[#eeeeee] dark:text-zinc-950 font-mono text-sm font-bold tracking-tight shadow-none hover:shadow-none transition-all transform active:scale-[0.98]"
             >
               <FileDown className="w-4 h-4" />
-              <span>Download CV</span>
+              <span>{t.contacts.downloadCv}</span>
             </a>
 
             <button
@@ -410,12 +414,12 @@ export const ContactsView: React.FC = () => {
               {copiedKey === 'resume' ? (
                 <>
                   <Check className="w-4 h-4 text-[#ee6018] dark:text-[#ee6018]" />
-                  <span className="text-[#ee6018] dark:text-[#ee6018]">Link Copied!</span>
+                  <span className="text-[#ee6018] dark:text-[#ee6018]">{t.contacts.linkCopied}</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-4 h-4 text-[#8a8380]" />
-                  <span>Copy Link</span>
+                  <span>{t.contacts.copyLink}</span>
                 </>
               )}
             </button>
@@ -423,14 +427,48 @@ export const ContactsView: React.FC = () => {
         </div>
       </section>
 
+      {/* 15-Minute Direct Scheduling Call */}
+      {contactsData.bookingUrl && (
+        <section data-assemble="3" className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#ee6018]/30 bg-[#ee6018]/5 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#ee6018]">
+                  {t.contacts.scheduleTag}
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-[3px] bg-[#ee6018]/20 text-[#ee6018] border border-[#ee6018]/30">
+                  Google Meet
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
+                {t.contacts.scheduleTitle}
+              </h2>
+              <p className="text-xs sm:text-sm text-zinc-600 dark:text-[#8a8380] max-w-xl leading-relaxed">
+                {t.contacts.scheduleDesc}
+              </p>
+            </div>
+            <a
+              href={contactsData.bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-[10px] bg-[#ee6018] hover:bg-[#ff6f24] text-white font-mono text-sm font-bold tracking-tight shadow-none transition-all transform active:scale-[0.98] shrink-0"
+            >
+              <Calendar className="w-4 h-4" />
+              <span>{t.contacts.scheduleBtn}</span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+            </a>
+          </div>
+        </section>
+      )}
+
       {contactsData.formspreeId && (
-        <section data-assemble="3" className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5">
+        <section data-assemble="4" className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5">
           <div>
             <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
-              No email app needed
+              {t.contacts.noEmailApp}
             </span>
             <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
-              Write me directly
+              {t.contacts.writeDirectly}
             </h2>
           </div>
           <ContactForm />
@@ -438,16 +476,13 @@ export const ContactsView: React.FC = () => {
       )}
 
       {/* Channel Cards Grid */}
-      <section data-assemble="4" className="space-y-6">
+      <section data-assemble="5" className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
-              Channels
+              {t.contacts.channelsTitle}
             </h2>
           </div>
-          <span className="text-xs font-mono text-[#8a8380]">
-            
-          </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -498,13 +533,13 @@ export const ContactsView: React.FC = () => {
                     <>
                       <Check className="w-3.5 h-3.5 text-[#ee6018] dark:text-[#ee6018]" />
                       <span className="text-[#ee6018] dark:text-[#ee6018] font-semibold">
-                        Copied to Clipboard!
+                        {t.contacts.copied}
                       </span>
                     </>
                   ) : (
                     <>
                       <Copy className="w-3.5 h-3.5 text-[#8a8380] group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors" />
-                      <span>Copy</span>
+                      <span>{t.contacts.copy}</span>
                     </>
                   )}
                 </button>
@@ -537,7 +572,7 @@ export const ContactsView: React.FC = () => {
             exit={{ opacity: 0, y: 20 }}
             role="status"
             aria-live="polite"
-            className="fixed bottom-6 right-6 z-50 pointer-events-none"
+            className="fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] right-6 z-50 pointer-events-none"
           >
             <div className="glass-panel px-4 py-3 rounded-[10px] shadow-none border border-zinc-300 dark:border-[#3d3a39] bg-[#1d1a18]/90 text-white dark:bg-zinc-100/95 dark:text-zinc-950 font-mono text-xs flex items-center gap-3">
               <span className="w-2 h-2 rounded-[3px] bg-[#ee6018] animate-ping" />

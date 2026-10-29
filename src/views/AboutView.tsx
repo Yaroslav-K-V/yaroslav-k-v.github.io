@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   CheckCircle2
 } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface Milestone {
   id: string;
@@ -34,6 +35,7 @@ interface Milestone {
 }
 
 export const AboutView: React.FC = () => {
+  const { t } = useLanguage();
   const milestones: Milestone[] = [
     {
       id: 'grenergy',
@@ -125,7 +127,7 @@ export const AboutView: React.FC = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-[3px] bg-[#ee6018] opacity-75" />
               <span className="relative inline-flex rounded-[3px] h-2 w-2 bg-[#ee6018]" />
             </span>
-            <span>Open to junior roles</span>
+            <span>{t.about.badge}</span>
           </div>
 
           <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380]">
@@ -135,10 +137,10 @@ export const AboutView: React.FC = () => {
 
         <div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-[#eeeeee] mb-4">
-            Junior Web Developer — AI Automation
+            {t.about.title}
           </h1>
           <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-4xl">
-            Software Engineering student and Junior Web Developer with production experience maintaining a live web platform (web app, Chrome extension, Supabase backend). Daily user of Claude Code and agentic AI workflows for exploring codebases, planning changes, writing code, and debugging. JavaScript · React · TypeScript · Node.js · Python · REST APIs.
+            {t.about.subtitle}
           </p>
         </div>
 
@@ -481,7 +483,7 @@ export const AboutView: React.FC = () => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {engineeringPillars.map((pillar) => (
             <div
               key={pillar.index}

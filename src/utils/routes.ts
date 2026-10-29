@@ -59,7 +59,7 @@ function normalizeInput(input: string | LocationInput): { pathname: string; sear
 }
 
 export function parseProjectSlug(input: string | LocationInput): string | null {
-  const { search, hash } = normalizeInput(input);
+  const { pathname, search, hash } = normalizeInput(input);
   const params = parseQueryParams(search);
 
   if (params['project']) {
@@ -78,6 +78,15 @@ export function parseProjectSlug(input: string | LocationInput): string | null {
     const cleanedHash = hash.replace(/^#\/?/, '').replace(/\/$/, '').toLowerCase();
     if (projects.some((proj) => proj.slug.toLowerCase() === cleanedHash)) {
       return cleanedHash;
+    }
+  }
+
+  // Check direct pathname: /projects/<slug> or /projects/<slug>/
+  const segments = pathname.replace(/^\//, '').replace(/\/$/, '').split('/');
+  if (segments[0] === 'projects' && segments[1]) {
+    const candidate = segments[1].toLowerCase();
+    if (projects.some((proj) => proj.slug.toLowerCase() === candidate)) {
+      return candidate;
     }
   }
 

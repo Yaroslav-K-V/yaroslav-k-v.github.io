@@ -27,6 +27,7 @@ export interface Project {
   url?: string;
   image?: string;
   video?: string;
+  webm?: string;
   dossier?: ProjectDossierData;
 }
 

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { GithubIcon } from '../components/Icons';
 import { VideoPreview } from '../components/VideoPreview';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface ProjectsViewProps {
   onSelectProject: (project: Project) => void;
@@ -34,6 +35,7 @@ const getInitialFilter = (): FilterCategory => {
 };
 
 export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, initialProjectSlug }) => {
+  const { t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState<FilterCategory>(getInitialFilter);
 
   const handleFilterChange = (category: FilterCategory) => {
@@ -86,11 +88,11 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
   }, [initialProjectSlug, onSelectProject]);
 
   const filterOptions: { id: FilterCategory; label: string }[] = [
-    { id: 'all', label: 'All' },
-    { id: 'fullstack', label: 'Full-Stack' },
-    { id: 'ai', label: 'AI / ML' },
-    { id: 'desktop', label: 'Desktop / Tools' },
-    { id: 'systems', label: 'Systems' }
+    { id: 'all', label: t.projects.filterAll },
+    { id: 'fullstack', label: t.projects.filterFullstack },
+    { id: 'ai', label: t.projects.filterAi },
+    { id: 'desktop', label: t.projects.filterDesktop },
+    { id: 'systems', label: t.projects.filterSystems }
   ];
 
   const matchesCategory = (project: Project, category: FilterCategory): boolean => {
@@ -164,7 +166,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
               <span className="relative inline-flex rounded-[3px] h-2 w-2 bg-[#ee6018]" />
             </span>
             <span className="font-semibold tracking-wider uppercase">
-              Projects
+              {t.projects.badge}
             </span>
           </div>
 
@@ -178,16 +180,15 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
         {/* Title and Engineering Description */}
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Projects
+            {t.projects.title}
           </h1>
           <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-300 max-w-3xl leading-relaxed">
-            Things I built or helped build: internship work, open-source tools, and data
-            notebooks. Click any card for details.
+            {t.projects.subtitle}
           </p>
         </div>
 
         {/* Filter Navigation Tabs */}
-        <div className="pt-2 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <div className="pt-2 flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto pb-2 scrollbar-none">
           <Filter className="w-3.5 h-3.5 text-[#8a8380] dark:text-[#8a8380] mr-1 flex-shrink-0" />
           {filterOptions.map((opt) => {
             const count = getFilterCount(opt.id);
@@ -301,14 +302,14 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
                           title="View source code on GitHub"
                         >
                           <GithubIcon className="w-3.5 h-3.5" />
-                          <span>Code</span>
+                          <span>{t.projects.sourceCode}</span>
                         </a>
                       )}
                       <button
                         onClick={() => onSelectProject(project)}
                         className="inline-flex items-center gap-1 text-xs font-mono font-medium px-3 py-1.5 rounded-[3px] bg-[#1d1a18] dark:bg-[#eeeeee] text-white dark:text-zinc-950 hover:bg-[#3d3a39] dark:hover:bg-zinc-200 transition-colors shadow-none"
                       >
-                        <span>Details</span>
+                        <span>{t.projects.viewDossier}</span>
                         <ArrowUpRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -335,6 +336,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
                       {(project.video || project.image) && (
                         <VideoPreview
                           src={project.video ?? project.image ?? ''}
+                          webm={project.webm}
                           poster={project.image}
                           alt={`${project.title} screenshot`}
                         />
@@ -481,6 +483,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ onSelectProject, ini
                   {(project.video || project.image) && (
                     <VideoPreview
                       src={project.video ?? project.image ?? ''}
+                      webm={project.webm}
                       poster={project.image}
                       alt={`${project.title} demo`}
                     />

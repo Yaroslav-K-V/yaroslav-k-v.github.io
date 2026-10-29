@@ -2,6 +2,7 @@ import React from 'react';
 import { PageRoute } from '../types';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface HomeViewProps {
   onNavigate: (route: PageRoute) => void;
@@ -17,29 +18,31 @@ interface DirectoryModule {
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
+  const { t } = useLanguage();
+
   const directoryModules: DirectoryModule[] = [
     {
       index: '01',
       route: 'about',
-      title: 'About Me',
+      title: t.home.dirAboutTitle,
       tag: 'Bio',
-      description: 'Software Engineering student, Grenergy LLC internship, skills, and certifications.',
+      description: t.home.dirAboutDesc,
       meta: 'JS · React · TS · Python · REST APIs'
     },
     {
       index: '02',
       route: 'projects',
-      title: 'Projects',
+      title: t.home.dirProjectsTitle,
       tag: 'Work & code',
-      description: 'meetbadi internship work, Unitra test generator, HotspotGuard macOS utility, PyGlow editor, and data notebooks.',
+      description: t.home.dirProjectsDesc,
       meta: 'Full-stack · Python · Swift · pandas'
     },
     {
       index: '03',
       route: 'contacts',
-      title: 'Contacts',
+      title: t.home.dirContactsTitle,
       tag: 'Get in touch',
-      description: 'Direct email, LinkedIn profile, GitHub, and PDF resume download.',
+      description: t.home.dirContactsDesc,
       meta: 'Varna, Bulgaria · Fast Response'
     }
   ];
@@ -61,21 +64,21 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             <span className="relative inline-flex rounded-[3px] h-2 w-2 bg-[#ee6018]" />
           </span>
           <span className="font-semibold tracking-wider uppercase">
-            JUNIOR WEB DEVELOPER // AI AUTOMATION
+            {t.home.badge}
           </span>
         </div>
 
         {/* Monochromatic Hero Headline */}
         <h1 data-assemble="2" className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.12] max-w-4xl">
-          Junior Web Developer building with{' '}
+          {t.home.titleStart}
           <span className="text-[#8a8380] dark:text-[#8a8380]">
-            JavaScript, React, and Applied AI.
+            {t.home.titleHighlight}
           </span>
         </h1>
 
         {/* Hero Subtitle */}
         <p data-assemble="3" className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 max-w-3xl leading-relaxed">
-          Software Engineering student with production experience maintaining a live web platform (web app, Chrome extension, Supabase backend). Daily user of Claude Code and agentic AI workflows for exploring codebases, writing code, and debugging.
+          {t.home.description}
         </p>
 
         {/* Quick Navigation CTAs */}
@@ -87,7 +90,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             }}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[3px] bg-[#1d1a18] dark:bg-[#eeeeee] text-white dark:text-zinc-950 font-mono text-xs sm:text-sm font-semibold hover:bg-[#3d3a39] dark:hover:bg-zinc-200 transition-all shadow-none group"
           >
-            <span>About Me</span>
+            <span>{t.home.btnAbout}</span>
             <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </button>
 
@@ -98,7 +101,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             }}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[3px] border border-[#3d3a39] dark:border-white/10 bg-zinc-100/60 dark:bg-[#1d1a18]/60 text-zinc-800 dark:text-[#eeeeee] font-mono text-xs sm:text-sm font-medium hover:bg-zinc-200/80 dark:hover:bg-[#eeeeee]/10 hover:border-zinc-300 dark:hover:border-white/20 transition-all group"
           >
-            <span>View Projects</span>
+            <span>{t.home.btnProjects}</span>
             <ArrowUpRight className="w-4 h-4 text-[#8a8380] group-hover:text-zinc-900 dark:group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
           </button>
         </div>
@@ -133,7 +136,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {directoryModules.map((card, i) => (
             <div
               key={card.route}
