@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { contactsData } from '../data/contacts';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { contactsData } from "../data/contacts";
 import {
   Mail,
   MapPin,
@@ -13,47 +13,53 @@ import {
   ArrowDown,
   Send,
   Loader2,
-  Calendar
-} from 'lucide-react';
-import { LinkedinIcon, GithubIcon, TelegramIcon } from '../components/Icons';
-import { useLanguage } from '../i18n/LanguageContext';
+  Calendar,
+} from "lucide-react";
+import { LinkedinIcon, GithubIcon, TelegramIcon } from "../components/Icons";
+import { useLanguage } from "../i18n/LanguageContext";
 
-type FormState = 'idle' | 'sending' | 'sent' | 'error';
+type FormState = "idle" | "sending" | "sent" | "error";
 
 const ContactForm: React.FC = () => {
   const { t } = useLanguage();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [topic, setTopic] = useState('Job offer');
-  const [message, setMessage] = useState('');
-  const [gotcha, setGotcha] = useState('');
-  const [state, setState] = useState<FormState>('idle');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [topic, setTopic] = useState("Job offer");
+  const [message, setMessage] = useState("");
+  const [gotcha, setGotcha] = useState("");
+  const [state, setState] = useState<FormState>("idle");
   const [errorText, setErrorText] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) return;
-    setState('sending');
+    setState("sending");
     setErrorText(null);
     try {
-      const res = await fetch(`https://formspree.io/f/${contactsData.formspreeId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          topic,
-          message: message.trim(),
-          _subject: `[Portfolio] ${topic} — ${name.trim()}`,
-          _gotcha: gotcha
-        })
-      });
+      const res = await fetch(
+        `https://formspree.io/f/${contactsData.formspreeId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            topic,
+            message: message.trim(),
+            _subject: `[Portfolio] ${topic} — ${name.trim()}`,
+            _gotcha: gotcha,
+          }),
+        },
+      );
       if (res.ok) {
-        setState('sent');
-        setName('');
-        setEmail('');
-        setMessage('');
-        setGotcha('');
+        setState("sent");
+        setName("");
+        setEmail("");
+        setMessage("");
+        setGotcha("");
         return;
       }
       let detail: { errors?: { field?: string; message?: string }[] } = {};
@@ -65,29 +71,31 @@ const ContactForm: React.FC = () => {
       const fields = (detail.errors ?? [])
         .map((er) => er.field)
         .filter(Boolean)
-        .join(', ');
-      if (fields.includes('email')) {
-        setErrorText('That email doesn’t look right — double-check it.');
+        .join(", ");
+      if (fields.includes("email")) {
+        setErrorText("That email doesn’t look right — double-check it.");
       } else if (res.status === 422) {
         setErrorText(
-          fields ? `Check the ${fields} field and try again.` : 'Something in the form looks off — check and try again.'
+          fields
+            ? `Check the ${fields} field and try again.`
+            : "Something in the form looks off — check and try again.",
         );
       } else if (res.status === 403) {
-        setErrorText('Sending is blocked right now — try email instead.');
+        setErrorText("Sending is blocked right now — try email instead.");
       } else {
-        setErrorText('Couldn’t send — try again in a minute.');
+        setErrorText("Couldn’t send — try again in a minute.");
       }
-      setState('error');
+      setState("error");
     } catch {
-      setState('error');
-      setErrorText('No connection — check your internet and try again.');
+      setState("error");
+      setErrorText("No connection — check your internet and try again.");
     }
   };
 
   const inputClass =
-    'w-full px-4 py-2.5 rounded-[3px] text-base sm:text-sm bg-[#eeeeee]/5 dark:bg-[#eeeeee]/5 border border-[#3d3a39] text-zinc-900 dark:text-[#eeeeee] placeholder:text-[#8a8380] focus:outline-none focus:border-[#ee6018] transition-colors';
+    "w-full px-4 py-2.5 rounded-[3px] text-base sm:text-sm bg-[#eeeeee]/5 dark:bg-[#eeeeee]/5 border border-[#3d3a39] text-zinc-900 dark:text-[#eeeeee] placeholder:text-[#8a8380] focus:outline-none focus:border-[#ee6018] transition-colors";
 
-  if (state === 'sent') {
+  if (state === "sent") {
     return (
       <div className="p-6 rounded-[3px] border border-[#ee6018]/30 bg-[#ee6018]/10 text-center space-y-2">
         <Check className="w-6 h-6 mx-auto text-[#ee6018]" />
@@ -95,7 +103,7 @@ const ContactForm: React.FC = () => {
           {t.contacts.formSentSuccess}
         </p>
         <button
-          onClick={() => setState('idle')}
+          onClick={() => setState("idle")}
           className="text-xs font-mono text-[#8a8380] hover:text-[#eeeeee] transition-colors"
         >
           {t.contacts.formSendAnother}
@@ -171,9 +179,9 @@ const ContactForm: React.FC = () => {
         aria-hidden="true"
         className="hidden"
       />
-      {state === 'error' && errorText && (
+      {state === "error" && errorText && (
         <p className="text-xs text-[#ee6018]">
-          {errorText}{' '}
+          {errorText}{" "}
           <a href={`mailto:${contactsData.email}`} className="underline">
             {contactsData.email}
           </a>
@@ -181,10 +189,10 @@ const ContactForm: React.FC = () => {
       )}
       <button
         type="submit"
-        disabled={state === 'sending'}
+        disabled={state === "sending"}
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[3px] bg-[#eeeeee] text-[#101010] font-mono text-xs sm:text-sm font-semibold hover:bg-white transition-colors disabled:opacity-60"
       >
-        {state === 'sending' ? (
+        {state === "sending" ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>{t.contacts.formSending}</span>
@@ -217,7 +225,9 @@ export const ContactsView: React.FC = () => {
         }, 2000);
 
         setTimeout(() => {
-          setToastMessage((current) => (current?.includes(label) ? null : current));
+          setToastMessage((current) =>
+            current?.includes(label) ? null : current,
+          );
         }, 3000);
       })
       .catch(() => {});
@@ -225,62 +235,67 @@ export const ContactsView: React.FC = () => {
 
   const channelCards = [
     {
-      id: 'email',
-      indexTag: 'Email',
-      title: 'Email',
+      id: "email",
+      indexTag: "Email",
+      title: "Email",
       value: contactsData.email,
       displayValue: contactsData.email,
-      status: 'Replies within a day',
-      statusType: 'online',
-      description: 'Best way to reach me — jobs, internships, or questions about my work.',
+      status: "Replies within a day",
+      statusType: "online",
+      description:
+        "Best way to reach me — jobs, internships, or questions about my work.",
       href: `mailto:${contactsData.email}`,
-      actionLabel: 'Write',
-      icon: <Mail className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+      actionLabel: "Write",
+      icon: <Mail className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />,
     },
     {
-      id: 'telegram',
-      indexTag: 'Messenger',
-      title: 'Telegram',
+      id: "telegram",
+      indexTag: "Messenger",
+      title: "Telegram",
       value: contactsData.telegramDisplay,
       displayValue: contactsData.telegramDisplay,
-      status: 'Replies fast',
-      statusType: 'priority',
-      description: 'Fastest reply — usually within a few hours.',
+      status: "Replies fast",
+      statusType: "priority",
+      description: "Fastest reply — usually within a few hours.",
       href: contactsData.telegram,
-      actionLabel: 'Open',
+      actionLabel: "Open",
       isExternal: true,
-      icon: <TelegramIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+      icon: (
+        <TelegramIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+      ),
     },
     {
-      id: 'linkedin',
-      indexTag: 'Network',
-      title: 'LinkedIn',
+      id: "linkedin",
+      indexTag: "Network",
+      title: "LinkedIn",
       value: contactsData.linkedin,
       displayValue: contactsData.linkedinDisplay,
-      status: 'Profile',
-      statusType: 'verified',
-      description: 'Work history, education, and background.',
+      status: "Profile",
+      statusType: "verified",
+      description: "Work history, education, and background.",
       href: contactsData.linkedin,
-      actionLabel: 'Open',
+      actionLabel: "Open",
       isExternal: true,
-      rel: 'me noopener noreferrer',
-      icon: <LinkedinIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+      rel: "me noopener noreferrer",
+      icon: (
+        <LinkedinIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+      ),
     },
     {
-      id: 'github',
-      indexTag: 'Code',
-      title: 'GitHub',
+      id: "github",
+      indexTag: "Code",
+      title: "GitHub",
       value: contactsData.github,
       displayValue: contactsData.githubDisplay,
-      status: 'Open source',
-      statusType: 'source',
-      description: 'My code — projects, commits, and open source.',
+      status: "Open source",
+      statusType: "source",
+      description: "My code — projects, commits, and open source.",
       href: contactsData.github,
-      actionLabel: 'Open',
+      actionLabel: "Open",
       isExternal: true,
-      rel: 'me noopener noreferrer',
-      icon: <GithubIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
-    }
+      rel: "me noopener noreferrer",
+      icon: <GithubIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />,
+    },
   ];
 
   return (
@@ -366,7 +381,10 @@ export const ContactsView: React.FC = () => {
       </section>
 
       {/* High-Visibility Resume Download Trigger Section */}
-      <section data-assemble="2" className="glass-panel p-6 sm:p-8 rounded-[10px] border-2 border-zinc-900/10 dark:border-zinc-100/10 bg-gradient-to-br from-zinc-50/80 via-white to-zinc-100/50 dark:from-zinc-900/80 dark:via-zinc-950 dark:to-zinc-900/50 space-y-5">
+      <section
+        data-assemble="2"
+        className="glass-panel p-6 sm:p-8 rounded-[10px] border-2 border-zinc-900/10 dark:border-zinc-100/10 bg-gradient-to-br from-zinc-50/80 via-white to-zinc-100/50 dark:from-zinc-900/80 dark:via-zinc-950 dark:to-zinc-900/50 space-y-5"
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
@@ -392,6 +410,7 @@ export const ContactsView: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
             <a
               href={contactsData.resumeUrl}
+              download="Yaroslav_Krupoder_CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-[10px] bg-[#1d1a18] hover:bg-[#3d3a39] text-white dark:bg-zinc-100 dark:hover:bg-[#eeeeee] dark:text-zinc-950 font-mono text-sm font-bold tracking-tight shadow-none hover:shadow-none transition-all transform active:scale-[0.98]"
@@ -403,18 +422,23 @@ export const ContactsView: React.FC = () => {
             <button
               onClick={() =>
                 handleCopy(
-                  'resume',
-                  new URL(contactsData.resumeUrl, window.location.origin).toString(),
-                  'Resume URL'
+                  "resume",
+                  new URL(
+                    contactsData.resumeUrl,
+                    window.location.origin,
+                  ).toString(),
+                  "Resume URL",
                 )
               }
               className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-[10px] border border-zinc-300 dark:border-[#3d3a39] bg-[#eeeeee]/60 dark:bg-[#1d1a18]/60 text-zinc-800 dark:text-[#eeeeee] font-mono text-xs hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors"
               title="Copy Resume Direct Link"
             >
-              {copiedKey === 'resume' ? (
+              {copiedKey === "resume" ? (
                 <>
                   <Check className="w-4 h-4 text-[#ee6018] dark:text-[#ee6018]" />
-                  <span className="text-[#ee6018] dark:text-[#ee6018]">{t.contacts.linkCopied}</span>
+                  <span className="text-[#ee6018] dark:text-[#ee6018]">
+                    {t.contacts.linkCopied}
+                  </span>
                 </>
               ) : (
                 <>
@@ -429,7 +453,10 @@ export const ContactsView: React.FC = () => {
 
       {/* 15-Minute Direct Scheduling Call */}
       {contactsData.bookingUrl && (
-        <section data-assemble="3" className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#ee6018]/30 bg-[#ee6018]/5 space-y-4">
+        <section
+          data-assemble="3"
+          className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#ee6018]/30 bg-[#ee6018]/5 space-y-4"
+        >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
@@ -462,7 +489,10 @@ export const ContactsView: React.FC = () => {
       )}
 
       {contactsData.formspreeId && (
-        <section data-assemble="4" className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5">
+        <section
+          data-assemble="4"
+          className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5"
+        >
           <div>
             <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
               {t.contacts.noEmailApp}
@@ -526,7 +556,9 @@ export const ContactsView: React.FC = () => {
               {/* Actions: 1-Click Copy and Direct Trigger */}
               <div className="pt-4 border-t border-zinc-100 dark:border-[#3d3a39]/80 flex items-center justify-between gap-3">
                 <button
-                  onClick={() => handleCopy(channel.id, channel.value, channel.title)}
+                  onClick={() =>
+                    handleCopy(channel.id, channel.value, channel.title)
+                  }
                   className="inline-flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-xs font-mono border border-[#3d3a39] dark:border-[#3d3a39] bg-[#eeeeee]/50 dark:bg-[#1d1a18]/40 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-[#3d3a39] transition-colors"
                 >
                   {copiedKey === channel.id ? (
@@ -546,8 +578,11 @@ export const ContactsView: React.FC = () => {
 
                 <a
                   href={channel.href}
-                  target={channel.isExternal ? '_blank' : undefined}
-                  rel={channel.rel || (channel.isExternal ? 'noopener noreferrer' : undefined)}
+                  target={channel.isExternal ? "_blank" : undefined}
+                  rel={
+                    channel.rel ||
+                    (channel.isExternal ? "noopener noreferrer" : undefined)
+                  }
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[10px] text-xs font-mono font-semibold bg-zinc-100 dark:bg-[#3d3a39] text-zinc-900 dark:text-[#eeeeee] hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
                 >
                   <span>{channel.actionLabel}</span>

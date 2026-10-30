@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface RouteLoaderProps {
   label?: string;
@@ -8,7 +8,9 @@ interface RouteLoaderProps {
  * Minimalist technical loader in the site's dark Factory aesthetic.
  * Uses pure CSS animations to guarantee instantaneous rendering without heavy runtime overhead.
  */
-export const RouteLoader: React.FC<RouteLoaderProps> = ({ label = 'Loading view' }) => {
+export const RouteLoader: React.FC<RouteLoaderProps> = ({
+  label = "Loading view",
+}) => {
   return (
     <div
       role="status"

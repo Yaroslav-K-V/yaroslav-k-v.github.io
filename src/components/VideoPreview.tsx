@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Play } from 'lucide-react';
+import React, { useState } from "react";
+import { Play } from "lucide-react";
 
 interface VideoPreviewProps {
   src: string;
@@ -19,17 +19,19 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
   webm,
   poster,
   alt,
-  className = 'w-full max-h-80 object-contain bg-[#101010]'
+  className = "w-full max-h-80 object-contain bg-[#101010]",
 }) => {
   const [tapped, setTapped] = useState(false);
   const [stillMode] = useState<boolean>(
     () =>
-      typeof window !== 'undefined' &&
-      (window.matchMedia('(max-width: 640px)').matches ||
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+      typeof window !== "undefined" &&
+      (window.matchMedia("(max-width: 640px)").matches ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches),
   );
 
-  const webmSource = webm || (src.endsWith('.mp4') ? src.replace(/\.mp4$/i, '.webm') : undefined);
+  const webmSource =
+    webm ||
+    (src.endsWith(".mp4") ? src.replace(/\.mp4$/i, ".webm") : undefined);
 
   if (!tapped && stillMode) {
     return (

@@ -1,7 +1,12 @@
-import { PageRoute, Project } from '../types';
-import { projects } from '../data/projects';
+import { PageRoute, Project } from "../types";
+import { projects } from "../data/projects";
 
-export const VALID_ROUTES: readonly PageRoute[] = ['welcome', 'about', 'projects', 'contacts'] as const;
+export const VALID_ROUTES: readonly PageRoute[] = [
+  "welcome",
+  "about",
+  "projects",
+  "contacts",
+] as const;
 
 export interface LocationInput {
   pathname?: string;
@@ -17,11 +22,14 @@ export interface ParsedRouteState {
 }
 
 export function isValidRoute(route: unknown): route is PageRoute {
-  return typeof route === 'string' && (VALID_ROUTES as readonly string[]).includes(route);
+  return (
+    typeof route === "string" &&
+    (VALID_ROUTES as readonly string[]).includes(route)
+  );
 }
 
-export function parseQueryParams(search: string = ''): Record<string, string> {
-  const query = search.startsWith('?') ? search.slice(1) : search;
+export function parseQueryParams(search: string = ""): Record<string, string> {
+  const query = search.startsWith("?") ? search.slice(1) : search;
   if (!query) return {};
   const params = new URLSearchParams(query);
   const result: Record<string, string> = {};
@@ -31,30 +39,35 @@ export function parseQueryParams(search: string = ''): Record<string, string> {
   return result;
 }
 
-function normalizeInput(input: string | LocationInput): { pathname: string; search: string; hash: string } {
-  if (typeof input === 'string') {
+function normalizeInput(input: string | LocationInput): {
+  pathname: string;
+  search: string;
+  hash: string;
+} {
+  if (typeof input === "string") {
     try {
-      const url = new URL(input, 'http://localhost');
+      const url = new URL(input, "http://localhost");
       return {
         pathname: url.pathname,
         search: url.search,
         hash: url.hash,
       };
     } catch {
-      const hashIndex = input.indexOf('#');
-      const hash = hashIndex !== -1 ? input.slice(hashIndex) : '';
+      const hashIndex = input.indexOf("#");
+      const hash = hashIndex !== -1 ? input.slice(hashIndex) : "";
       const withoutHash = hashIndex !== -1 ? input.slice(0, hashIndex) : input;
-      const queryIndex = withoutHash.indexOf('?');
-      const search = queryIndex !== -1 ? withoutHash.slice(queryIndex) : '';
-      const pathname = queryIndex !== -1 ? withoutHash.slice(0, queryIndex) : withoutHash;
+      const queryIndex = withoutHash.indexOf("?");
+      const search = queryIndex !== -1 ? withoutHash.slice(queryIndex) : "";
+      const pathname =
+        queryIndex !== -1 ? withoutHash.slice(0, queryIndex) : withoutHash;
       return { pathname, search, hash };
     }
   }
 
   return {
-    pathname: input.pathname || '',
-    search: input.search || '',
-    hash: input.hash || '',
+    pathname: input.pathname || "",
+    search: input.search || "",
+    hash: input.hash || "",
   };
 }
 
@@ -62,28 +75,31 @@ export function parseProjectSlug(input: string | LocationInput): string | null {
   const { pathname, search, hash } = normalizeInput(input);
   const params = parseQueryParams(search);
 
-  if (params['project']) {
-    return params['project'];
+  if (params["project"]) {
+    return params["project"];
   }
 
-  const p = params['p'];
+  const p = params["p"];
   if (p) {
-    const cleanedP = p.replace(/^\//, '').replace(/\/$/, '').toLowerCase();
+    const cleanedP = p.replace(/^\//, "").replace(/\/$/, "").toLowerCase();
     if (projects.some((proj) => proj.slug.toLowerCase() === cleanedP)) {
       return cleanedP;
     }
   }
 
   if (hash) {
-    const cleanedHash = hash.replace(/^#\/?/, '').replace(/\/$/, '').toLowerCase();
+    const cleanedHash = hash
+      .replace(/^#\/?/, "")
+      .replace(/\/$/, "")
+      .toLowerCase();
     if (projects.some((proj) => proj.slug.toLowerCase() === cleanedHash)) {
       return cleanedHash;
     }
   }
 
   // Check direct pathname: /projects/<slug> or /projects/<slug>/
-  const segments = pathname.replace(/^\//, '').replace(/\/$/, '').split('/');
-  if (segments[0] === 'projects' && segments[1]) {
+  const segments = pathname.replace(/^\//, "").replace(/\/$/, "").split("/");
+  if (segments[0] === "projects" && segments[1]) {
     const candidate = segments[1].toLowerCase();
     if (projects.some((proj) => proj.slug.toLowerCase() === candidate)) {
       return candidate;
@@ -96,7 +112,7 @@ export function parseProjectSlug(input: string | LocationInput): string | null {
 export function parseFilter(input: string | LocationInput): string | null {
   const { search } = normalizeInput(input);
   const params = parseQueryParams(search);
-  return params['filter'] || null;
+  return params["filter"] || null;
 }
 
 export function parseRoute(input: string | LocationInput): PageRoute {
@@ -104,47 +120,57 @@ export function parseRoute(input: string | LocationInput): PageRoute {
   const params = parseQueryParams(search);
 
   // 1. Check query parameter redirect first (e.g. from 404.html redirect /?p=/about or /?p=about)
-  const p = params['p'];
+  const p = params["p"];
   if (p) {
-    const cleaned = p.replace(/^\//, '').replace(/\/$/, '');
+    const cleaned = p.replace(/^\//, "").replace(/\/$/, "");
     if (isValidRoute(cleaned)) {
       return cleaned;
     }
     // If ?p=unitra where slug matches one of our projects
-    if (projects.some((proj) => proj.slug.toLowerCase() === cleaned.toLowerCase())) {
-      return 'projects';
+    if (
+      projects.some((proj) => proj.slug.toLowerCase() === cleaned.toLowerCase())
+    ) {
+      return "projects";
     }
   }
 
   // 2. Query param ?project=slug or ?filter=category implies projects view unless path is another route
-  const projectParam = params['project'];
-  const filterParam = params['filter'];
-  const cleanedPath = pathname.replace(/^\//, '').replace(/\/$/, '');
+  const projectParam = params["project"];
+  const filterParam = params["filter"];
+  const cleanedPath = pathname.replace(/^\//, "").replace(/\/$/, "");
 
   if (projectParam || filterParam) {
-    if (!cleanedPath || cleanedPath === 'welcome' || cleanedPath === 'projects') {
-      return 'projects';
+    if (
+      !cleanedPath ||
+      cleanedPath === "welcome" ||
+      cleanedPath === "projects"
+    ) {
+      return "projects";
     }
   }
 
   // 3. Check hash fallback (e.g. #/about, #about)
   if (hash) {
-    const hashRoute = hash.replace(/^#\/?/, '').replace(/\/$/, '');
+    const hashRoute = hash.replace(/^#\/?/, "").replace(/\/$/, "");
     if (isValidRoute(hashRoute)) {
       return hashRoute;
     }
-    if (projects.some((proj) => proj.slug.toLowerCase() === hashRoute.toLowerCase())) {
-      return 'projects';
+    if (
+      projects.some(
+        (proj) => proj.slug.toLowerCase() === hashRoute.toLowerCase(),
+      )
+    ) {
+      return "projects";
     }
   }
 
   // 4. Check pathname
-  if (cleanedPath.startsWith('about')) return 'about';
-  if (cleanedPath.startsWith('projects')) return 'projects';
-  if (cleanedPath.startsWith('contacts')) return 'contacts';
-  if (cleanedPath.startsWith('welcome')) return 'welcome';
+  if (cleanedPath.startsWith("about")) return "about";
+  if (cleanedPath.startsWith("projects")) return "projects";
+  if (cleanedPath.startsWith("contacts")) return "contacts";
+  if (cleanedPath.startsWith("welcome")) return "welcome";
 
-  return 'welcome';
+  return "welcome";
 }
 
 export function parseLocation(input: string | LocationInput): ParsedRouteState {

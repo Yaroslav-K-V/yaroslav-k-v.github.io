@@ -1,7 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { experience } from '../data/experience';
-import { competencyMatrices, certifications } from '../data/skills';
+import React from "react";
+import { motion } from "framer-motion";
+import { experience } from "../data/experience";
+import { competencyMatrices, certifications } from "../data/skills";
 import {
   ExternalLink,
   Cpu,
@@ -11,21 +11,22 @@ import {
   Layers,
   Activity,
   ShieldCheck,
-  CheckCircle2
-} from 'lucide-react';
-import { useLanguage } from '../i18n/LanguageContext';
+  CheckCircle2,
+} from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
+import { AgenticWorkflowDemo } from "../components/AgenticWorkflowDemo";
 
 interface Milestone {
   id: string;
   indexTag: string;
-  type: 'experience' | 'education' | 'engineering';
+  type: "experience" | "education" | "engineering";
   role: string;
   organization: string;
   location: string;
   program?: string;
   period: string;
   statusText?: string;
-  statusType?: 'active' | 'completed' | 'ongoing';
+  statusType?: "active" | "completed" | "ongoing";
   highlights: string[];
   link?: {
     text: string;
@@ -38,77 +39,105 @@ export const AboutView: React.FC = () => {
   const { t } = useLanguage();
   const milestones: Milestone[] = [
     {
-      id: 'grenergy',
-      indexTag: 'Experience',
-      type: 'experience',
-      role: 'AI Agent Developer Intern',
-      organization: 'Grenergy LLC',
-      location: experience[0]?.location || 'Hybrid, Istanbul',
-      program: 'Internship',
-      period: 'Jun 2026 – Aug 2026',
+      id: "grenergy",
+      indexTag: "Experience",
+      type: "experience",
+      role: "AI Agent Developer Intern",
+      organization: "Grenergy LLC",
+      location: experience[0]?.location || "Hybrid, Istanbul",
+      program: "Internship",
+      period: "Jun 2026 – Aug 2026",
       highlights: experience[0]?.highlights || [],
       link: experience[0]?.link,
-      techBadges: ['Python', 'TypeScript/JavaScript', 'REST APIs', 'OpenRouter', 'Stripe', 'Resend', 'Supabase', 'PostgreSQL', 'Chrome Extension', 'Linux/VPS', 'CI/CD', 'Claude Code']
+      techBadges: [
+        "Python",
+        "TypeScript/JavaScript",
+        "REST APIs",
+        "OpenRouter",
+        "Stripe",
+        "Resend",
+        "Supabase",
+        "PostgreSQL",
+        "Chrome Extension",
+        "Linux/VPS",
+        "CI/CD",
+        "Claude Code",
+      ],
     },
     {
-      id: 'university',
-      indexTag: 'Education',
-      type: 'education',
-      role: 'BSc Software Engineering',
-      organization: 'Varna University of Management',
-      location: 'Varna, Bulgaria',
-      program: 'Undergraduate Degree Program',
-      period: 'Sep 2025 – Present',
-      statusText: 'In progress',
-      statusType: 'ongoing',
+      id: "university",
+      indexTag: "Education",
+      type: "education",
+      role: "BSc Software Engineering",
+      organization: "Varna University of Management",
+      location: "Varna, Bulgaria",
+      program: "Undergraduate Degree Program",
+      period: "Sep 2025 – Present",
+      statusText: "In progress",
+      statusType: "ongoing",
       highlights: [
-        'Relevant coursework: Object-Oriented Programming, Data Structures & Algorithms, Software Design, SDLC, Agile.'
+        "Relevant coursework: Object-Oriented Programming, Data Structures & Algorithms, Software Design, SDLC, Agile.",
       ],
-      techBadges: ['OOP', 'Data Structures & Algorithms', 'Software Design', 'SDLC', 'Agile']
+      techBadges: [
+        "OOP",
+        "Data Structures & Algorithms",
+        "Software Design",
+        "SDLC",
+        "Agile",
+      ],
     },
     {
-      id: 'projects-track',
-      indexTag: 'Projects',
-      type: 'engineering',
-      role: 'Independent Projects & Open Source',
-      organization: 'Unitra · PyGlow · HotspotGuard · Data Science',
-      location: 'Varna, Bulgaria / Remote',
-      program: 'Project Track',
-      period: '2025 – Present',
-      statusText: 'Ongoing',
-      statusType: 'ongoing',
+      id: "projects-track",
+      indexTag: "Projects",
+      type: "engineering",
+      role: "Independent Projects & Open Source",
+      organization: "Unitra · PyGlow · HotspotGuard · Data Science",
+      location: "Varna, Bulgaria / Remote",
+      program: "Project Track",
+      period: "2025 – Present",
+      statusText: "Ongoing",
+      statusType: "ongoing",
       highlights: [
-        'Unitra — AI-powered desktop application that automatically generates Python unit tests from source code (AST analysis, LLM prompt construction, Flask + pywebview, pytest).',
-        'PyGlow — lightweight Python code editor built from scratch (Pygments highlighting, local LLM autocomplete, plugin-style architecture).',
-        'Applied Data Science — exploratory data analysis on real estate, retail, and student datasets with pandas, seaborn, and reproducible Jupyter Notebook reports.',
-        'HotspotGuard — macOS Wi-Fi watchdog built as an agentic-development exercise (Swift, self-tested, CI).'
+        "Unitra — AI-powered desktop application that automatically generates Python unit tests from source code (AST analysis, LLM prompt construction, Flask + pywebview, pytest).",
+        "PyGlow — lightweight Python code editor built from scratch (Pygments highlighting, local LLM autocomplete, plugin-style architecture).",
+        "Applied Data Science — exploratory data analysis on real estate, retail, and student datasets with pandas, seaborn, and reproducible Jupyter Notebook reports.",
+        "HotspotGuard — macOS Wi-Fi watchdog built as an agentic-development exercise (Swift, self-tested, CI).",
       ],
-      techBadges: ['Python', 'Flask', 'pywebview', 'PySide6', 'Pygments', 'pytest', 'pandas', 'Jupyter Notebook']
-    }
+      techBadges: [
+        "Python",
+        "Flask",
+        "pywebview",
+        "PySide6",
+        "Pygments",
+        "pytest",
+        "pandas",
+        "Jupyter Notebook",
+      ],
+    },
   ];
 
   const engineeringPillars = [
     {
-      index: '01',
-      tag: 'Production',
-      title: 'Keep live systems running',
+      index: "01",
+      tag: "Production",
+      title: "Keep live systems running",
       description:
-        'Update layouts and features, fix bugs, and debug data and integration issues reported by users — on the web app, Chrome extension, and Supabase backend.'
+        "Update layouts and features, fix bugs, and debug data and integration issues reported by users — on the web app, Chrome extension, and Supabase backend.",
     },
     {
-      index: '02',
-      tag: 'AI workflow',
-      title: 'AI-assisted, human-reviewed',
+      index: "02",
+      tag: "AI workflow",
+      title: "AI-assisted, human-reviewed",
       description:
-        'Daily Claude Code and agentic workflows to explore codebases, plan changes, write code, and debug — with AI output reviewed for correctness before shipping.'
+        "Daily Claude Code and agentic workflows to explore codebases, plan changes, write code, and debug — with AI output reviewed for correctness before shipping.",
     },
     {
-      index: '03',
-      tag: 'Workflow',
-      title: 'Organized GitHub delivery',
+      index: "03",
+      tag: "Workflow",
+      title: "Organized GitHub delivery",
       description:
-        'Organized branches, commits, and pull requests, clear task communication, technical documentation, and CI/CD + Linux/VPS basics to deliver fixes reliably.'
-    }
+        "Organized branches, commits, and pull requests, clear task communication, technical documentation, and CI/CD + Linux/VPS basics to deliver fixes reliably.",
+    },
   ];
 
   return (
@@ -219,12 +248,12 @@ export const AboutView: React.FC = () => {
               {/* Telemetry Node Dot */}
               <div className="absolute -left-[31px] sm:-left-[39px] top-1.5 flex items-center justify-center">
                 <span className="relative flex h-5 w-5 items-center justify-center">
-                  {item.statusType === 'active' ? (
+                  {item.statusType === "active" ? (
                     <>
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-[3px] bg-[#ee6018] opacity-75" />
                       <span className="relative inline-flex rounded-[3px] h-3 w-3 bg-[#ee6018] ring-4 ring-[#eeeeee] dark:ring-zinc-950" />
                     </>
-                  ) : item.statusType === 'ongoing' ? (
+                  ) : item.statusType === "ongoing" ? (
                     <span className="relative inline-flex rounded-[3px] h-3 w-3 bg-[#1d1a18] dark:bg-zinc-200 ring-4 ring-[#eeeeee] dark:ring-zinc-950" />
                   ) : (
                     <span className="relative inline-flex rounded-[3px] h-3 w-3 bg-zinc-400 dark:bg-zinc-600 ring-4 ring-[#eeeeee] dark:ring-zinc-950" />
@@ -255,9 +284,15 @@ export const AboutView: React.FC = () => {
 
                     <h3 className="text-xl font-bold text-zinc-900 dark:text-[#eeeeee] flex flex-wrap items-baseline gap-2">
                       <span className="inline-flex items-center gap-2">
-                        {item.type === 'experience' && <Briefcase className="w-4 h-4 text-[#ee6018] dark:text-[#ee6018] inline-block" />}
-                        {item.type === 'education' && <GraduationCap className="w-4 h-4 text-zinc-600 dark:text-[#8a8380] inline-block" />}
-                        {item.type === 'engineering' && <Terminal className="w-4 h-4 text-zinc-600 dark:text-[#8a8380] inline-block" />}
+                        {item.type === "experience" && (
+                          <Briefcase className="w-4 h-4 text-[#ee6018] dark:text-[#ee6018] inline-block" />
+                        )}
+                        {item.type === "education" && (
+                          <GraduationCap className="w-4 h-4 text-zinc-600 dark:text-[#8a8380] inline-block" />
+                        )}
+                        {item.type === "engineering" && (
+                          <Terminal className="w-4 h-4 text-zinc-600 dark:text-[#8a8380] inline-block" />
+                        )}
                         <span>{item.role}</span>
                       </span>
                       <span className="text-[#8a8380] dark:text-[#8a8380] font-medium text-base">
@@ -349,9 +384,15 @@ export const AboutView: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {matrix.id === 'frontend' && <Cpu className="w-5 h-5 text-zinc-600 dark:text-[#8a8380]" />}
-                    {matrix.id === 'backend' && <Activity className="w-5 h-5 text-[#ee6018] dark:text-[#ee6018]" />}
-                    {matrix.id === 'ai-workflow' && <Layers className="w-5 h-5 text-zinc-600 dark:text-[#8a8380]" />}
+                    {matrix.id === "frontend" && (
+                      <Cpu className="w-5 h-5 text-zinc-600 dark:text-[#8a8380]" />
+                    )}
+                    {matrix.id === "backend" && (
+                      <Activity className="w-5 h-5 text-[#ee6018] dark:text-[#ee6018]" />
+                    )}
+                    {matrix.id === "ai-workflow" && (
+                      <Layers className="w-5 h-5 text-zinc-600 dark:text-[#8a8380]" />
+                    )}
                     <h3 className="text-xl font-bold text-zinc-900 dark:text-[#eeeeee]">
                       {matrix.title}
                     </h3>
@@ -418,8 +459,13 @@ export const AboutView: React.FC = () => {
         </div>
       </section>
 
+      {/* Interactive Agentic Workflow & Geometric Cyber-Artifacts Demo */}
+      <section data-assemble="4">
+        <AgenticWorkflowDemo />
+      </section>
+
       {/* Certifications */}
-      <section data-assemble="4" className="space-y-6">
+      <section data-assemble="5" className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
           <div>
             <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
@@ -465,7 +511,7 @@ export const AboutView: React.FC = () => {
       </section>
 
       {/* Engineering Philosophy & Rigor Section */}
-      <section data-assemble="5" className="space-y-6">
+      <section data-assemble="6" className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
           <div>
             <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">

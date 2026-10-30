@@ -1,9 +1,9 @@
-@import '@fontsource/geist-sans/400.css';
-@import '@fontsource/geist-sans/500.css';
-@import '@fontsource/geist-sans/600.css';
-@import '@fontsource/geist-sans/700.css';
-@import '@fontsource/geist-mono/400.css';
-@import '@fontsource/geist-mono/500.css';
+@import "@fontsource/geist-sans/400.css";
+@import "@fontsource/geist-sans/500.css";
+@import "@fontsource/geist-sans/600.css";
+@import "@fontsource/geist-sans/700.css";
+@import "@fontsource/geist-mono/400.css";
+@import "@fontsource/geist-mono/500.css";
 
 @tailwind base;
 @tailwind components;
@@ -31,7 +31,11 @@
   body {
     background-color: var(--bg-page);
     color: var(--text-primary);
-    font-family: 'Geist Sans', system-ui, -apple-system, sans-serif;
+    font-family:
+      "Geist Sans",
+      system-ui,
+      -apple-system,
+      sans-serif;
     font-weight: 400;
     letter-spacing: -0.01em;
     line-height: 1.5;
@@ -40,7 +44,9 @@
     overflow-x: hidden;
   }
 
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     font-weight: 400;
     letter-spacing: -0.025em;
   }
@@ -48,7 +54,10 @@
 
 /* Flat instrument grid, no glow */
 .tech-grid {
-  background-image: radial-gradient(rgba(238, 238, 238, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(
+    rgba(238, 238, 238, 0.05) 1px,
+    transparent 1px
+  );
   background-size: 28px 28px;
 }
 

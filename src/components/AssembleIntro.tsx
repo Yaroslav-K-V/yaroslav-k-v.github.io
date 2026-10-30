@@ -36,7 +36,10 @@ export interface AssembleIntroProps {
   enabled?: boolean;
 }
 
-export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enabled = true }) => {
+export const AssembleIntro: React.FC<AssembleIntroProps> = ({
+  onComplete,
+  enabled = true,
+}) => {
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
@@ -48,9 +51,10 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
 
     const reducedMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    const replay = new URLSearchParams(window.location.search).has('replay');
+    const replay = new URLSearchParams(window.location.search).has("replay");
 
-    const routeSlug = window.location.pathname.split("/").filter(Boolean).join("-") || "home";
+    const routeSlug =
+      window.location.pathname.split("/").filter(Boolean).join("-") || "home";
     // Base session key; suffixed with the current route at runtime.
     const sessionKey = `yk:assemble:played:v1:${routeSlug}`;
 
@@ -259,7 +263,8 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({ onComplete, enable
               (col / Math.max(cols - 1, 1)) * (CELL_FLASH_MS * 0.7);
             // Vertical gradient: center brighter, edges dimmer.
             const cellCenterY = y + CELL_SIZE / 2;
-            const dist = Math.abs(cellCenterY - blockCenterY) / (blockHeight / 2);
+            const dist =
+              Math.abs(cellCenterY - blockCenterY) / (blockHeight / 2);
             const intensity = Math.max(0.35, 1 - dist * 0.65);
             cells.push({ x, y, start: baseStart + waveDelay, intensity });
           }

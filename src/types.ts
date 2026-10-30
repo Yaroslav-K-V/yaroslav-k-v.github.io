@@ -1,6 +1,7 @@
-export type ProjectCategory = 'all' | 'ai' | 'fullstack' | 'desktop';
+export type ProjectCategory = "all" | "ai" | "fullstack" | "desktop";
 
-export type ProjectBadge = 'Live Service' | 'Desktop App' | 'Open Source' | 'In Progress';
+export type ProjectBadge =
+  "Live Service" | "Desktop App" | "Open Source" | "In Progress";
 
 export interface ProjectDossierData {
   problemStatement: string;
@@ -46,4 +47,4 @@ export interface ExperienceItem {
   };
 }
 
-export type PageRoute = 'welcome' | 'about' | 'projects' | 'contacts';
+export type PageRoute = "welcome" | "about" | "projects" | "contacts";

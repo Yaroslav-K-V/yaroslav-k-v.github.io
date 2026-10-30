@@ -1,9 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { PageRoute } from '../types';
-import { contactsData } from '../data/contacts';
-import { FileText, Menu, X, ExternalLink, Eye, EyeOff, Mail, Check, Globe, ChevronDown } from 'lucide-react';
-import { useLanguage } from '../i18n/LanguageContext';
-import { Locale } from '../i18n/translations';
+import React, { useState, useEffect, useRef } from "react";
+import { PageRoute } from "../types";
+import { contactsData } from "../data/contacts";
+import {
+  FileText,
+  Menu,
+  X,
+  ExternalLink,
+  Eye,
+  EyeOff,
+  Mail,
+  Check,
+  Globe,
+  ChevronDown,
+} from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
+import { Locale } from "../i18n/translations";
 
 interface NavbarProps {
   currentRoute: PageRoute;
@@ -13,16 +24,16 @@ interface NavbarProps {
 }
 
 const LANGUAGES: { code: Locale; label: string; full: string }[] = [
-  { code: 'en', label: 'EN', full: 'English' },
-  { code: 'ua', label: 'UA', full: 'Українська' },
-  { code: 'bg', label: 'BG', full: 'Български' }
+  { code: "en", label: "EN", full: "English" },
+  { code: "ua", label: "UA", full: "Українська" },
+  { code: "bg", label: "BG", full: "Български" },
 ];
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentRoute,
   onNavigate,
   animationsEnabled = true,
-  onToggleAnimations
+  onToggleAnimations,
 }) => {
   const { locale, setLocale, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -36,20 +47,23 @@ export const Navbar: React.FC<NavbarProps> = ({
   useEffect(() => {
     if (!langOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
-      if (langDropdownRef.current && !langDropdownRef.current.contains(e.target as Node)) {
+      if (
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(e.target as Node)
+      ) {
         setLangOpen(false);
       }
     };
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         setLangOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [langOpen]);
 
@@ -60,13 +74,13 @@ export const Navbar: React.FC<NavbarProps> = ({
       window.setTimeout(() => setCopiedEmail(false), 2000);
     } catch {
       // Fallback in case clipboard API fails
-      const textarea = document.createElement('textarea');
+      const textarea = document.createElement("textarea");
       textarea.value = contactsData.email;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
       document.body.appendChild(textarea);
       textarea.select();
-      document.execCommand('copy');
+      document.execCommand("copy");
       document.body.removeChild(textarea);
       setCopiedEmail(true);
       window.setTimeout(() => setCopiedEmail(false), 2000);
@@ -76,14 +90,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   // Overlay mode: lock background scroll + focus trap + close on Escape.
   useEffect(() => {
     if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
 
       // Move focus to first navigation item on open
       const timer = requestAnimationFrame(() => {
         const menuEl = mobileMenuRef.current;
         if (!menuEl) return;
         const focusable = menuEl.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
         );
         if (focusable.length > 0) {
           focusable[0].focus();
@@ -91,18 +105,18 @@ export const Navbar: React.FC<NavbarProps> = ({
       });
 
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
+        if (e.key === "Escape") {
           setMobileMenuOpen(false);
           return;
         }
 
-        if (e.key === 'Tab') {
+        if (e.key === "Tab") {
           const menuEl = mobileMenuRef.current;
           if (!menuEl) return;
           const focusable = Array.from(
             menuEl.querySelectorAll<HTMLElement>(
-              'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-            )
+              'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+            ),
           );
           if (focusable.length === 0) return;
 
@@ -110,12 +124,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           const lastElement = focusable[focusable.length - 1];
 
           if (e.shiftKey) {
-            if (document.activeElement === firstElement || !menuEl.contains(document.activeElement)) {
+            if (
+              document.activeElement === firstElement ||
+              !menuEl.contains(document.activeElement)
+            ) {
               e.preventDefault();
               lastElement.focus();
             }
           } else {
-            if (document.activeElement === lastElement || !menuEl.contains(document.activeElement)) {
+            if (
+              document.activeElement === lastElement ||
+              !menuEl.contains(document.activeElement)
+            ) {
               e.preventDefault();
               firstElement.focus();
             }
@@ -123,12 +143,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         }
       };
 
-      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener("keydown", handleKeyDown);
 
       return () => {
         cancelAnimationFrame(timer);
-        document.body.style.overflow = '';
-        window.removeEventListener('keydown', handleKeyDown);
+        document.body.style.overflow = "";
+        window.removeEventListener("keydown", handleKeyDown);
       };
     } else if (prevOpenRef.current) {
       // Return focus to menu toggle button when closing
@@ -138,25 +158,28 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, [mobileMenuOpen]);
 
   const navItems: { route: PageRoute; label: string }[] = [
-    { route: 'welcome', label: t.nav.welcome },
-    { route: 'about', label: t.nav.about },
-    { route: 'projects', label: t.nav.projects },
-    { route: 'contacts', label: t.nav.contacts }
+    { route: "welcome", label: t.nav.welcome },
+    { route: "about", label: t.nav.about },
+    { route: "projects", label: t.nav.projects },
+    { route: "contacts", label: t.nav.contacts },
   ];
 
   const handleNavClick = (route: PageRoute) => {
     onNavigate(route);
     setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <header data-assemble="0" className="sticky top-0 z-40 w-full backdrop-blur-xl bg-[#101010]/70 border-b border-white/10 transition-colors">
+    <header
+      data-assemble="0"
+      className="sticky top-0 z-40 w-full backdrop-blur-xl bg-[#101010]/70 border-b border-white/10 transition-colors"
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Monogram & Live Status */}
         <div className="flex items-center gap-2 sm:gap-3">
           <button
-            onClick={() => handleNavClick('welcome')}
+            onClick={() => handleNavClick("welcome")}
             className="group flex items-center gap-2 text-left font-mono hover:opacity-80 transition-opacity"
           >
             <span className="font-bold tracking-widest text-sm sm:text-base text-white">
@@ -183,8 +206,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleNavClick(item.route)}
                 className={`px-3 py-1 text-xs font-mono whitespace-nowrap transition-all rounded-[3px] ${
                   isActive
-                    ? 'bg-[#eeeeee] text-black font-semibold shadow-none'
-                    : 'text-[#8a8380] hover:text-white hover:bg-[#eeeeee]/5'
+                    ? "bg-[#eeeeee] text-black font-semibold shadow-none"
+                    : "text-[#8a8380] hover:text-white hover:bg-[#eeeeee]/5"
                 }`}
               >
                 {item.label}
@@ -206,10 +229,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               aria-haspopup="listbox"
             >
               <Globe className="w-3.5 h-3.5 text-[#ee6018]" />
-              <span className="font-semibold uppercase tracking-wider">{locale}</span>
+              <span className="font-semibold uppercase tracking-wider">
+                {locale}
+              </span>
               <ChevronDown
                 className={`w-3 h-3 text-[#8a8380] transition-transform duration-200 ${
-                  langOpen ? 'rotate-180' : ''
+                  langOpen ? "rotate-180" : ""
                 }`}
               />
             </button>
@@ -233,8 +258,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className={`w-full text-left px-3 py-1.5 text-xs font-mono flex items-center justify-between transition-colors ${
                         isSelected
-                          ? 'bg-[#ee6018]/15 text-[#ee6018] font-bold'
-                          : 'text-zinc-300 hover:bg-[#eeeeee]/10 hover:text-white'
+                          ? "bg-[#ee6018]/15 text-[#ee6018] font-bold"
+                          : "text-zinc-300 hover:bg-[#eeeeee]/10 hover:text-white"
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -243,7 +268,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         </span>
                         <span>{item.full}</span>
                       </div>
-                      {isSelected && <Check className="w-3.5 h-3.5 text-[#ee6018]" />}
+                      {isSelected && (
+                        <Check className="w-3.5 h-3.5 text-[#ee6018]" />
+                      )}
                     </button>
                   );
                 })}
@@ -255,10 +282,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onToggleAnimations}
               className="inline-flex items-center justify-center w-8 h-8 rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-white/30 hover:bg-[#eeeeee]/5 transition-all"
-              aria-label={animationsEnabled ? t.nav.animationsOff : t.nav.animationsOn}
-              title={animationsEnabled ? t.nav.animationsOff : t.nav.animationsOn}
+              aria-label={
+                animationsEnabled ? t.nav.animationsOff : t.nav.animationsOn
+              }
+              title={
+                animationsEnabled ? t.nav.animationsOff : t.nav.animationsOn
+              }
             >
-              {animationsEnabled ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+              {animationsEnabled ? (
+                <Eye className="w-3.5 h-3.5" />
+              ) : (
+                <EyeOff className="w-3.5 h-3.5" />
+              )}
             </button>
           )}
           <button
@@ -270,7 +305,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             {copiedEmail ? (
               <>
                 <Check className="w-3.5 h-3.5 text-[#ee6018]" />
-                <span className="text-[#ee6018] font-semibold hidden lg:inline">{t.nav.emailCopied}</span>
+                <span className="text-[#ee6018] font-semibold hidden lg:inline">
+                  {t.nav.emailCopied}
+                </span>
               </>
             ) : (
               <>
@@ -302,7 +339,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav-menu"
           >
-            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            {mobileMenuOpen ? (
+              <X className="w-4 h-4" />
+            ) : (
+              <Menu className="w-4 h-4" />
+            )}
           </button>
         </div>
       </div>
@@ -329,8 +370,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => handleNavClick(item.route)}
                     className={`w-full text-left px-3 py-2 rounded-[3px] text-xs font-mono transition-colors ${
                       isActive
-                        ? 'bg-[#eeeeee] text-black font-semibold'
-                        : 'text-zinc-300 hover:bg-[#eeeeee]/5'
+                        ? "bg-[#eeeeee] text-black font-semibold"
+                        : "text-zinc-300 hover:bg-[#eeeeee]/5"
                     }`}
                   >
                     {item.label}
@@ -351,8 +392,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onClick={() => setLocale(l.code)}
                       className={`px-2 py-0.5 rounded-[2px] uppercase transition-colors ${
                         locale === l.code
-                          ? 'bg-[#ee6018] text-white font-bold'
-                          : 'text-[#8a8380] hover:text-white'
+                          ? "bg-[#ee6018] text-white font-bold"
+                          : "text-[#8a8380] hover:text-white"
                       }`}
                       aria-label={`Switch language to ${l.full}`}
                     >
@@ -370,7 +411,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {copiedEmail ? (
                     <>
                       <Check className="w-3.5 h-3.5 text-[#ee6018]" />
-                      <span className="text-[#ee6018] font-semibold">{t.nav.emailCopied}</span>
+                      <span className="text-[#ee6018] font-semibold">
+                        {t.nav.emailCopied}
+                      </span>
                     </>
                   ) : (
                     <>
