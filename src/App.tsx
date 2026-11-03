@@ -24,6 +24,13 @@ function parseRouteFromLocation(): PageRoute {
   const p = urlParams.get("p");
   if (p) {
     const cleaned = p.replace(/^\//, "").replace(/\/$/, "");
+    if (cleaned === "welcome") {
+      urlParams.delete("p");
+      const remaining = urlParams.toString();
+      const target = `/${remaining ? `?${remaining}` : ""}${window.location.hash}`;
+      window.history.replaceState(null, "", target);
+      return "welcome";
+    }
     if (["about", "projects", "contacts"].includes(cleaned)) {
       urlParams.delete("p");
       const remaining = urlParams.toString();
@@ -31,17 +38,26 @@ function parseRouteFromLocation(): PageRoute {
       window.history.replaceState(null, "", target);
       return cleaned as PageRoute;
     }
-    // If ?p=slug where slug matches one of our projects
-    if (
-      projects.some((proj) => proj.slug.toLowerCase() === cleaned.toLowerCase())
-    ) {
+    const slugCandidate = cleaned.toLowerCase().startsWith("projects/")
+      ? cleaned.slice("projects/".length)
+      : cleaned;
+    const matchedProject = projects.find(
+      (proj) => proj.slug.toLowerCase() === slugCandidate.toLowerCase(),
+    );
+    // If ?p=slug or ?p=/projects/slug matches one of our projects, use canonical /projects/<slug>/
+    if (matchedProject) {
       urlParams.delete("p");
-      urlParams.set("project", cleaned);
+      urlParams.delete("project");
       const remaining = urlParams.toString();
-      const target = `/projects/${remaining ? `?${remaining}` : ""}${window.location.hash}`;
+      const target = `/projects/${matchedProject.slug}/${remaining ? `?${remaining}` : ""}${window.location.hash}`;
       window.history.replaceState(null, "", target);
       return "projects";
     }
+    // Unknown ?p= value: strip it from address bar so invalid query does not linger
+    urlParams.delete("p");
+    const remaining = urlParams.toString();
+    const cleanTarget = `${window.location.pathname}${remaining ? `?${remaining}` : ""}${window.location.hash}`;
+    window.history.replaceState(null, "", cleanTarget);
   }
 
   return parseRoute({
@@ -168,21 +184,26 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleSelectProject = (project: Project) => {
+  const handleSelectProject = useCallback((project: Project) => {
     setModalLoaded(true);
     setSelectedProject(project);
 
     const url = new URL(window.location.href);
-    url.searchParams.set("project", project.slug);
+    url.searchParams.delete("project");
     url.searchParams.delete("p");
-    window.history.pushState(
-      { projectSlug: project.slug },
-      "",
-      url.pathname + (url.search || "") + (url.hash || ""),
-    );
-  };
+    const targetPath = `/projects/${project.slug}/`;
+    const nextUrl = targetPath + (url.search || "") + (url.hash || "");
+    if (
+      window.location.pathname +
+        window.location.search +
+        window.location.hash !==
+      nextUrl
+    ) {
+      window.history.pushState({ projectSlug: project.slug }, "", nextUrl);
+    }
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setSelectedProject(null);
 
     const url = new URL(window.location.href);
@@ -192,12 +213,15 @@ export const App: React.FC = () => {
     if (projects.some((p) => p.slug.toLowerCase() === hash.toLowerCase())) {
       url.hash = "";
     }
+    const targetPath = url.pathname.startsWith("/projects")
+      ? "/projects/"
+      : url.pathname;
     window.history.pushState(
       null,
       "",
-      url.pathname + (url.search || "") + (url.hash || ""),
+      targetPath + (url.search || "") + (url.hash || ""),
     );
-  };
+  }, []);
 
   useEffect(() => {
     if (selectedProject) {
@@ -218,8 +242,12 @@ export const App: React.FC = () => {
     }
   }, [currentRoute]);
 
-  // Per-route document titles.
+  // Per-route document titles (including active project dossier).
   useEffect(() => {
+    if (currentRoute === "projects" && selectedProject) {
+      document.title = `${selectedProject.title} — Yaroslav Krupoder`;
+      return;
+    }
     const titles: Record<PageRoute, string> = {
       welcome: "Yaroslav Krupoder — Junior Web Developer",
       about: "About — Yaroslav Krupoder",
@@ -227,7 +255,7 @@ export const App: React.FC = () => {
       contacts: "Contacts — Yaroslav Krupoder",
     };
     document.title = titles[currentRoute];
-  }, [currentRoute]);
+  }, [currentRoute, selectedProject]);
 
   // Prefetch remaining views on idle so subsequent clicks transition instantly
   useEffect(() => {

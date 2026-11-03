@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { projects } from "../data/projects";
+import { projects, getLocalizedProjects } from "../data/projects";
+import { Locale } from "../i18n/translations";
 
 describe("Projects data collection", () => {
   it("exports projects array containing exactly 5 projects", () => {
@@ -100,6 +101,23 @@ describe("Projects data collection", () => {
         expect(typeof layer.detail).toBe("string");
         expect(layer.name.trim().length).toBeGreaterThan(0);
         expect(layer.detail.trim().length).toBeGreaterThan(0);
+      });
+    });
+  });
+
+  it("provides localized project datasets for en, ua, and bg locales", () => {
+    const locales: Locale[] = ["en", "ua", "bg"];
+    locales.forEach((locale) => {
+      const list = getLocalizedProjects(locale);
+      expect(list).toHaveLength(5);
+      list.forEach((project) => {
+        expect(project.subtitle.trim().length).toBeGreaterThan(0);
+        expect(project.description.trim().length).toBeGreaterThan(0);
+        expect(project.features.length).toBeGreaterThan(0);
+        expect(project.dossier).toBeDefined();
+        expect(project.dossier!.problemStatement.trim().length).toBeGreaterThan(
+          0,
+        );
       });
     });
   });

@@ -8,7 +8,7 @@
     "build": "tsc && vite build && node scripts/copy-routes.js",
     "preview": "vite preview",
     "test": "vitest run",
-    "lint": "tsc --noEmit && eslint scripts",
+    "lint": "tsc --noEmit && eslint scripts src",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
   },

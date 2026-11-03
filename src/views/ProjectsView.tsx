@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { projects } from "../data/projects";
+import { getLocalizedProjects } from "../data/projects";
+import { parseProjectSlug } from "../utils/routes";
 import { Project, ProjectCategory } from "../types";
 import {
   ExternalLink,
@@ -44,7 +45,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   onSelectProject,
   initialProjectSlug,
 }) => {
-  const { t } = useLanguage();
+  const { locale, t } = useLanguage();
+  const localizedProjects = getLocalizedProjects(locale);
   const [activeFilter, setActiveFilter] =
     useState<FilterCategory>(getInitialFilter);
 
@@ -82,28 +84,16 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   }, []);
 
   useEffect(() => {
-    if (initialProjectSlug) {
-      const found = projects.find(
-        (p) => p.slug.toLowerCase() === initialProjectSlug.toLowerCase(),
-      );
-      if (found) {
-        onSelectProject(found);
-        return;
-      }
-    }
-
     if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const projectParam = params.get("project") || params.get("p");
-      const hash = window.location.hash.replace(/^#\/?/, "").replace(/\/$/, "");
       const slug =
-        projectParam ||
-        (hash &&
-        projects.some((p) => p.slug.toLowerCase() === hash.toLowerCase())
-          ? hash
-          : null);
+        initialProjectSlug ||
+        parseProjectSlug({
+          pathname: window.location.pathname,
+          search: window.location.search,
+          hash: window.location.hash,
+        });
       if (slug) {
-        const found = projects.find(
+        const found = localizedProjects.find(
           (p) => p.slug.toLowerCase() === slug.toLowerCase(),
         );
         if (found) {
@@ -111,7 +101,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
         }
       }
     }
-  }, [initialProjectSlug, onSelectProject]);
+  }, [initialProjectSlug, onSelectProject, localizedProjects]);
 
   const filterOptions: { id: FilterCategory; label: string }[] = [
     { id: "all", label: t.projects.filterAll },
@@ -127,49 +117,45 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   ): boolean => {
     if (category === "all") return true;
     if (category === "systems") {
-      return project.tech.some((t) =>
-        ["pytest", "Flask", "pywebview"].includes(t),
+      return project.tech.some((techName) =>
+        ["pytest", "Flask", "pywebview"].includes(techName),
       );
     }
     return project.categories.includes(category as ProjectCategory);
   };
 
-  const filteredProjects = projects.filter((project) =>
+  const filteredProjects = localizedProjects.filter((project) =>
     matchesCategory(project, activeFilter),
   );
 
   const getFilterCount = (category: FilterCategory): number => {
-    return projects.filter((p) => matchesCategory(p, category)).length;
+    return localizedProjects.filter((p) => matchesCategory(p, category)).length;
   };
 
   const getStatusBadge = (badge: string) => {
     switch (badge) {
       case "Live Service":
         return {
-          label: "Live",
-          className:
-            "bg-[#ee6018]/10 text-[#ee6018] dark:text-[#ee6018] border-[#ee6018]/30 dark:border-[#ee6018]/30",
+          label: t.projects.statusLive,
+          className: "bg-[#ee6018]/10 text-[#ee6018] border-[#ee6018]/30",
           dotClass: "bg-[#ee6018]",
         };
       case "In Progress":
         return {
-          label: "In progress",
-          className:
-            "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 dark:border-amber-500/30",
+          label: t.projects.statusInProgress,
+          className: "bg-amber-500/10 text-amber-400 border-amber-500/30",
           dotClass: "bg-amber-500",
         };
       case "Open Source":
         return {
-          label: "Open source",
-          className:
-            "bg-zinc-500/10 text-zinc-700 dark:text-zinc-300 border-zinc-300 dark:border-[#3d3a39]",
+          label: t.projects.statusOpenSource,
+          className: "bg-zinc-500/10 text-zinc-300 border-[#3d3a39]",
           dotClass: "bg-zinc-400",
         };
       default:
         return {
           label: badge.toUpperCase(),
-          className:
-            "bg-zinc-500/10 text-zinc-700 dark:text-zinc-300 border-zinc-300 dark:border-[#3d3a39]",
+          className: "bg-zinc-500/10 text-zinc-300 border-[#3d3a39]",
           dotClass: "bg-zinc-400",
         };
     }
@@ -192,8 +178,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       {/* Header Section */}
       <section data-assemble="1" className="space-y-4 pt-2">
         {/* System Registry Eyebrow */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#3d3a39]/80 dark:border-white/10 pb-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018] dark:text-[#ee6018]">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018]">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-[3px] bg-[#ee6018] opacity-75" />
               <span className="relative inline-flex rounded-[3px] h-2 w-2 bg-[#ee6018]" />
@@ -203,24 +189,26 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-mono text-[#8a8380] dark:text-[#8a8380]">
-            <span className="hidden sm:inline">{projects.length} projects</span>
+          <div className="flex items-center gap-4 text-xs font-mono text-[#8a8380]">
+            <span className="hidden sm:inline">
+              {localizedProjects.length} {t.projects.projectsCount}
+            </span>
           </div>
         </div>
 
         {/* Title and Engineering Description */}
         <div className="space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-50">
             {t.projects.title}
           </h1>
-          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-300 max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-zinc-300 max-w-3xl leading-relaxed">
             {t.projects.subtitle}
           </p>
         </div>
 
         {/* Filter Navigation Tabs */}
         <div className="pt-2 flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto pb-2 scrollbar-none">
-          <Filter className="w-3.5 h-3.5 text-[#8a8380] dark:text-[#8a8380] mr-1 flex-shrink-0" />
+          <Filter className="w-3.5 h-3.5 text-[#8a8380] mr-1 flex-shrink-0" />
           {filterOptions.map((opt) => {
             const count = getFilterCount(opt.id);
             const isActive = activeFilter === opt.id;
@@ -230,16 +218,16 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                 onClick={() => handleFilterChange(opt.id)}
                 className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-[3px] text-xs font-mono transition-all whitespace-nowrap border ${
                   isActive
-                    ? "bg-[#1d1a18] dark:bg-[#eeeeee] text-white dark:text-zinc-950 border-zinc-900 dark:border-white font-semibold shadow-none"
-                    : "bg-zinc-100/70 dark:bg-[#1d1a18]/60 text-zinc-600 dark:text-[#8a8380] border-[#3d3a39]/80 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20 hover:text-zinc-900 dark:hover:text-[#eeeeee]"
+                    ? "bg-[#eeeeee] text-zinc-950 border-white font-semibold shadow-none"
+                    : "bg-[#1d1a18]/60 text-[#8a8380] border-white/10 hover:border-white/20 hover:text-[#eeeeee]"
                 }`}
               >
                 <span>{opt.label}</span>
                 <span
                   className={`text-[10px] px-1.5 py-0.5 rounded ${
                     isActive
-                      ? "bg-[#3d3a39] text-[#eeeeee] dark:bg-zinc-200 dark:text-zinc-900"
-                      : "bg-zinc-200/60 dark:bg-[#3d3a39] text-[#8a8380] dark:text-[#8a8380]"
+                      ? "bg-zinc-200 text-zinc-900"
+                      : "bg-[#3d3a39] text-[#8a8380]"
                   }`}
                 >
                   {String(count).padStart(2, "0")}
@@ -256,17 +244,17 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
           data-assemble="2"
           className="glass-panel rounded-[10px] p-12 text-center space-y-3"
         >
-          <p className="text-base font-semibold text-zinc-900 dark:text-[#eeeeee]">
-            Nothing here yet
+          <p className="text-base font-semibold text-[#eeeeee]">
+            {t.projects.emptyTitle}
           </p>
           <p className="text-xs font-mono text-[#8a8380] max-w-sm mx-auto">
-            No projects in this category — try another filter.
+            {t.projects.emptySubtitle}
           </p>
           <button
             onClick={() => handleFilterChange("all")}
-            className="mt-2 text-xs font-mono px-3 py-1.5 rounded-[3px] border border-[#3d3a39] text-zinc-800 dark:text-[#eeeeee] hover:bg-zinc-100 dark:hover:bg-[#eeeeee]/10 transition-colors"
+            className="mt-2 text-xs font-mono px-3 py-1.5 rounded-[3px] border border-[#3d3a39] text-[#eeeeee] hover:bg-[#eeeeee]/10 transition-colors"
           >
-            Show all
+            {t.projects.showAllBtn}
           </button>
         </div>
       ) : (
@@ -291,7 +279,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.2 }}
                     onClick={() => onSelectProject(project)}
-                    className="group md:col-span-2 glass-panel rounded-[10px] border border-[#3d3a39]/80 dark:border-white/10 hover:border-zinc-400 dark:hover:border-white/30 p-6 sm:p-8 transition-all cursor-pointer shadow-none hover:shadow-none relative overflow-hidden"
+                    className="group md:col-span-2 glass-panel rounded-[10px] border border-white/10 hover:border-white/30 p-6 sm:p-8 transition-all cursor-pointer shadow-none hover:shadow-none relative overflow-hidden"
                   >
                     {/* Subtle Top Ambient Lighting Accent */}
                     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#ee6018]/50 to-transparent" />
@@ -299,10 +287,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     {/* Header Row */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                       <div className="flex flex-wrap items-center gap-2.5">
-                        <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-[#1d1a18] text-white dark:bg-[#eeeeee] dark:text-zinc-950">
-                          Featured
+                        <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-[#eeeeee] text-zinc-950">
+                          {t.projects.featuredBadge}
                         </span>
-                        <span className="font-mono text-xs text-[#8a8380] dark:text-[#8a8380]">
+                        <span className="font-mono text-xs text-[#8a8380]">
                           {projectTag}
                         </span>
                         <div
@@ -325,10 +313,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-[3px] bg-zinc-100 dark:bg-[#1d1a18] text-zinc-800 dark:text-[#eeeeee] hover:bg-zinc-200 dark:hover:bg-[#3d3a39] transition-colors border border-[#3d3a39]/60 dark:border-white/10"
+                            className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-[3px] bg-[#1d1a18] text-[#eeeeee] hover:bg-[#3d3a39] transition-colors border border-white/10"
                             title="Visit live production service"
                           >
-                            <span>Live Service</span>
+                            <span>{t.projects.liveService}</span>
                             <ExternalLink className="w-3.5 h-3.5 text-[#8a8380]" />
                           </a>
                         )}
@@ -337,7 +325,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-[3px] bg-zinc-100 dark:bg-[#1d1a18] text-zinc-800 dark:text-[#eeeeee] hover:bg-zinc-200 dark:hover:bg-[#3d3a39] transition-colors border border-[#3d3a39]/60 dark:border-white/10"
+                            className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-[3px] bg-[#1d1a18] text-[#eeeeee] hover:bg-[#3d3a39] transition-colors border border-white/10"
                             title="View source code on GitHub"
                           >
                             <GithubIcon className="w-3.5 h-3.5" />
@@ -346,7 +334,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                         )}
                         <button
                           onClick={() => onSelectProject(project)}
-                          className="inline-flex items-center gap-1 text-xs font-mono font-medium px-3 py-1.5 rounded-[3px] bg-[#1d1a18] dark:bg-[#eeeeee] text-white dark:text-zinc-950 hover:bg-[#3d3a39] dark:hover:bg-zinc-200 transition-colors shadow-none"
+                          className="inline-flex items-center gap-1 text-xs font-mono font-medium px-3 py-1.5 rounded-[3px] bg-[#eeeeee] text-zinc-950 hover:bg-zinc-200 transition-colors shadow-none"
                         >
                           <span>{t.projects.viewDossier}</span>
                           <ArrowUpRight className="w-3.5 h-3.5" />
@@ -356,10 +344,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
                     {/* Title & Subtitle */}
                     <div className="mb-6">
-                      <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 group-hover:text-[#ee6018] dark:group-hover:text-[#ee6018] transition-colors">
+                      <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-50 group-hover:text-[#ee6018] transition-colors">
                         {project.title}
                       </h2>
-                      <p className="text-sm sm:text-base font-medium text-zinc-600 dark:text-zinc-300 mt-1">
+                      <p className="text-sm sm:text-base font-medium text-zinc-300 mt-1">
                         {project.subtitle}
                       </p>
                     </div>
@@ -368,7 +356,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
                       {/* Left Column: Scope & Capabilities */}
                       <div className="lg:col-span-7 space-y-4">
-                        <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                        <p className="text-sm text-zinc-300 leading-relaxed">
                           {project.description}
                         </p>
 
@@ -381,11 +369,11 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                           />
                         )}
                         <div className="space-y-2">
-                          <span className="text-[11px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] flex items-center gap-1.5">
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-[#8a8380] flex items-center gap-1.5">
                             <CheckCircle2 className="w-3.5 h-3.5 text-[#ee6018]" />
-                            Highlights
+                            {t.projects.highlightsLabel}
                           </span>
-                          <ul className="space-y-1.5 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300">
+                          <ul className="space-y-1.5 text-xs sm:text-sm text-zinc-300">
                             {project.features.slice(0, 4).map((feat, idx) => (
                               <li key={idx} className="flex items-start gap-2">
                                 <span className="text-[#8a8380] font-mono text-xs mt-0.5">
@@ -399,16 +387,16 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                       </div>
 
                       {/* Right Column: Architecture Breakdown Plate */}
-                      <div className="lg:col-span-5 bg-zinc-100/70 dark:bg-[#101010]/50 border border-[#3d3a39]/80 dark:border-white/10 rounded-[10px] p-4 sm:p-5 flex flex-col justify-between space-y-4">
+                      <div className="lg:col-span-5 bg-[#101010]/50 border border-white/10 rounded-[10px] p-4 sm:p-5 flex flex-col justify-between space-y-4">
                         <div>
-                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-[#3d3a39]/60 dark:border-white/5">
-                            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/5">
+                            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
                               <Layers className="w-3.5 h-3.5 text-[#ee6018]" />
-                              Stack Overview
+                              {t.projects.stackOverviewLabel}
                             </span>
                             <span className="font-mono text-[10px] text-[#8a8380]">
                               {project.architecture
-                                ? `${project.architecture.length} layers`
+                                ? `${project.architecture.length} ${t.projects.layersSuffix}`
                                 : ""}
                             </span>
                           </div>
@@ -418,7 +406,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                               {project.architecture.map((arch, aIdx) => (
                                 <div
                                   key={aIdx}
-                                  className="text-[11px] font-mono text-zinc-600 dark:text-zinc-300 flex items-start gap-2 bg-[#eeeeee]/60 dark:bg-[#1d1a18]/40 p-2 rounded border border-[#3d3a39]/40 dark:border-white/5"
+                                  className="text-[11px] font-mono text-zinc-300 flex items-start gap-2 bg-[#1d1a18]/40 p-2 rounded border border-white/5"
                                 >
                                   <span className="text-[#ee6018] font-bold">
                                     0{aIdx + 1}
@@ -442,24 +430,24 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                         </div>
 
                         {/* Flagship Marker */}
-                        <div className="pt-2 border-t border-[#3d3a39]/60 dark:border-white/5 flex items-center justify-between font-mono text-[10px] text-[#8a8380] dark:text-[#8a8380]">
-                          <span>FEATURED PROJECT</span>
+                        <div className="pt-2 border-t border-white/5 flex items-center justify-between font-mono text-[10px] text-[#8a8380]">
+                          <span>{t.projects.featuredMarker}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Bottom Tech Pills Row */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#3d3a39]/60 dark:border-white/10">
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
                       <div className="flex flex-wrap items-center gap-1.5">
                         <span className="text-[11px] font-mono text-[#8a8380] mr-1">
-                          Stack:
+                          {t.projects.stackPrefix}
                         </span>
-                        {project.tech.map((t) => (
+                        {project.tech.map((techItem) => (
                           <span
-                            key={t}
-                            className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-zinc-100 dark:bg-[#eeeeee]/5 border border-[#3d3a39]/60 dark:border-white/10 text-zinc-700 dark:text-zinc-300"
+                            key={techItem}
+                            className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-[#eeeeee]/5 border border-white/10 text-zinc-300"
                           >
-                            {t}
+                            {techItem}
                           </span>
                         ))}
                       </div>
@@ -475,7 +463,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                             title="Visit live site"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
-                            <span>Live Demo</span>
+                            <span>{t.projects.liveDemoBtn}</span>
                           </a>
                         )}
                         {project.github && (
@@ -488,11 +476,11 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                             title="View GitHub repository"
                           >
                             <GithubIcon className="w-3.5 h-3.5" />
-                            <span>Code</span>
+                            <span>{t.projects.codeBtn}</span>
                           </a>
                         )}
-                        <span className="text-xs font-mono text-[#8a8380] group-hover:text-zinc-900 dark:group-hover:text-white transition-colors flex items-center gap-1">
-                          <span>Details</span>
+                        <span className="text-xs font-mono text-[#8a8380] group-hover:text-white transition-colors flex items-center gap-1">
+                          <span>{t.projects.detailsBtn}</span>
                           <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </span>
                       </div>
@@ -511,12 +499,12 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
                   onClick={() => onSelectProject(project)}
-                  className="group glass-panel rounded-[10px] border border-[#3d3a39]/80 dark:border-white/10 hover:border-zinc-400 dark:hover:border-white/30 p-5 sm:p-6 transition-all cursor-pointer shadow-none hover:shadow-none flex flex-col justify-between space-y-4"
+                  className="group glass-panel rounded-[10px] border border-white/10 hover:border-white/30 p-5 sm:p-6 transition-all cursor-pointer shadow-none hover:shadow-none flex flex-col justify-between space-y-4"
                 >
                   {/* Header */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-mono text-xs text-[#8a8380] dark:text-[#8a8380]">
+                      <span className="font-mono text-xs text-[#8a8380]">
                         {projectTag}
                       </span>
                       <div
@@ -539,20 +527,20 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     )}
 
                     <div>
-                      <h3 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee] group-hover:text-[#ee6018] dark:group-hover:text-[#ee6018] transition-colors">
+                      <h3 className="text-xl font-bold tracking-tight text-[#eeeeee] group-hover:text-[#ee6018] transition-colors">
                         {project.title}
                       </h3>
-                      <p className="text-xs sm:text-sm font-medium text-zinc-600 dark:text-[#8a8380] mt-1 line-clamp-1">
+                      <p className="text-xs sm:text-sm font-medium text-[#8a8380] mt-1 line-clamp-1">
                         {project.subtitle}
                       </p>
                     </div>
 
-                    <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed line-clamp-3">
+                    <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed line-clamp-3">
                       {project.description}
                     </p>
 
                     {/* Bullet points summary */}
-                    <ul className="space-y-1 text-xs text-zinc-600 dark:text-[#8a8380] pt-1">
+                    <ul className="space-y-1 text-xs text-[#8a8380] pt-1">
                       {project.features.slice(0, 2).map((feat, fIdx) => (
                         <li
                           key={fIdx}
@@ -566,14 +554,14 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   </div>
 
                   {/* Footer with Tech & Actions */}
-                  <div className="space-y-3 pt-3 border-t border-[#3d3a39]/60 dark:border-white/10">
+                  <div className="space-y-3 pt-3 border-t border-white/10">
                     <div className="flex flex-wrap gap-1.5">
-                      {project.tech.map((t) => (
+                      {project.tech.map((techItem) => (
                         <span
-                          key={t}
-                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-[#eeeeee]/5 border border-[#3d3a39]/60 dark:border-white/10 text-zinc-700 dark:text-zinc-300"
+                          key={techItem}
+                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#eeeeee]/5 border border-white/10 text-zinc-300"
                         >
-                          {t}
+                          {techItem}
                         </span>
                       ))}
                     </div>
@@ -592,7 +580,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                             title="Visit live site"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
-                            <span>Demo</span>
+                            <span>{t.projects.demoBtn}</span>
                           </a>
                         )}
                         {project.github && (
@@ -604,7 +592,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                             title="View GitHub repository"
                           >
                             <GithubIcon className="w-3.5 h-3.5" />
-                            <span>Code</span>
+                            <span>{t.projects.codeBtn}</span>
                           </a>
                         )}
                       </div>
@@ -613,7 +601,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                         onClick={() => onSelectProject(project)}
                         className="inline-flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-white transition-colors ml-auto"
                       >
-                        <span>Details</span>
+                        <span>{t.projects.detailsBtn}</span>
                         <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                       </button>
                     </div>

@@ -21,7 +21,7 @@ const ROUTE_METADATA = {
     canonical: 'https://yaroslav-k-v.github.io/contacts/',
     url: 'https://yaroslav-k-v.github.io/contacts/',
     description:
-      'Get in touch with Yaroslav Krupoder — email, Telegram, LinkedIn, phone, and resume.',
+      'Get in touch with Yaroslav Krupoder — email, Telegram, LinkedIn, and resume.',
   },
   'projects/meetbadi': {
     title: 'meetbadi.com — Yaroslav Krupoder',

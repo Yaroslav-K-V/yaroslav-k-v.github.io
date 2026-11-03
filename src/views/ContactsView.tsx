@@ -73,33 +73,29 @@ const ContactForm: React.FC = () => {
         .filter(Boolean)
         .join(", ");
       if (fields.includes("email")) {
-        setErrorText("That email doesn’t look right — double-check it.");
+        setErrorText(t.contacts.formErrInvalidEmail);
       } else if (res.status === 422) {
-        setErrorText(
-          fields
-            ? `Check the ${fields} field and try again.`
-            : "Something in the form looks off — check and try again.",
-        );
+        setErrorText(t.contacts.formErrCheckFields);
       } else if (res.status === 403) {
-        setErrorText("Sending is blocked right now — try email instead.");
+        setErrorText(t.contacts.formErrBlocked);
       } else {
-        setErrorText("Couldn’t send — try again in a minute.");
+        setErrorText(t.contacts.formErrGeneric);
       }
       setState("error");
     } catch {
       setState("error");
-      setErrorText("No connection — check your internet and try again.");
+      setErrorText(t.contacts.formErrNoConnection);
     }
   };
 
   const inputClass =
-    "w-full px-4 py-2.5 rounded-[3px] text-base sm:text-sm bg-[#eeeeee]/5 dark:bg-[#eeeeee]/5 border border-[#3d3a39] text-zinc-900 dark:text-[#eeeeee] placeholder:text-[#8a8380] focus:outline-none focus:border-[#ee6018] transition-colors";
+    "w-full px-4 py-2.5 rounded-[3px] text-base sm:text-sm bg-[#eeeeee]/5 border border-[#3d3a39] text-[#eeeeee] placeholder:text-[#8a8380] focus:outline-none focus:border-[#ee6018] transition-colors";
 
   if (state === "sent") {
     return (
       <div className="p-6 rounded-[3px] border border-[#ee6018]/30 bg-[#ee6018]/10 text-center space-y-2">
         <Check className="w-6 h-6 mx-auto text-[#ee6018]" />
-        <p className="text-sm text-zinc-900 dark:text-[#eeeeee] font-medium">
+        <p className="text-sm text-[#eeeeee] font-medium">
           {t.contacts.formSentSuccess}
         </p>
         <button
@@ -149,10 +145,10 @@ const ContactForm: React.FC = () => {
           aria-label={t.contacts.formTopic}
           className={`${inputClass} [color-scheme:dark]`}
         >
-          <option>{t.contacts.formTopicJob}</option>
-          <option>{t.contacts.formTopicInternship}</option>
-          <option>{t.contacts.formTopicCollab}</option>
-          <option>{t.contacts.formTopicQuestion}</option>
+          <option value="Job offer">{t.contacts.formTopicJob}</option>
+          <option value="Internship">{t.contacts.formTopicInternship}</option>
+          <option value="Collaboration">{t.contacts.formTopicCollab}</option>
+          <option value="Question">{t.contacts.formTopicQuestion}</option>
         </select>
       </div>
       <textarea
@@ -218,7 +214,7 @@ export const ContactsView: React.FC = () => {
       .writeText(value)
       .then(() => {
         setCopiedKey(key);
-        setToastMessage(`[CLIPBOARD] Copied ${label} to clipboard`);
+        setToastMessage(`${t.contacts.toastCopiedPrefix} ${label}`);
 
         setTimeout(() => {
           setCopiedKey(null);
@@ -236,65 +232,60 @@ export const ContactsView: React.FC = () => {
   const channelCards = [
     {
       id: "email",
-      indexTag: "Email",
-      title: "Email",
+      indexTag: t.contacts.channels.email.indexTag,
+      title: t.contacts.channels.email.title,
       value: contactsData.email,
       displayValue: contactsData.email,
-      status: "Replies within a day",
+      status: t.contacts.channels.email.status,
       statusType: "online",
-      description:
-        "Best way to reach me — jobs, internships, or questions about my work.",
+      description: t.contacts.channels.email.description,
       href: `mailto:${contactsData.email}`,
-      actionLabel: "Write",
-      icon: <Mail className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />,
+      actionLabel: t.contacts.channels.email.actionLabel,
+      icon: <Mail className="w-5 h-5 text-zinc-300" />,
     },
     {
       id: "telegram",
-      indexTag: "Messenger",
-      title: "Telegram",
+      indexTag: t.contacts.channels.telegram.indexTag,
+      title: t.contacts.channels.telegram.title,
       value: contactsData.telegramDisplay,
       displayValue: contactsData.telegramDisplay,
-      status: "Replies fast",
+      status: t.contacts.channels.telegram.status,
       statusType: "priority",
-      description: "Fastest reply — usually within a few hours.",
+      description: t.contacts.channels.telegram.description,
       href: contactsData.telegram,
-      actionLabel: "Open",
+      actionLabel: t.contacts.channels.telegram.actionLabel,
       isExternal: true,
-      icon: (
-        <TelegramIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
-      ),
+      icon: <TelegramIcon className="w-5 h-5 text-zinc-300" />,
     },
     {
       id: "linkedin",
-      indexTag: "Network",
-      title: "LinkedIn",
+      indexTag: t.contacts.channels.linkedin.indexTag,
+      title: t.contacts.channels.linkedin.title,
       value: contactsData.linkedin,
       displayValue: contactsData.linkedinDisplay,
-      status: "Profile",
+      status: t.contacts.channels.linkedin.status,
       statusType: "verified",
-      description: "Work history, education, and background.",
+      description: t.contacts.channels.linkedin.description,
       href: contactsData.linkedin,
-      actionLabel: "Open",
+      actionLabel: t.contacts.channels.linkedin.actionLabel,
       isExternal: true,
       rel: "me noopener noreferrer",
-      icon: (
-        <LinkedinIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
-      ),
+      icon: <LinkedinIcon className="w-5 h-5 text-zinc-300" />,
     },
     {
       id: "github",
-      indexTag: "Code",
-      title: "GitHub",
+      indexTag: t.contacts.channels.github.indexTag,
+      title: t.contacts.channels.github.title,
       value: contactsData.github,
       displayValue: contactsData.githubDisplay,
-      status: "Open source",
+      status: t.contacts.channels.github.status,
       statusType: "source",
-      description: "My code — projects, commits, and open source.",
+      description: t.contacts.channels.github.description,
       href: contactsData.github,
-      actionLabel: "Open",
+      actionLabel: t.contacts.channels.github.actionLabel,
       isExternal: true,
       rel: "me noopener noreferrer",
-      icon: <GithubIcon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />,
+      icon: <GithubIcon className="w-5 h-5 text-zinc-300" />,
     },
   ];
 
@@ -309,7 +300,7 @@ export const ContactsView: React.FC = () => {
       {/* Dossier Header */}
       <section data-assemble="1" className="space-y-6">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018] dark:text-[#ee6018]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018]">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-[3px] bg-[#ee6018] opacity-75" />
               <span className="relative inline-flex rounded-[3px] h-2 w-2 bg-[#ee6018]" />
@@ -317,64 +308,64 @@ export const ContactsView: React.FC = () => {
             <span>{t.contacts.badge}</span>
           </div>
 
-          <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380]">
+          <span className="text-xs font-mono text-[#8a8380]">
             {t.contacts.subtitle}
           </span>
         </div>
 
         <div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-[#eeeeee] mb-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#eeeeee] mb-4">
             {t.contacts.title}
           </h1>
-          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-4xl">
+          <p className="text-base sm:text-lg text-zinc-300 leading-relaxed max-w-4xl">
             {t.contacts.statusAvailable}
           </p>
         </div>
 
-        {/*  */}
+        {/* Info cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
           <div className="glass-panel p-4 rounded-[10px] space-y-1">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] block">
-              Replies
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] block">
+              {t.contacts.infoRepliesLabel}
             </span>
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#ee6018] dark:text-[#ee6018]" />
-              <span className="text-sm font-semibold text-zinc-900 dark:text-[#eeeeee]">
-                Within a day
+              <Clock className="w-4 h-4 text-[#ee6018]" />
+              <span className="text-sm font-semibold text-[#eeeeee]">
+                {t.contacts.infoRepliesValue}
               </span>
             </div>
             <span className="text-[11px] font-mono text-[#8a8380] block">
-              I check mail daily
+              {t.contacts.infoRepliesSub}
             </span>
           </div>
 
           <div className="glass-panel p-4 rounded-[10px] space-y-1">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] block">
-              Primary Location &amp; Time
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] block">
+              {t.contacts.infoLocationLabel}
             </span>
             <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-zinc-600 dark:text-[#8a8380]" />
-              <span className="text-sm font-semibold text-zinc-900 dark:text-[#eeeeee]">
-                Varna, Bulgaria · UTC+2
+              <MapPin className="w-4 h-4 text-[#8a8380]" />
+              <span className="text-sm font-semibold text-[#eeeeee]">
+                {t.contacts.infoLocationValue}
               </span>
             </div>
             <span className="text-[11px] font-mono text-[#8a8380] block">
-              Open to remote
+              {t.contacts.infoLocationSub}
             </span>
           </div>
 
           <div className="glass-panel p-4 rounded-[10px] space-y-1">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] block">
-              Current Availability
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#8a8380] block">
+              {t.contacts.infoAvailabilityLabel}
             </span>
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#ee6018] dark:text-[#ee6018]" />
-              <span className="text-sm font-semibold text-zinc-900 dark:text-[#eeeeee]">
-                Open to Junior roles
+              <ShieldCheck className="w-4 h-4 text-[#ee6018]" />
+              <span className="text-sm font-semibold text-[#eeeeee]">
+                {t.contacts.infoAvailabilityValue}
               </span>
             </div>
             <span className="text-[11px] font-mono text-[#8a8380] block">
-              Full-time / Part-time / Remote
+              {t.contacts.infoAvailabilitySub}
             </span>
           </div>
         </div>
@@ -383,22 +374,22 @@ export const ContactsView: React.FC = () => {
       {/* High-Visibility Resume Download Trigger Section */}
       <section
         data-assemble="2"
-        className="glass-panel p-6 sm:p-8 rounded-[10px] border-2 border-zinc-900/10 dark:border-zinc-100/10 bg-gradient-to-br from-zinc-50/80 via-white to-zinc-100/50 dark:from-zinc-900/80 dark:via-zinc-950 dark:to-zinc-900/50 space-y-5"
+        className="glass-panel p-6 sm:p-8 rounded-[10px] border-2 border-zinc-100/10 bg-gradient-to-br from-zinc-900/80 via-zinc-950 to-zinc-900/50 space-y-5"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase tracking-wider text-[#8a8380] dark:text-[#8a8380] font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#8a8380] font-semibold">
                 {t.contacts.cvTitle}
               </span>
-              <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#ee6018]/10 text-[#ee6018] dark:text-[#ee6018] border border-[#ee6018]/20">
+              <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#ee6018]/10 text-[#ee6018] border border-[#ee6018]/20">
                 PDF
               </span>
             </div>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-[#eeeeee] tracking-tight">
+            <h2 className="text-2xl font-extrabold text-[#eeeeee] tracking-tight">
               {t.contacts.cvTitle}
             </h2>
-            <p className="text-sm text-zinc-600 dark:text-[#8a8380] max-w-2xl leading-relaxed">
+            <p className="text-sm text-[#8a8380] max-w-2xl leading-relaxed">
               {t.contacts.cvDesc}
             </p>
             <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-[#8a8380] pt-1">
@@ -413,7 +404,7 @@ export const ContactsView: React.FC = () => {
               download="Yaroslav_Krupoder_CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-[10px] bg-[#1d1a18] hover:bg-[#3d3a39] text-white dark:bg-zinc-100 dark:hover:bg-[#eeeeee] dark:text-zinc-950 font-mono text-sm font-bold tracking-tight shadow-none hover:shadow-none transition-all transform active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-[10px] bg-zinc-100 hover:bg-[#eeeeee] text-zinc-950 font-mono text-sm font-bold tracking-tight shadow-none hover:shadow-none transition-all transform active:scale-[0.98]"
             >
               <FileDown className="w-4 h-4" />
               <span>{t.contacts.downloadCv}</span>
@@ -430,13 +421,13 @@ export const ContactsView: React.FC = () => {
                   "Resume URL",
                 )
               }
-              className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-[10px] border border-zinc-300 dark:border-[#3d3a39] bg-[#eeeeee]/60 dark:bg-[#1d1a18]/60 text-zinc-800 dark:text-[#eeeeee] font-mono text-xs hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-[10px] border border-[#3d3a39] bg-[#1d1a18]/60 text-[#eeeeee] font-mono text-xs hover:border-zinc-600 transition-colors"
               title="Copy Resume Direct Link"
             >
               {copiedKey === "resume" ? (
                 <>
-                  <Check className="w-4 h-4 text-[#ee6018] dark:text-[#ee6018]" />
-                  <span className="text-[#ee6018] dark:text-[#ee6018]">
+                  <Check className="w-4 h-4 text-[#ee6018]" />
+                  <span className="text-[#ee6018]">
                     {t.contacts.linkCopied}
                   </span>
                 </>
@@ -467,10 +458,10 @@ export const ContactsView: React.FC = () => {
                   Google Meet
                 </span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#eeeeee]">
                 {t.contacts.scheduleTitle}
               </h2>
-              <p className="text-xs sm:text-sm text-zinc-600 dark:text-[#8a8380] max-w-xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#8a8380] max-w-xl leading-relaxed">
                 {t.contacts.scheduleDesc}
               </p>
             </div>
@@ -491,13 +482,13 @@ export const ContactsView: React.FC = () => {
       {contactsData.formspreeId && (
         <section
           data-assemble="4"
-          className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 space-y-5"
+          className="glass-panel p-6 sm:p-7 rounded-[10px] border border-[#3d3a39]/80 space-y-5"
         >
           <div>
-            <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380] uppercase tracking-widest block mb-1">
+            <span className="text-xs font-mono text-[#8a8380] uppercase tracking-widest block mb-1">
               {t.contacts.noEmailApp}
             </span>
-            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
+            <h2 className="text-2xl font-bold tracking-tight text-[#eeeeee]">
               {t.contacts.writeDirectly}
             </h2>
           </div>
@@ -507,9 +498,9 @@ export const ContactsView: React.FC = () => {
 
       {/* Channel Cards Grid */}
       <section data-assemble="5" className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-[#3d3a39]">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
+            <h2 className="text-2xl font-bold tracking-tight text-[#eeeeee]">
               {t.contacts.channelsTitle}
             </h2>
           </div>
@@ -519,15 +510,15 @@ export const ContactsView: React.FC = () => {
           {channelCards.map((channel) => (
             <div
               key={channel.id}
-              className="glass-panel p-6 sm:p-7 rounded-[10px] flex flex-col justify-between space-y-5 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all group"
+              className="glass-panel p-6 sm:p-7 rounded-[10px] flex flex-col justify-between space-y-5 hover:border-zinc-600 transition-all group"
             >
               <div className="space-y-3">
                 {/* Header Tag & Status */}
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-[#8a8380] dark:text-[#8a8380] font-semibold">
+                  <span className="text-[#8a8380] font-semibold">
                     {channel.indexTag}
                   </span>
-                  <div className="flex items-center gap-1.5 text-[10px] text-[#ee6018] dark:text-[#ee6018] font-medium">
+                  <div className="flex items-center gap-1.5 text-[10px] text-[#ee6018] font-medium">
                     <span className="w-1.5 h-1.5 rounded-[3px] bg-[#ee6018] animate-pulse" />
                     <span>{channel.status}</span>
                   </div>
@@ -535,42 +526,42 @@ export const ContactsView: React.FC = () => {
 
                 {/* Title & Icon */}
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-[10px] bg-zinc-100 dark:bg-[#3d3a39]/80 border border-[#3d3a39] dark:border-[#3d3a39]">
+                  <div className="p-2.5 rounded-[10px] bg-[#3d3a39]/80 border border-[#3d3a39]">
                     {channel.icon}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-[#eeeeee]">
+                    <h3 className="text-lg font-bold text-[#eeeeee]">
                       {channel.title}
                     </h3>
-                    <span className="text-xs font-mono text-[#8a8380] dark:text-[#8a8380]">
+                    <span className="text-xs font-mono text-[#8a8380]">
                       {channel.displayValue}
                     </span>
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-zinc-600 dark:text-[#8a8380] leading-relaxed pt-1">
+                <p className="text-xs sm:text-sm text-[#8a8380] leading-relaxed pt-1">
                   {channel.description}
                 </p>
               </div>
 
               {/* Actions: 1-Click Copy and Direct Trigger */}
-              <div className="pt-4 border-t border-zinc-100 dark:border-[#3d3a39]/80 flex items-center justify-between gap-3">
+              <div className="pt-4 border-t border-[#3d3a39]/80 flex items-center justify-between gap-3">
                 <button
                   onClick={() =>
                     handleCopy(channel.id, channel.value, channel.title)
                   }
-                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-xs font-mono border border-[#3d3a39] dark:border-[#3d3a39] bg-[#eeeeee]/50 dark:bg-[#1d1a18]/40 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-[#3d3a39] transition-colors"
+                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-xs font-mono border border-[#3d3a39] bg-[#1d1a18]/40 text-zinc-300 hover:border-zinc-600 hover:bg-[#3d3a39] transition-colors"
                 >
                   {copiedKey === channel.id ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-[#ee6018] dark:text-[#ee6018]" />
-                      <span className="text-[#ee6018] dark:text-[#ee6018] font-semibold">
+                      <Check className="w-3.5 h-3.5 text-[#ee6018]" />
+                      <span className="text-[#ee6018] font-semibold">
                         {t.contacts.copied}
                       </span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5 text-[#8a8380] group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors" />
+                      <Copy className="w-3.5 h-3.5 text-[#8a8380] group-hover:text-zinc-300 transition-colors" />
                       <span>{t.contacts.copy}</span>
                     </>
                   )}
@@ -583,7 +574,7 @@ export const ContactsView: React.FC = () => {
                     channel.rel ||
                     (channel.isExternal ? "noopener noreferrer" : undefined)
                   }
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[10px] text-xs font-mono font-semibold bg-zinc-100 dark:bg-[#3d3a39] text-zinc-900 dark:text-[#eeeeee] hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[10px] text-xs font-mono font-semibold bg-[#3d3a39] text-[#eeeeee] hover:bg-zinc-700 transition-colors"
                 >
                   <span>{channel.actionLabel}</span>
                   {channel.isExternal ? (
@@ -609,7 +600,7 @@ export const ContactsView: React.FC = () => {
             aria-live="polite"
             className="fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] right-6 z-50 pointer-events-none"
           >
-            <div className="glass-panel px-4 py-3 rounded-[10px] shadow-none border border-zinc-300 dark:border-[#3d3a39] bg-[#1d1a18]/90 text-white dark:bg-zinc-100/95 dark:text-zinc-950 font-mono text-xs flex items-center gap-3">
+            <div className="glass-panel px-4 py-3 rounded-[10px] shadow-none border border-[#3d3a39] bg-zinc-100/95 text-zinc-950 font-mono text-xs flex items-center gap-3">
               <span className="w-2 h-2 rounded-[3px] bg-[#ee6018] animate-ping" />
               <span>{toastMessage}</span>
             </div>

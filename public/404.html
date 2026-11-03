@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self';" />
     <meta name="theme-color" content="#101010" />
     <meta name="color-scheme" content="dark" />
     <title>404 — Yaroslav Krupoder</title>
@@ -60,12 +61,35 @@
       <div class="count" id="count"></div>
     </div>
     <script>
-      // Preserve SPA routing: replay the path through /?p=...
-      var path = window.location.pathname;
-      var search = window.location.search;
-      var hash = window.location.hash;
-      var home = '/?p=' + encodeURIComponent(path) + (search ? '&' + search.slice(1) : '') + hash;
+      // Preserve SPA routing only for known client routes/slugs; otherwise return to clean root "/"
+      var path = window.location.pathname || '/';
+      var search = window.location.search || '';
+      var hash = window.location.hash || '';
+      var cleaned = path.replace(/^\/+|\/+$/g, '').toLowerCase();
+      var knownRoutes = [
+        'welcome',
+        'about',
+        'projects',
+        'contacts',
+        'meetbadi',
+        'unitra',
+        'pyglow',
+        'applied-data-science',
+        'hotspotguard',
+        'projects/meetbadi',
+        'projects/unitra',
+        'projects/pyglow',
+        'projects/applied-data-science',
+        'projects/hotspotguard'
+      ];
+      var isKnown = knownRoutes.indexOf(cleaned) !== -1;
+      var home = isKnown
+        ? '/?p=' + encodeURIComponent(path) + (search ? '&' + search.slice(1) : '') + hash
+        : '/';
       document.getElementById('home-link').href = home;
+      if (isKnown) {
+        window.location.replace(home);
+      }
       var n = 5;
       var el = document.getElementById('count');
       el.textContent = 'redirecting in ' + n + '… (click the hippo to stay)';

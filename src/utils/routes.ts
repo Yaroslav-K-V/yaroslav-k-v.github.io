@@ -82,8 +82,14 @@ export function parseProjectSlug(input: string | LocationInput): string | null {
   const p = params["p"];
   if (p) {
     const cleanedP = p.replace(/^\//, "").replace(/\/$/, "").toLowerCase();
-    if (projects.some((proj) => proj.slug.toLowerCase() === cleanedP)) {
-      return cleanedP;
+    const slugCandidate = cleanedP.startsWith("projects/")
+      ? cleanedP.slice("projects/".length)
+      : cleanedP;
+    const matched = projects.find(
+      (proj) => proj.slug.toLowerCase() === slugCandidate,
+    );
+    if (matched) {
+      return matched.slug;
     }
   }
 
@@ -126,9 +132,14 @@ export function parseRoute(input: string | LocationInput): PageRoute {
     if (isValidRoute(cleaned)) {
       return cleaned;
     }
-    // If ?p=unitra where slug matches one of our projects
+    const slugCandidate = cleaned.toLowerCase().startsWith("projects/")
+      ? cleaned.slice("projects/".length)
+      : cleaned;
+    // If ?p=unitra or ?p=/projects/unitra where slug matches one of our projects
     if (
-      projects.some((proj) => proj.slug.toLowerCase() === cleaned.toLowerCase())
+      projects.some(
+        (proj) => proj.slug.toLowerCase() === slugCandidate.toLowerCase(),
+      )
     ) {
       return "projects";
     }

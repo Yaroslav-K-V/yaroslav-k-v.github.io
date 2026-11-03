@@ -280,7 +280,7 @@ export const AssembleIntro: React.FC<AssembleIntroProps> = ({
         for (const cell of cells) {
           const local = now - cell.start;
           if (local < 0 || local > CELL_FLASH_MS) continue;
-          let opacity = 0;
+          let opacity: number;
           if (local < CELL_RISE_MS) {
             opacity = easeInOut(local / CELL_RISE_MS) * CELL_PEAK_OPACITY;
           } else {

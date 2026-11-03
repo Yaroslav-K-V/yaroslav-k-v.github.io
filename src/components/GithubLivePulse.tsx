@@ -15,6 +15,13 @@ interface GitHubEvent {
   };
 }
 
+interface CachedGitHubTelemetry {
+  data: GitHubTelemetry;
+  timestamp: number;
+  etag?: string;
+  createdAt?: string;
+}
+
 const CACHE_KEY = "gh_pulse_telemetry_v2";
 const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes cache
 
@@ -38,19 +45,35 @@ function getRelativeTimeString(dateIso: string): string {
   return `${Math.floor(diffDays / 30)}mo ago`;
 }
 
+function readCachedTelemetry(): CachedGitHubTelemetry | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as CachedGitHubTelemetry;
+    if (parsed && parsed.data && typeof parsed.timestamp === "number") {
+      if (parsed.createdAt) {
+        parsed.data = {
+          ...parsed.data,
+          relativeTime: getRelativeTimeString(parsed.createdAt),
+        };
+      }
+      return parsed;
+    }
+  } catch {
+    // Ignore localStorage issues
+  }
+  return null;
+}
+
 export const GithubLivePulse: React.FC = () => {
   // Synchronous initial state from localStorage to avoid layout shift and flash
   const [telemetry, setTelemetry] = useState<GitHubTelemetry>(() => {
-    try {
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (Date.now() - parsed.timestamp < CACHE_TTL_MS && parsed.data) {
-          return parsed.data;
-        }
-      }
-    } catch {
-      // Ignore localStorage issues
+    const cached = readCachedTelemetry();
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      return cached.data;
+    }
+    if (cached) {
+      return cached.data;
     }
     return {
       repoName: "Site_YK",
@@ -60,39 +83,61 @@ export const GithubLivePulse: React.FC = () => {
   });
 
   useEffect(() => {
-    // Check if valid cache already loaded
-    try {
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (Date.now() - parsed.timestamp < CACHE_TTL_MS && parsed.data) {
-          return;
-        }
-      }
-    } catch {
-      // Continue to fetch
+    const cached = readCachedTelemetry();
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      return;
     }
 
     const controller = new AbortController();
+    const headers: Record<string, string> = {
+      Accept: "application/vnd.github.v3+json",
+    };
+    if (cached?.etag) {
+      headers["If-None-Match"] = cached.etag;
+    }
+
     fetch("https://api.github.com/users/Yaroslav-K-V/events/public", {
       signal: controller.signal,
-      headers: {
-        Accept: "application/vnd.github.v3+json",
-      },
+      headers,
     })
       .then((res) => {
+        if (res.status === 304 && cached) {
+          // 304 Not Modified does not consume GitHub API rate limit
+          const refreshedData: GitHubTelemetry = {
+            ...cached.data,
+            relativeTime: cached.createdAt
+              ? getRelativeTimeString(cached.createdAt)
+              : cached.data.relativeTime,
+          };
+          setTelemetry(refreshedData);
+          try {
+            localStorage.setItem(
+              CACHE_KEY,
+              JSON.stringify({
+                ...cached,
+                data: refreshedData,
+                timestamp: Date.now(),
+              }),
+            );
+          } catch {
+            // Ignore cache write error
+          }
+          return null;
+        }
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
+        const etag = res.headers.get("etag") || undefined;
+        return res.json().then((events: GitHubEvent[]) => ({ events, etag }));
       })
-      .then((events: GitHubEvent[]) => {
+      .then((payload) => {
+        if (!payload) return;
+        const { events, etag } = payload;
         if (!Array.isArray(events) || events.length === 0) return;
         const latestPush =
           events.find((e) => e.type === "PushEvent") || events[0];
         const rawRepo = latestPush?.repo?.name || "Site_YK";
         const repoClean = sanitizeRepoName(rawRepo);
-        const relTime = latestPush?.created_at
-          ? getRelativeTimeString(latestPush.created_at)
-          : "recent";
+        const createdAt = latestPush?.created_at;
+        const relTime = createdAt ? getRelativeTimeString(createdAt) : "recent";
 
         const data: GitHubTelemetry = {
           repoName: repoClean,
@@ -102,20 +147,27 @@ export const GithubLivePulse: React.FC = () => {
 
         setTelemetry(data);
         try {
-          localStorage.setItem(
-            CACHE_KEY,
-            JSON.stringify({ data, timestamp: Date.now() }),
-          );
+          const entry: CachedGitHubTelemetry = {
+            data,
+            timestamp: Date.now(),
+            etag,
+            createdAt,
+          };
+          localStorage.setItem(CACHE_KEY, JSON.stringify(entry));
         } catch {
           // Ignore cache write error
         }
       })
       .catch((err: unknown) => {
         if (err instanceof Error && err.name === "AbortError") return;
+        if (cached?.data) {
+          setTelemetry(cached.data);
+          return;
+        }
         // Fallback to static verified state
         setTelemetry({
-          repoName: "Site_YK · 26 tests passing",
-          relativeTime: "live",
+          repoName: "Site_YK",
+          relativeTime: "verified",
           isFallback: true,
         });
       });

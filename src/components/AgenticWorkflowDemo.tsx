@@ -60,7 +60,7 @@ export const AgenticWorkflowDemo: React.FC = () => {
       </div>
 
       {/* Header and Controls */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#3d3a39] dark:border-[#3d3a39]">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#3d3a39]">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#ee6018]" />
@@ -68,10 +68,10 @@ export const AgenticWorkflowDemo: React.FC = () => {
               {t.workflow.badge}
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#eeeeee]">
             {t.workflow.title}
           </h2>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-[#8a8380] max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#8a8380] max-w-2xl leading-relaxed">
             {t.workflow.subtitle}
           </p>
         </div>
@@ -83,7 +83,7 @@ export const AgenticWorkflowDemo: React.FC = () => {
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[3px] text-xs font-mono border transition-all ${
               isAutoPlaying
                 ? "bg-[#ee6018]/15 text-[#ee6018] border-[#ee6018]/40"
-                : "bg-zinc-100/70 dark:bg-[#1d1a18]/60 text-zinc-600 dark:text-[#8a8380] border-[#3d3a39]"
+                : "bg-[#1d1a18]/60 text-[#8a8380] border-[#3d3a39]"
             }`}
             title={isAutoPlaying ? t.workflow.pause : t.workflow.auto}
             aria-label={isAutoPlaying ? t.workflow.pause : t.workflow.auto}
@@ -100,7 +100,7 @@ export const AgenticWorkflowDemo: React.FC = () => {
 
           <button
             onClick={goToPrev}
-            className="min-h-[36px] min-w-[36px] p-2 flex items-center justify-center rounded-[3px] border border-[#3d3a39] bg-zinc-100/70 dark:bg-[#1d1a18]/60 text-zinc-600 dark:text-[#8a8380] hover:text-white hover:bg-[#3d3a39] transition-all"
+            className="min-h-[36px] min-w-[36px] p-2 flex items-center justify-center rounded-[3px] border border-[#3d3a39] bg-[#1d1a18]/60 text-[#8a8380] hover:text-white hover:bg-[#3d3a39] transition-all"
             aria-label={t.workflow.prevStep || "Previous step"}
           >
             <ArrowLeft className="w-4 h-4" />
@@ -108,7 +108,7 @@ export const AgenticWorkflowDemo: React.FC = () => {
 
           <button
             onClick={goToNext}
-            className="min-h-[36px] min-w-[36px] p-2 flex items-center justify-center rounded-[3px] border border-[#3d3a39] bg-zinc-100/70 dark:bg-[#1d1a18]/60 text-zinc-600 dark:text-[#8a8380] hover:text-white hover:bg-[#3d3a39] transition-all"
+            className="min-h-[36px] min-w-[36px] p-2 flex items-center justify-center rounded-[3px] border border-[#3d3a39] bg-[#1d1a18]/60 text-[#8a8380] hover:text-white hover:bg-[#3d3a39] transition-all"
             aria-label={t.workflow.nextStep || "Next step"}
           >
             <ArrowRight className="w-4 h-4" />
@@ -126,8 +126,8 @@ export const AgenticWorkflowDemo: React.FC = () => {
               onClick={() => setActiveIndex(idx)}
               className={`p-3 rounded-[4px] border text-left transition-all relative font-mono text-xs overflow-hidden ${
                 isActive
-                  ? "border-[#ee6018] bg-[#ee6018]/10 text-zinc-900 dark:text-white shadow-sm"
-                  : "border-[#3d3a39]/70 bg-zinc-100/40 dark:bg-[#1d1a18]/40 text-[#8a8380] hover:border-[#3d3a39] hover:text-zinc-800 dark:hover:text-zinc-200"
+                  ? "border-[#ee6018] bg-[#ee6018]/10 text-white shadow-sm"
+                  : "border-[#3d3a39]/70 bg-[#1d1a18]/40 text-[#8a8380] hover:border-[#3d3a39] hover:text-zinc-200"
               }`}
             >
               <div className="flex items-center justify-between text-[10px] text-[#8a8380] mb-1">
@@ -139,7 +139,7 @@ export const AgenticWorkflowDemo: React.FC = () => {
                 </span>
               </div>
               <div
-                className={`font-semibold text-xs truncate ${isActive ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-500 dark:text-zinc-400"}`}
+                className={`font-semibold text-xs truncate ${isActive ? "text-zinc-100" : "text-zinc-400"}`}
               >
                 {step.shortTitle}
               </div>
@@ -160,7 +160,7 @@ export const AgenticWorkflowDemo: React.FC = () => {
       </div>
 
       {/* Main Showcase Terminal with Corner Registration Marks */}
-      <div className="relative glass-panel p-5 sm:p-7 rounded-[10px] border border-[#3d3a39] dark:border-[#3d3a39]/80 min-h-[380px]">
+      <div className="relative glass-panel p-5 sm:p-7 rounded-[10px] border border-[#3d3a39]/80 min-h-[380px]">
         {/* Technical Corner Registration Marks (+) */}
         <span
           aria-hidden="true"
@@ -208,10 +208,10 @@ export const AgenticWorkflowDemo: React.FC = () => {
                       {currentStep.tag}
                     </span>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-[#eeeeee]">
+                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#eeeeee]">
                     {currentStep.title}
                   </h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed font-sans">
+                  <p className="text-sm text-zinc-300 leading-relaxed font-sans">
                     {currentStep.lead}
                   </p>
                 </div>

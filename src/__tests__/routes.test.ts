@@ -114,6 +114,12 @@ describe("Route Validation & Parsing Engine", () => {
       expect(parseProjectSlug("/?p=unitra")).toBe("unitra");
       expect(parseRoute("/?p=/unitra/")).toBe("projects");
       expect(parseProjectSlug("/?p=/unitra/")).toBe("unitra");
+      expect(parseRoute("/?p=/projects/unitra")).toBe("projects");
+      expect(parseProjectSlug("/?p=/projects/unitra")).toBe("unitra");
+      expect(parseRoute("/?p=/projects/hotspotguard/")).toBe("projects");
+      expect(parseProjectSlug("/?p=/projects/hotspotguard/")).toBe(
+        "hotspotguard",
+      );
     });
 
     it("preserves non-root page route when filter query is attached", () => {
