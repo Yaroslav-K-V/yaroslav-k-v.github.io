@@ -461,9 +461,7 @@ export const AboutView: React.FC = () => {
                 <span className="text-xs font-mono text-granite">
                   {cert.provider}
                 </span>
-                <h3 className="text-base font-bold text-bone">
-                  {cert.title}
-                </h3>
+                <h3 className="text-base font-bold text-bone">{cert.title}</h3>
                 <p className="text-xs text-stone leading-relaxed mt-1">
                   {cert.detail}
                 </p>
@@ -476,7 +474,9 @@ export const AboutView: React.FC = () => {
         </div>
 
         <div className="glass-panel p-5 text-sm text-stone">
-          <span className="font-semibold text-bone">{t.about.spokenLanguagesLabel}</span>
+          <span className="font-semibold text-bone">
+            {t.about.spokenLanguagesLabel}
+          </span>
           {t.about.spokenLanguagesValue}
         </div>
       </section>
@@ -502,10 +502,7 @@ export const AboutView: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {engineeringPillars.map((pillar) => (
-            <div
-              key={pillar.index}
-              className="glass-panel p-6 space-y-3"
-            >
+            <div key={pillar.index} className="glass-panel p-6 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono text-granite">
                   {pillar.tag}
@@ -514,9 +511,7 @@ export const AboutView: React.FC = () => {
                   [{pillar.index}]
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-bone">
-                {pillar.title}
-              </h3>
+              <h3 className="text-lg font-bold text-bone">{pillar.title}</h3>
               <p className="text-sm text-stone leading-relaxed">
                 {pillar.description}
               </p>

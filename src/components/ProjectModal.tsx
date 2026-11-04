@@ -542,9 +542,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       <div className="text-[10px] text-granite uppercase tracking-wider">
                         {t.modal.notesLabel}
                       </div>
-                      <p className="text-stone italic">
-                        {activeProject.note}
-                      </p>
+                      <p className="text-stone italic">{activeProject.note}</p>
                     </div>
                   )}
                 </section>

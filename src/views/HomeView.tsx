@@ -251,17 +251,19 @@ export const HomeView: React.FC<HomeViewProps> = ({
                         <span className="text-metric">03 LAYERS</span>
                       </div>
                       <div className="space-y-1.5 my-auto">
-                        {(project.architecture ?? []).slice(0, 3).map((layer, lIdx) => (
-                          <div
-                            key={lIdx}
-                            className="text-[10px] text-stone truncate flex items-center gap-1.5"
-                          >
-                            <span className="text-signal font-bold">
-                              0{lIdx + 1}
-                            </span>
-                            <span className="truncate">{layer}</span>
-                          </div>
-                        ))}
+                        {(project.architecture ?? [])
+                          .slice(0, 3)
+                          .map((layer, lIdx) => (
+                            <div
+                              key={lIdx}
+                              className="text-[10px] text-stone truncate flex items-center gap-1.5"
+                            >
+                              <span className="text-signal font-bold">
+                                0{lIdx + 1}
+                              </span>
+                              <span className="truncate">{layer}</span>
+                            </div>
+                          ))}
                       </div>
                     </div>
                   )}

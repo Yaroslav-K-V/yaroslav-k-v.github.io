@@ -443,9 +443,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
               {copiedKey === "resume" ? (
                 <>
                   <Check className="w-4 h-4 text-signal" />
-                  <span className="text-signal">
-                    {t.contacts.linkCopied}
-                  </span>
+                  <span className="text-signal">{t.contacts.linkCopied}</span>
                 </>
               ) : (
                 <>
@@ -497,10 +495,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
       )}
 
       {contactsData.formspreeId && (
-        <section
-          data-assemble="4"
-          className="glass-panel p-6 sm:p-7 space-y-5"
-        >
+        <section data-assemble="4" className="glass-panel p-6 sm:p-7 space-y-5">
           <div>
             <span className="text-xs font-mono text-granite uppercase tracking-widest block mb-1">
               {t.contacts.noEmailApp}
