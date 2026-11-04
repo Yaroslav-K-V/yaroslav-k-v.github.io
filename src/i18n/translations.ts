@@ -12,6 +12,7 @@ export interface Translations {
     animationsOn: string;
     animationsOff: string;
     toggleMenu: string;
+    commandMenu: string;
   };
   home: {
     badge: string;
@@ -28,6 +29,10 @@ export interface Translations {
     sectionsTitle: string;
     sectionsCount: string;
     openSection: string;
+    featuredTitle: string;
+    featuredCount: string;
+    viewAllProjects: string;
+    openDossier: string;
     dirAboutTag: string;
     dirAboutTitle: string;
     dirAboutDesc: string;
@@ -198,6 +203,7 @@ export interface Translations {
     infoAvailabilitySub: string;
     cvTitle: string;
     cvDesc: string;
+    previewCv: string;
     downloadCv: string;
     copyLink: string;
     linkCopied: string;
@@ -264,6 +270,40 @@ export interface Translations {
     backToTop: string;
     replayIntro: string;
   };
+  cmdPalette: {
+    placeholder: string;
+    groupActions: string;
+    groupProjects: string;
+    groupNavigation: string;
+    groupPreferences: string;
+    actionPreviewCv: string;
+    actionPreviewCvSub: string;
+    actionDownloadCv: string;
+    actionDownloadCvSub: string;
+    actionBookCall: string;
+    actionBookCallSub: string;
+    actionCopyEmail: string;
+    actionEmailCopied: string;
+    actionOpenTelegram: string;
+    actionOpenGithub: string;
+    actionOpenLinkedin: string;
+    prefLanguage: string;
+    noResults: string;
+    footerHint: string;
+  };
+  cvModal: {
+    eyebrow: string;
+    title: string;
+    updatedBadge: string;
+    summaryEducation: string;
+    summaryExperience: string;
+    summaryStack: string;
+    openNewTab: string;
+    downloadPdf: string;
+    copyLink: string;
+    linkCopied: string;
+    close: string;
+  };
   workflow: {
     badge: string;
     title: string;
@@ -312,9 +352,10 @@ export const translations: Record<Locale, Translations> = {
       animationsOn: "Animations: On",
       animationsOff: "Animations: Off",
       toggleMenu: "Toggle menu",
+      commandMenu: "Command Menu",
     },
     home: {
-      badge: "JUNIOR WEB DEVELOPER // AI AUTOMATION",
+      badge: "JUNIOR WEB DEVELOPER · AI AUTOMATION",
       titleStart: "Junior Web Developer building with ",
       titleHighlight: "JavaScript, React, and Applied AI.",
       description:
@@ -327,8 +368,12 @@ export const translations: Record<Locale, Translations> = {
       openToWork: "Open to work",
       directoryTag: "INDEX DIRECTORY",
       sectionsTitle: "Sections",
-      sectionsCount: "// 03 pages",
+      sectionsCount: "3 pages",
       openSection: "Open →",
+      featuredTitle: "Selected Work",
+      featuredCount: "3 featured",
+      viewAllProjects: "All 5 projects →",
+      openDossier: "Dossier →",
       dirAboutTag: "Bio",
       dirAboutTitle: "About Me",
       dirAboutDesc:
@@ -498,22 +543,22 @@ export const translations: Record<Locale, Translations> = {
       tabArchitecture: "Architecture",
       tabTech: "Tech Stack",
       tabMetrics: "Metrics",
-      projectDetailsEyebrow: "PROJECT DETAILS",
-      section01Title: "Section 01 // What & why",
+      projectDetailsEyebrow: "PROJECT DOSSIER",
+      section01Title: "01 · What & why",
       problemStatement: "Core Challenge",
       scopeObjectives: "Goals & Scope",
-      section02Title: "Section 02 // How it’s built",
+      section02Title: "02 · How it’s built",
       howItsBuilt: "How It’s Built",
       keyDecisions: "Key Decisions",
-      section03Title: "Section 03 // Tech stack",
+      section03Title: "03 · Tech stack",
       techStackMatrix: "Technology Stack Matrix",
-      section04Title: "Section 04 // Notes",
+      section04Title: "04 · Notes",
       checklistLabel: "Checklist",
       notesLabel: "NOTES",
       metricsResults: "Engineering Metrics & Verification",
       openService: "Open Live Service",
       openGithub: "View on GitHub",
-      footerEnd: "PROJECT DETAILS // END",
+      footerEnd: "Engineering Dossier · Yaroslav Krupoder",
       liveServiceLink: "Live Service",
       repositoryLink: "Repository",
       close: "Close (Esc)",
@@ -537,6 +582,7 @@ export const translations: Record<Locale, Translations> = {
       cvTitle: "Curriculum Vitae",
       cvDesc:
         "My CV: background, Grenergy internship, skills, projects, and contact info.",
+      previewCv: "Preview CV",
       downloadCv: "Download CV",
       copyLink: "Copy Link",
       linkCopied: "Link Copied!",
@@ -568,7 +614,7 @@ export const translations: Record<Locale, Translations> = {
       channelsTitle: "Direct Channels",
       copy: "Copy",
       copied: "Copied!",
-      toastCopiedPrefix: "[CLIPBOARD] Copied",
+      toastCopiedPrefix: "Copied",
       channels: {
         email: {
           indexTag: "Email",
@@ -605,6 +651,40 @@ export const translations: Record<Locale, Translations> = {
       rights: "All rights reserved",
       backToTop: "Back to top",
       replayIntro: "Replay intro",
+    },
+    cmdPalette: {
+      placeholder: "Type a command or search projects, CV, contacts…",
+      groupActions: "Quick Actions",
+      groupProjects: "Projects & Dossiers",
+      groupNavigation: "Navigation",
+      groupPreferences: "Preferences",
+      actionPreviewCv: "Preview CV (Quick Look)",
+      actionPreviewCvSub: "Read 1-page PDF inline without leaving the site",
+      actionDownloadCv: "Download CV (PDF)",
+      actionDownloadCvSub: "Save Yaroslav_Krupoder_CV.pdf",
+      actionBookCall: "Book 15-min Intro Call",
+      actionBookCallSub: "Google Meet / Zoom calendar slot",
+      actionCopyEmail: "Copy Email Address",
+      actionEmailCopied: "Copied to clipboard!",
+      actionOpenTelegram: "Message on Telegram",
+      actionOpenGithub: "Open GitHub Profile",
+      actionOpenLinkedin: "Open LinkedIn Profile",
+      prefLanguage: "Switch Language",
+      noResults: "No matching commands or projects found.",
+      footerHint: "↑↓ to navigate · ↵ to select · Esc to close",
+    },
+    cvModal: {
+      eyebrow: "CURRICULUM VITAE · QUICK LOOK",
+      title: "Yaroslav Krupoder — Resume",
+      updatedBadge: "Updated Oct 2026 · 1 Page",
+      summaryEducation: "BSc Software Engineering · VUM (2025–Present)",
+      summaryExperience: "AI Agent Developer Intern · Grenergy LLC (2026)",
+      summaryStack: "JS/TS · React · Python · Swift · Supabase",
+      openNewTab: "Open in New Tab",
+      downloadPdf: "Download PDF",
+      copyLink: "Copy Link",
+      linkCopied: "Copied!",
+      close: "Close",
     },
     workflow: {
       badge: "Engineering Workflow",
@@ -726,9 +806,10 @@ export const translations: Record<Locale, Translations> = {
       animationsOn: "Анімації: Увімкнено",
       animationsOff: "Анімації: Вимкнено",
       toggleMenu: "Перемкнути меню",
+      commandMenu: "Командне меню",
     },
     home: {
-      badge: "JUNIOR WEB DEVELOPER // AI AUTOMATION",
+      badge: "JUNIOR WEB DEVELOPER · AI AUTOMATION",
       titleStart: "Junior Web Developer, який розробляє на ",
       titleHighlight: "JavaScript, React та Applied AI.",
       description:
@@ -741,8 +822,12 @@ export const translations: Record<Locale, Translations> = {
       openToWork: "Відкритий до пропозицій",
       directoryTag: "НАВІГАЦІЙНИЙ ДОВІДНИК",
       sectionsTitle: "Розділи",
-      sectionsCount: "// 03 сторінки",
+      sectionsCount: "3 сторінки",
       openSection: "Відкрити →",
+      featuredTitle: "Обрані проєкти",
+      featuredCount: "3 ключові",
+      viewAllProjects: "Усі 5 проєктів →",
+      openDossier: "Досьє →",
       dirAboutTag: "Біо",
       dirAboutTitle: "Про мене",
       dirAboutDesc:
@@ -914,21 +999,21 @@ export const translations: Record<Locale, Translations> = {
       tabTech: "Стек технологій",
       tabMetrics: "Метрики",
       projectDetailsEyebrow: "ДОСЬЄ ПРОЄКТУ",
-      section01Title: "Розділ 01 // Суть та мета",
+      section01Title: "01 · Суть та мета",
       problemStatement: "Ключовий виклик",
       scopeObjectives: "Цілі та обсяг роботи",
-      section02Title: "Розділ 02 // Як це побудовано",
+      section02Title: "02 · Як це побудовано",
       howItsBuilt: "Архітектура системи",
       keyDecisions: "Ключові технічні рішення",
-      section03Title: "Розділ 03 // Технологічний стек",
+      section03Title: "03 · Технологічний стек",
       techStackMatrix: "Матриця технологічного стеку",
-      section04Title: "Розділ 04 // Результати та нотатки",
+      section04Title: "04 · Результати та нотатки",
       checklistLabel: "Реалізовано",
-      notesLabel: " ПРИМІТКИ",
+      notesLabel: "ПРИМІТКИ",
       metricsResults: "Інженерні метрики та верифікація",
       openService: "Відкрити живий сервіс",
       openGithub: "Переглянути на GitHub",
-      footerEnd: "ДОСЬЄ ПРОЄКТУ // КІНЕЦЬ",
+      footerEnd: "Інженерне досьє · Ярослав Круподер",
       liveServiceLink: "Живий сервіс",
       repositoryLink: "Репозиторій",
       close: "Закрити (Esc)",
@@ -952,6 +1037,7 @@ export const translations: Record<Locale, Translations> = {
       cvTitle: "Curriculum Vitae",
       cvDesc:
         "Моє резюме: освіта, досвід у Grenergy LLC, навички, проєкти та контакти.",
+      previewCv: "Переглянути CV",
       downloadCv: "Завантажити CV",
       copyLink: "Скопіювати лінк",
       linkCopied: "Лінк скопійовано!",
@@ -986,7 +1072,7 @@ export const translations: Record<Locale, Translations> = {
       channelsTitle: "Прямі канали",
       copy: "Скопіювати",
       copied: "Скопійовано!",
-      toastCopiedPrefix: "[БУФЕР] Скопійовано:",
+      toastCopiedPrefix: "Скопійовано:",
       channels: {
         email: {
           indexTag: "Пошта",
@@ -1024,6 +1110,40 @@ export const translations: Record<Locale, Translations> = {
       rights: "Усі права захищено",
       backToTop: "Нагору",
       replayIntro: "Повторити інтро",
+    },
+    cmdPalette: {
+      placeholder: "Введіть команду або шукайте проєкти, CV, контакти…",
+      groupActions: "Швидкі дії",
+      groupProjects: "Проєкти та досьє",
+      groupNavigation: "Навігація",
+      groupPreferences: "Налаштування",
+      actionPreviewCv: "Переглянути CV (Quick Look)",
+      actionPreviewCvSub: "Відкрити 1-сторінкове PDF прямо на сайті",
+      actionDownloadCv: "Завантажити CV (PDF)",
+      actionDownloadCvSub: "Зберегти файл Yaroslav_Krupoder_CV.pdf",
+      actionBookCall: "Записатися на 15-хв дзвінок",
+      actionBookCallSub: "Обрати слот у Google Meet / Zoom",
+      actionCopyEmail: "Скопіювати Email адресу",
+      actionEmailCopied: "Скопійовано в буфер!",
+      actionOpenTelegram: "Написати в Telegram",
+      actionOpenGithub: "Відкрити профіль GitHub",
+      actionOpenLinkedin: "Відкрити профіль LinkedIn",
+      prefLanguage: "Змінити мову",
+      noResults: "Команд або проєктів за цим запитом не знайдено.",
+      footerHint: "↑↓ навігація · ↵ обрати · Esc закрити",
+    },
+    cvModal: {
+      eyebrow: "CURRICULUM VITAE · ШВИДКИЙ ПЕРЕГЛЯД",
+      title: "Ярослав Круподер — Резюме",
+      updatedBadge: "Оновлено Жовт 2026 · 1 стор.",
+      summaryEducation: "BSc Software Engineering · VUM (2025–дотепер)",
+      summaryExperience: "AI Agent Developer Intern · Grenergy LLC (2026)",
+      summaryStack: "JS/TS · React · Python · Swift · Supabase",
+      openNewTab: "У новій вкладці",
+      downloadPdf: "Завантажити PDF",
+      copyLink: "Скопіювати лінк",
+      linkCopied: "Скопійовано!",
+      close: "Закрити",
     },
     workflow: {
       badge: "Інженерний процес",
@@ -1145,9 +1265,10 @@ export const translations: Record<Locale, Translations> = {
       animationsOn: "Анимации: Вкл",
       animationsOff: "Анимации: Изкл",
       toggleMenu: "Меню",
+      commandMenu: "Командно меню",
     },
     home: {
-      badge: "JUNIOR WEB DEVELOPER // AI AUTOMATION",
+      badge: "JUNIOR WEB DEVELOPER · AI AUTOMATION",
       titleStart: "Junior Web Developer разработващ с ",
       titleHighlight: "JavaScript, React и Applied AI.",
       description:
@@ -1160,8 +1281,12 @@ export const translations: Record<Locale, Translations> = {
       openToWork: "Отворен за предложения",
       directoryTag: "ИНДЕКС ДИРЕКТОРИЯ",
       sectionsTitle: "Раздели",
-      sectionsCount: "// 03 страници",
+      sectionsCount: "3 страници",
       openSection: "Отвори →",
+      featuredTitle: "Избрани проекти",
+      featuredCount: "3 водещи",
+      viewAllProjects: "Всички 5 проекта →",
+      openDossier: "Досие →",
       dirAboutTag: "Био",
       dirAboutTitle: "За мен",
       dirAboutDesc:
@@ -1332,21 +1457,21 @@ export const translations: Record<Locale, Translations> = {
       tabTech: "Технологичен стек",
       tabMetrics: "Метрики",
       projectDetailsEyebrow: "ДОСИЕ НА ПРОЕКТА",
-      section01Title: "Раздел 01 // Цел и обхват",
+      section01Title: "01 · Цел и обхват",
       problemStatement: "Основно предизвикателство",
       scopeObjectives: "Цели и обхват",
-      section02Title: "Раздел 02 // Архитектура",
+      section02Title: "02 · Архитектура",
       howItsBuilt: "Как е изградено",
       keyDecisions: "Ключови архитектурни решения",
-      section03Title: "Раздел 03 // Технологичен стек",
+      section03Title: "03 · Технологичен стек",
       techStackMatrix: "Матрица на технологичния стек",
-      section04Title: "Раздел 04 // Бележки и резултати",
+      section04Title: "04 · Бележки и резултати",
       checklistLabel: "Реализирано",
       notesLabel: "БЕЛЕЖКИ",
       metricsResults: "Инженерни метрики и верификация",
       openService: "Отвори услугата",
       openGithub: "Преглед в GitHub",
-      footerEnd: "ДОСИЕ НА ПРОЕКТА // КРАЙ",
+      footerEnd: "Инженерно досие · Ярослав Круподер",
       liveServiceLink: "Работеща услуга",
       repositoryLink: "Хранилище",
       close: "Затвори (Esc)",
@@ -1370,6 +1495,7 @@ export const translations: Record<Locale, Translations> = {
       cvTitle: "Curriculum Vitae",
       cvDesc:
         "Моята автобиография: образование, опит в Grenergy LLC, умения, проекти и контакти.",
+      previewCv: "Преглед на CV",
       downloadCv: "Изтегли CV",
       copyLink: "Копирай линк",
       linkCopied: "Линкът е копиран!",
@@ -1403,7 +1529,7 @@ export const translations: Record<Locale, Translations> = {
       channelsTitle: "Директни канали",
       copy: "Копирай",
       copied: "Копирано!",
-      toastCopiedPrefix: "[КЛИПБОРД] Копирано:",
+      toastCopiedPrefix: "Копирано:",
       channels: {
         email: {
           indexTag: "Имейл",
@@ -1441,6 +1567,40 @@ export const translations: Record<Locale, Translations> = {
       rights: "Всички права запазени",
       backToTop: "Към началото",
       replayIntro: "Повтори интрото",
+    },
+    cmdPalette: {
+      placeholder: "Въведете команда или търсете проекти, CV, контакти…",
+      groupActions: "Бързи действия",
+      groupProjects: "Проекти и досиета",
+      groupNavigation: "Навигация",
+      groupPreferences: "Настройки",
+      actionPreviewCv: "Преглед на CV (Quick Look)",
+      actionPreviewCvSub: "Прочетете PDF автобиографията директно тук",
+      actionDownloadCv: "Изтегли CV (PDF)",
+      actionDownloadCvSub: "Запази Yaroslav_Krupoder_CV.pdf",
+      actionBookCall: "Запази 15-мин разговор",
+      actionBookCallSub: "Google Meet / Zoom календар",
+      actionCopyEmail: "Копирай имейл адрес",
+      actionEmailCopied: "Копирано в клипборда!",
+      actionOpenTelegram: "Пиши в Telegram",
+      actionOpenGithub: "Отвори GitHub профил",
+      actionOpenLinkedin: "Отвори LinkedIn профил",
+      prefLanguage: "Смяна на език",
+      noResults: "Няма намерени команди или проекти.",
+      footerHint: "↑↓ навигация · ↵ избор · Esc затваряне",
+    },
+    cvModal: {
+      eyebrow: "CURRICULUM VITAE · БЪРЗ ПРЕГЛЕД",
+      title: "Ярослав Круподер — Автобиография",
+      updatedBadge: "Обновено Окт 2026 · 1 стр.",
+      summaryEducation: "BSc Software Engineering · VUM (2025–Настояще)",
+      summaryExperience: "AI Agent Developer Intern · Grenergy LLC (2026)",
+      summaryStack: "JS/TS · React · Python · Swift · Supabase",
+      openNewTab: "Отвори в нов раздел",
+      downloadPdf: "Изтегли PDF",
+      copyLink: "Копирай линк",
+      linkCopied: "Копирано!",
+      close: "Затвори",
     },
     workflow: {
       badge: "Инженерен процес",

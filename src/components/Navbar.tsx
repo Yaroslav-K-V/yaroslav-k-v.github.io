@@ -21,6 +21,8 @@ interface NavbarProps {
   onNavigate: (route: PageRoute) => void;
   animationsEnabled?: boolean;
   onToggleAnimations?: () => void;
+  onOpenCommandPalette?: () => void;
+  onOpenCvPreview?: () => void;
 }
 
 const LANGUAGES: { code: Locale; label: string; full: string }[] = [
@@ -34,6 +36,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   animationsEnabled = true,
   onToggleAnimations,
+  onOpenCommandPalette,
+  onOpenCvPreview,
 }) => {
   const { locale, setLocale, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -173,41 +177,41 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header
       data-assemble="0"
-      className="sticky top-0 z-40 w-full backdrop-blur-xl bg-[#101010]/70 border-b border-white/10 transition-colors"
+      className="sticky top-0 z-40 w-full backdrop-blur-xl bg-canvas/80 border-b border-stroke transition-colors"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Monogram & Live Status */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             onClick={() => handleNavClick("welcome")}
-            className="group flex items-center gap-2 text-left font-mono hover:opacity-80 transition-opacity"
+            className="group flex items-center gap-2 text-left font-mono hover:opacity-80 transition-opacity shrink-0 whitespace-nowrap"
           >
-            <span className="font-bold tracking-widest text-sm sm:text-base text-white">
+            <span className="font-bold tracking-widest text-sm sm:text-base text-chalk whitespace-nowrap shrink-0">
               YK // 01
             </span>
-            <span className="hidden sm:inline-block text-zinc-700">|</span>
-            <span className="hidden sm:inline-block text-[11px] uppercase tracking-widest text-[#8a8380]">
+            <span className="hidden xl:inline-block text-stroke">|</span>
+            <span className="hidden xl:inline-block text-[11px] uppercase tracking-widest text-granite whitespace-nowrap">
               YAROSLAV KRUPODER
             </span>
           </button>
 
-          <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded-[3px] border border-white/10 text-[10px] font-mono text-[#8a8380]">
+          <div className="hidden 2xl:flex items-center gap-1.5 px-2 py-0.5 rounded-control border border-stroke text-[10px] font-mono text-granite shrink-0">
             <span className="tracking-wide">Varna · UTC+2</span>
           </div>
         </div>
 
         {/* Desktop Navigation Tabs */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-[3px] border border-white/10 bg-[#eeeeee]/[0.03] backdrop-blur-md">
+        <nav className="hidden md:flex items-center gap-1 p-1 rounded-control border border-stroke bg-surface/60 backdrop-blur-md">
           {navItems.map((item) => {
             const isActive = currentRoute === item.route;
             return (
               <button
                 key={item.route}
                 onClick={() => handleNavClick(item.route)}
-                className={`px-3 py-1 text-xs font-mono whitespace-nowrap transition-all rounded-[3px] ${
+                className={`px-3 py-1 text-xs font-mono whitespace-nowrap transition-all rounded-control ${
                   isActive
-                    ? "bg-[#eeeeee] text-black font-semibold shadow-none"
-                    : "text-[#8a8380] hover:text-white hover:bg-[#eeeeee]/5"
+                    ? "bg-bone text-canvas font-semibold"
+                    : "text-granite hover:text-bone hover:bg-stroke/40"
                 }`}
               >
                 {item.label}
@@ -217,23 +221,23 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right Actions: Resume & Controls */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Language Dropdown */}
-          <div ref={langDropdownRef} className="relative">
+          <div ref={langDropdownRef} className="relative shrink-0">
             <button
               type="button"
               onClick={() => setLangOpen((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[3px] border border-white/15 bg-[#1d1a18]/70 hover:bg-[#3d3a39] text-zinc-300 hover:text-white text-xs font-mono transition-all"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-control border border-stroke bg-surface/80 hover:bg-stroke text-stone hover:text-bone text-xs font-mono transition-all shrink-0"
               aria-label="Select language"
               aria-expanded={langOpen}
               aria-haspopup="listbox"
             >
-              <Globe className="w-3.5 h-3.5 text-[#ee6018]" />
+              <Globe className="w-3.5 h-3.5 text-signal" />
               <span className="font-semibold uppercase tracking-wider">
                 {locale}
               </span>
               <ChevronDown
-                className={`w-3 h-3 text-[#8a8380] transition-transform duration-200 ${
+                className={`w-3 h-3 text-granite transition-transform duration-200 ${
                   langOpen ? "rotate-180" : ""
                 }`}
               />
@@ -243,7 +247,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div
                 role="listbox"
                 aria-label="Languages"
-                className="absolute right-0 mt-1.5 w-40 py-1 rounded-[4px] bg-[#101010] border border-[#3d3a39] shadow-2xl z-50"
+                className="absolute right-0 mt-1.5 w-40 py-1 rounded-control bg-canvas border border-stroke shadow-2xl z-50"
               >
                 {LANGUAGES.map((item) => {
                   const isSelected = locale === item.code;
@@ -258,18 +262,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className={`w-full text-left px-3 py-1.5 text-xs font-mono flex items-center justify-between transition-colors ${
                         isSelected
-                          ? "bg-[#ee6018]/15 text-[#ee6018] font-bold"
-                          : "text-zinc-300 hover:bg-[#eeeeee]/10 hover:text-white"
+                          ? "bg-signal/15 text-signal font-bold"
+                          : "text-stone hover:bg-stroke/40 hover:text-bone"
                       }`}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase text-[#8a8380]">
+                        <span className="text-[10px] font-bold uppercase text-granite">
                           {item.label}
                         </span>
                         <span>{item.full}</span>
                       </div>
                       {isSelected && (
-                        <Check className="w-3.5 h-3.5 text-[#ee6018]" />
+                        <Check className="w-3.5 h-3.5 text-signal" />
                       )}
                     </button>
                   );
@@ -278,10 +282,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
+          {onOpenCommandPalette && (
+            <button
+              type="button"
+              onClick={onOpenCommandPalette}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-control border border-stroke bg-surface/80 hover:border-graphite hover:bg-stroke/40 text-stone hover:text-bone text-xs font-mono transition-all shrink-0"
+              aria-label={t.nav.commandMenu}
+              title={`${t.nav.commandMenu} (⌘K)`}
+            >
+              <span className="text-[11px] font-semibold text-bone">⌘K</span>
+            </button>
+          )}
+
           {onToggleAnimations && (
             <button
               onClick={onToggleAnimations}
-              className="inline-flex items-center justify-center w-8 h-8 rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-white/30 hover:bg-[#eeeeee]/5 transition-all"
+              className="inline-flex items-center justify-center w-8 h-8 rounded-control border border-stroke text-stone hover:text-bone hover:border-graphite hover:bg-stroke/40 transition-all shrink-0"
               aria-label={
                 animationsEnabled ? t.nav.animationsOff : t.nav.animationsOn
               }
@@ -298,43 +314,58 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
           <button
             onClick={handleCopyEmail}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-[#ee6018]/50 hover:bg-[#ee6018]/10 transition-all"
+            data-umami-event="copy-email"
+            className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-control border border-stroke text-stone hover:text-bone hover:border-signal/50 hover:bg-signal/10 transition-all shrink-0 whitespace-nowrap"
             title={`Copy email (${contactsData.email})`}
             aria-label="Copy email address"
           >
             {copiedEmail ? (
               <>
-                <Check className="w-3.5 h-3.5 text-[#ee6018]" />
-                <span className="text-[#ee6018] font-semibold hidden lg:inline">
+                <Check className="w-3.5 h-3.5 text-signal" />
+                <span className="text-signal font-semibold">
                   {t.nav.emailCopied}
                 </span>
               </>
             ) : (
               <>
-                <Mail className="w-3.5 h-3.5 text-[#ee6018]" />
-                <span className="hidden lg:inline">{t.nav.copyEmail}</span>
+                <Mail className="w-3.5 h-3.5 text-signal" />
+                <span>{t.nav.copyEmail}</span>
               </>
             )}
           </button>
 
-          <a
-            href={contactsData.resumeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            download="Yaroslav_Krupoder_CV.pdf"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-white/30 hover:bg-[#eeeeee]/5 transition-all"
-            title="Download Yaroslav Krupoder CV"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span className="hidden lg:inline">{t.nav.resume}</span>
-            <ExternalLink className="w-3 h-3 opacity-60 hidden lg:inline" />
-          </a>
+          {onOpenCvPreview ? (
+            <button
+              type="button"
+              onClick={onOpenCvPreview}
+              data-umami-event="nav-resume"
+              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-control border border-stroke text-stone hover:text-bone hover:border-graphite hover:bg-stroke/40 transition-all shrink-0 whitespace-nowrap"
+              title={t.nav.resume}
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>{t.nav.resume}</span>
+            </button>
+          ) : (
+            <a
+              href={contactsData.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              download="Yaroslav_Krupoder_CV.pdf"
+              data-umami-event="nav-resume"
+              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-control border border-stroke text-stone hover:text-bone hover:border-graphite hover:bg-stroke/40 transition-all shrink-0 whitespace-nowrap"
+              title="Download Yaroslav Krupoder CV"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>{t.nav.resume}</span>
+              <ExternalLink className="w-3 h-3 opacity-60" />
+            </a>
+          )}
 
           {/* Mobile menu trigger */}
           <button
             ref={menuButtonRef}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-[3px] border border-white/10 text-[#8a8380] hover:text-white hover:bg-[#eeeeee]/5 transition-colors"
+            className="md:hidden p-2 rounded-control border border-stroke text-granite hover:text-bone hover:bg-stroke/40 transition-colors shrink-0"
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav-menu"
@@ -406,39 +437,48 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleCopyEmail}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:border-[#ee6018]/50 hover:bg-[#ee6018]/10"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-control border border-stroke text-stone hover:text-bone hover:border-signal/50 hover:bg-signal/10"
                 >
                   {copiedEmail ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-[#ee6018]" />
-                      <span className="text-[#ee6018] font-semibold">
+                      <Check className="w-3.5 h-3.5 text-signal" />
+                      <span className="text-signal font-semibold">
                         {t.nav.emailCopied}
                       </span>
                     </>
                   ) : (
                     <>
-                      <Mail className="w-3.5 h-3.5 text-[#ee6018]" />
+                      <Mail className="w-3.5 h-3.5 text-signal" />
                       <span>{t.nav.copyEmail}</span>
                     </>
                   )}
                 </button>
 
-                <a
-                  href={contactsData.resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download="Yaroslav_Krupoder_CV.pdf"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-[3px] border border-white/15 text-zinc-300 hover:text-white hover:bg-[#eeeeee]/5"
-                >
-                  <FileText className="w-3.5 h-3.5" />
-                  <span>{t.nav.resume}</span>
-                  <ExternalLink className="w-3 h-3 opacity-60" />
-                </a>
-              </div>
-
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[10px] font-mono text-[#ee6018]">
-                <span className="w-1.5 h-1.5 rounded-[3px] bg-[#ee6018] animate-pulse" />
-                <span>ONLINE</span>
+                {onOpenCvPreview ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenCvPreview();
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-control border border-stroke text-stone hover:text-bone hover:bg-bone/5"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>{t.nav.resume}</span>
+                  </button>
+                ) : (
+                  <a
+                    href={contactsData.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download="Yaroslav_Krupoder_CV.pdf"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-control border border-stroke text-stone hover:text-bone hover:bg-bone/5"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>{t.nav.resume}</span>
+                    <ExternalLink className="w-3 h-3 opacity-60" />
+                  </a>
+                )}
               </div>
             </div>
           </div>

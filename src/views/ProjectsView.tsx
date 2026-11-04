@@ -137,8 +137,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       case "Live Service":
         return {
           label: t.projects.statusLive,
-          className: "bg-[#ee6018]/10 text-[#ee6018] border-[#ee6018]/30",
-          dotClass: "bg-[#ee6018]",
+          className: "bg-signal/10 text-signal border-signal/30",
+          dotClass: "bg-signal",
         };
       case "In Progress":
         return {
@@ -149,14 +149,14 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       case "Open Source":
         return {
           label: t.projects.statusOpenSource,
-          className: "bg-zinc-500/10 text-zinc-300 border-[#3d3a39]",
-          dotClass: "bg-zinc-400",
+          className: "bg-stroke/35 text-stone border-stroke",
+          dotClass: "bg-metric",
         };
       default:
         return {
           label: badge.toUpperCase(),
-          className: "bg-zinc-500/10 text-zinc-300 border-[#3d3a39]",
-          dotClass: "bg-zinc-400",
+          className: "bg-stroke/35 text-stone border-stroke",
+          dotClass: "bg-granite",
         };
     }
   };
@@ -178,18 +178,15 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       {/* Header Section */}
       <section data-assemble="1" className="space-y-4 pt-2">
         {/* System Registry Eyebrow */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[3px] border border-[#ee6018]/20 bg-[#ee6018]/10 text-[11px] font-mono text-[#ee6018]">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-[3px] bg-[#ee6018] opacity-75" />
-              <span className="relative inline-flex rounded-[3px] h-2 w-2 bg-[#ee6018]" />
-            </span>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stroke pb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-control border border-signal/25 bg-signal/10 text-[11px] font-mono text-signal">
+            <span className="h-1.5 w-1.5 rounded-[2px] bg-signal" />
             <span className="font-semibold tracking-wider uppercase">
               {t.projects.badge}
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-mono text-[#8a8380]">
+          <div className="flex items-center gap-4 text-xs font-mono text-granite">
             <span className="hidden sm:inline">
               {localizedProjects.length} {t.projects.projectsCount}
             </span>
@@ -198,17 +195,17 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
         {/* Title and Engineering Description */}
         <div className="space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-50">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-[-0.03em] text-chalk">
             {t.projects.title}
           </h1>
-          <p className="text-sm sm:text-base text-zinc-300 max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-stone max-w-3xl leading-relaxed">
             {t.projects.subtitle}
           </p>
         </div>
 
         {/* Filter Navigation Tabs */}
         <div className="pt-2 flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto pb-2 scrollbar-none">
-          <Filter className="w-3.5 h-3.5 text-[#8a8380] mr-1 flex-shrink-0" />
+          <Filter className="w-3.5 h-3.5 text-granite mr-1 flex-shrink-0" />
           {filterOptions.map((opt) => {
             const count = getFilterCount(opt.id);
             const isActive = activeFilter === opt.id;
@@ -216,18 +213,18 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               <button
                 key={opt.id}
                 onClick={() => handleFilterChange(opt.id)}
-                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-[3px] text-xs font-mono transition-all whitespace-nowrap border ${
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-control text-xs font-mono transition-all whitespace-nowrap border ${
                   isActive
-                    ? "bg-[#eeeeee] text-zinc-950 border-white font-semibold shadow-none"
-                    : "bg-[#1d1a18]/60 text-[#8a8380] border-white/10 hover:border-white/20 hover:text-[#eeeeee]"
+                    ? "bg-bone text-canvas border-bone font-semibold"
+                    : "bg-surface/70 text-granite border-stroke hover:border-graphite hover:text-bone"
                 }`}
               >
                 <span>{opt.label}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded ${
+                  className={`text-[10px] px-1.5 py-0.5 rounded-[2px] ${
                     isActive
-                      ? "bg-zinc-200 text-zinc-900"
-                      : "bg-[#3d3a39] text-[#8a8380]"
+                      ? "bg-canvas/15 text-canvas"
+                      : "bg-stroke text-stone"
                   }`}
                 >
                   {String(count).padStart(2, "0")}
@@ -242,17 +239,17 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       {filteredProjects.length === 0 ? (
         <div
           data-assemble="2"
-          className="glass-panel rounded-[10px] p-12 text-center space-y-3"
+          className="glass-panel p-12 text-center space-y-3"
         >
-          <p className="text-base font-semibold text-[#eeeeee]">
+          <p className="text-base font-semibold text-bone">
             {t.projects.emptyTitle}
           </p>
-          <p className="text-xs font-mono text-[#8a8380] max-w-sm mx-auto">
+          <p className="text-xs font-mono text-granite max-w-sm mx-auto">
             {t.projects.emptySubtitle}
           </p>
           <button
             onClick={() => handleFilterChange("all")}
-            className="mt-2 text-xs font-mono px-3 py-1.5 rounded-[3px] border border-[#3d3a39] text-[#eeeeee] hover:bg-[#eeeeee]/10 transition-colors"
+            className="mt-2 text-xs font-mono px-3 py-1.5 rounded-control border border-stroke text-bone hover:bg-stroke/40 transition-colors"
           >
             {t.projects.showAllBtn}
           </button>
@@ -266,10 +263,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             {filteredProjects.map((project) => {
               const isFeatured = isFlagship(project);
               const status = getStatusBadge(project.badge);
-              const projectTag = `[PRJ // ${String(project.id).padStart(2, "0")}]`;
+              const projectTag = String(project.id).padStart(2, "0");
 
               if (isFeatured) {
-                // FLAGSHIP PROMINENT WIDE CARD
+                // FLAGSHIP PROMINENT WIDE CARD (single action bar at bottom, no duplicate top buttons)
                 return (
                   <motion.article
                     layout
@@ -279,75 +276,48 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.2 }}
                     onClick={() => onSelectProject(project)}
-                    className="group md:col-span-2 glass-panel rounded-[10px] border border-white/10 hover:border-white/30 p-6 sm:p-8 transition-all cursor-pointer shadow-none hover:shadow-none relative overflow-hidden"
+                    className="group md:col-span-2 glass-panel glass-panel-interactive p-6 sm:p-8 cursor-pointer relative overflow-hidden"
                   >
                     {/* Subtle Top Ambient Lighting Accent */}
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#ee6018]/50 to-transparent" />
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-signal/55 to-transparent" />
 
-                    {/* Header Row */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    {/* Header Row: Telemetry Badges & Category Indicator */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                       <div className="flex flex-wrap items-center gap-2.5">
-                        <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-[#eeeeee] text-zinc-950">
+                        <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded-control bg-bone text-canvas">
                           {t.projects.featuredBadge}
                         </span>
-                        <span className="font-mono text-xs text-[#8a8380]">
+                        <span className="font-mono text-xs text-granite">
                           {projectTag}
                         </span>
                         <div
-                          className={`inline-flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-0.5 rounded-[3px] border ${status.className}`}
+                          className={`inline-flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-0.5 rounded-control border ${status.className}`}
                         >
                           <span
-                            className={`w-1.5 h-1.5 rounded-[3px] ${status.dotClass}`}
+                            className={`w-1.5 h-1.5 rounded-[2px] ${status.dotClass}`}
                           />
                           <span>{status.label}</span>
                         </div>
                       </div>
 
-                      {/* Action Triggers */}
-                      <div
-                        className="flex items-center gap-2"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {project.url && (
-                          <a
-                            href={project.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-[3px] bg-[#1d1a18] text-[#eeeeee] hover:bg-[#3d3a39] transition-colors border border-white/10"
-                            title="Visit live production service"
+                      <div className="hidden sm:flex items-center gap-1.5 font-mono text-[11px] text-granite">
+                        {project.categories.map((cat) => (
+                          <span
+                            key={cat}
+                            className="uppercase tracking-wider px-2 py-0.5 rounded-control border border-stroke/80 bg-canvas/50 text-stone"
                           >
-                            <span>{t.projects.liveService}</span>
-                            <ExternalLink className="w-3.5 h-3.5 text-[#8a8380]" />
-                          </a>
-                        )}
-                        {project.github && (
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-[3px] bg-[#1d1a18] text-[#eeeeee] hover:bg-[#3d3a39] transition-colors border border-white/10"
-                            title="View source code on GitHub"
-                          >
-                            <GithubIcon className="w-3.5 h-3.5" />
-                            <span>{t.projects.sourceCode}</span>
-                          </a>
-                        )}
-                        <button
-                          onClick={() => onSelectProject(project)}
-                          className="inline-flex items-center gap-1 text-xs font-mono font-medium px-3 py-1.5 rounded-[3px] bg-[#eeeeee] text-zinc-950 hover:bg-zinc-200 transition-colors shadow-none"
-                        >
-                          <span>{t.projects.viewDossier}</span>
-                          <ArrowUpRight className="w-3.5 h-3.5" />
-                        </button>
+                            {cat}
+                          </span>
+                        ))}
                       </div>
                     </div>
 
                     {/* Title & Subtitle */}
                     <div className="mb-6">
-                      <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-50 group-hover:text-[#ee6018] transition-colors">
+                      <h2 className="text-2xl sm:text-3xl font-bold tracking-[-0.03em] text-chalk group-hover:text-signal transition-colors">
                         {project.title}
                       </h2>
-                      <p className="text-sm sm:text-base font-medium text-zinc-300 mt-1">
+                      <p className="text-sm sm:text-base font-medium text-stone mt-1">
                         {project.subtitle}
                       </p>
                     </div>
@@ -356,7 +326,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
                       {/* Left Column: Scope & Capabilities */}
                       <div className="lg:col-span-7 space-y-4">
-                        <p className="text-sm text-zinc-300 leading-relaxed">
+                        <p className="text-sm text-stone leading-relaxed">
                           {project.description}
                         </p>
 
@@ -369,14 +339,14 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                           />
                         )}
                         <div className="space-y-2">
-                          <span className="text-[11px] font-mono uppercase tracking-wider text-[#8a8380] flex items-center gap-1.5">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#ee6018]" />
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-granite flex items-center gap-1.5">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-signal" />
                             {t.projects.highlightsLabel}
                           </span>
-                          <ul className="space-y-1.5 text-xs sm:text-sm text-zinc-300">
+                          <ul className="space-y-1.5 text-xs sm:text-sm text-stone">
                             {project.features.slice(0, 4).map((feat, idx) => (
                               <li key={idx} className="flex items-start gap-2">
-                                <span className="text-[#8a8380] font-mono text-xs mt-0.5">
+                                <span className="text-granite font-mono text-xs mt-0.5">
                                   ▸
                                 </span>
                                 <span>{feat}</span>
@@ -387,14 +357,14 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                       </div>
 
                       {/* Right Column: Architecture Breakdown Plate */}
-                      <div className="lg:col-span-5 bg-[#101010]/50 border border-white/10 rounded-[10px] p-4 sm:p-5 flex flex-col justify-between space-y-4">
+                      <div className="lg:col-span-5 bg-canvas/65 border border-stroke rounded-panel p-4 sm:p-5 flex flex-col justify-between space-y-4">
                         <div>
-                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/5">
-                            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
-                              <Layers className="w-3.5 h-3.5 text-[#ee6018]" />
+                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-stroke/60">
+                            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-bone flex items-center gap-1.5">
+                              <Layers className="w-3.5 h-3.5 text-signal" />
                               {t.projects.stackOverviewLabel}
                             </span>
-                            <span className="font-mono text-[10px] text-[#8a8380]">
+                            <span className="font-mono text-[10px] text-granite">
                               {project.architecture
                                 ? `${project.architecture.length} ${t.projects.layersSuffix}`
                                 : ""}
@@ -406,9 +376,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                               {project.architecture.map((arch, aIdx) => (
                                 <div
                                   key={aIdx}
-                                  className="text-[11px] font-mono text-zinc-300 flex items-start gap-2 bg-[#1d1a18]/40 p-2 rounded border border-white/5"
+                                  className="text-[11px] font-mono text-stone flex items-start gap-2 bg-surface/50 p-2.5 rounded-control border border-stroke/70"
                                 >
-                                  <span className="text-[#ee6018] font-bold">
+                                  <span className="text-signal font-bold">
                                     0{aIdx + 1}
                                   </span>
                                   <span className="leading-tight">{arch}</span>
@@ -416,13 +386,13 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                               ))}
                             </div>
                           ) : (
-                            <div className="text-xs font-mono text-[#8a8380] space-y-2">
+                            <div className="text-xs font-mono text-granite space-y-2">
                               <div className="flex items-center gap-2">
-                                <Cpu className="w-3.5 h-3.5 text-[#ee6018]" />
+                                <Cpu className="w-3.5 h-3.5 text-signal" />
                                 <span>Modular Component Architecture</span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <Terminal className="w-3.5 h-3.5 text-[#8a8380]" />
+                                <Terminal className="w-3.5 h-3.5 text-granite" />
                                 <span>Strict Separation of Concerns</span>
                               </div>
                             </div>
@@ -430,37 +400,40 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                         </div>
 
                         {/* Flagship Marker */}
-                        <div className="pt-2 border-t border-white/5 flex items-center justify-between font-mono text-[10px] text-[#8a8380]">
+                        <div className="pt-2 border-t border-stroke/60 flex items-center justify-between font-mono text-[10px] text-granite">
                           <span>{t.projects.featuredMarker}</span>
+                          <span className="text-metric">VERIFIED</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Bottom Tech Pills Row */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
+                    {/* Single Unified Bottom Tech Pills & Action Bar */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-stroke">
                       <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="text-[11px] font-mono text-[#8a8380] mr-1">
+                        <span className="text-[11px] font-mono text-granite mr-1">
                           {t.projects.stackPrefix}
                         </span>
                         {project.tech.map((techItem) => (
                           <span
                             key={techItem}
-                            className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-[#eeeeee]/5 border border-white/10 text-zinc-300"
+                            className="text-[11px] font-mono px-2.5 py-0.5 rounded-control bg-canvas/70 border border-stroke text-stone"
                           >
                             {techItem}
                           </span>
                         ))}
                       </div>
 
-                      <div className="flex items-center gap-2.5">
+                      <div
+                        className="flex flex-wrap items-center gap-2"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         {project.url && (
                           <a
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[3px] text-xs font-mono border border-[#ee6018]/35 bg-[#ee6018]/10 text-[#ee6018] hover:bg-[#ee6018]/20 transition-all font-medium"
-                            title="Visit live site"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-xs font-mono border border-signal/40 bg-signal/10 text-signal hover:bg-signal/20 transition-all font-medium"
+                            title="Visit live production service"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                             <span>{t.projects.liveDemoBtn}</span>
@@ -471,18 +444,20 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[3px] text-xs font-mono border border-white/10 bg-[#eeeeee]/5 text-zinc-300 hover:text-white hover:border-white/30 transition-all"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-xs font-mono border border-stroke bg-canvas/60 text-stone hover:text-bone hover:border-graphite transition-all"
                             title="View GitHub repository"
                           >
                             <GithubIcon className="w-3.5 h-3.5" />
                             <span>{t.projects.codeBtn}</span>
                           </a>
                         )}
-                        <span className="text-xs font-mono text-[#8a8380] group-hover:text-white transition-colors flex items-center gap-1">
-                          <span>{t.projects.detailsBtn}</span>
+                        <button
+                          onClick={() => onSelectProject(project)}
+                          className="inline-flex items-center gap-1 text-xs font-mono font-semibold px-3.5 py-1.5 rounded-control bg-bone text-canvas hover:bg-chalk transition-colors"
+                        >
+                          <span>{t.projects.viewDossier}</span>
                           <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                        </span>
+                        </button>
                       </div>
                     </div>
                   </motion.article>
@@ -499,19 +474,19 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
                   onClick={() => onSelectProject(project)}
-                  className="group glass-panel rounded-[10px] border border-white/10 hover:border-white/30 p-5 sm:p-6 transition-all cursor-pointer shadow-none hover:shadow-none flex flex-col justify-between space-y-4"
+                  className="group glass-panel glass-panel-interactive p-5 sm:p-6 cursor-pointer flex flex-col justify-between space-y-4"
                 >
                   {/* Header */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-mono text-xs text-[#8a8380]">
+                      <span className="font-mono text-xs text-granite">
                         {projectTag}
                       </span>
                       <div
-                        className={`inline-flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded-[3px] border ${status.className}`}
+                        className={`inline-flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded-control border ${status.className}`}
                       >
                         <span
-                          className={`w-1.5 h-1.5 rounded-[3px] ${status.dotClass}`}
+                          className={`w-1.5 h-1.5 rounded-[2px] ${status.dotClass}`}
                         />
                         <span>{status.label}</span>
                       </div>
@@ -527,26 +502,26 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     )}
 
                     <div>
-                      <h3 className="text-xl font-bold tracking-tight text-[#eeeeee] group-hover:text-[#ee6018] transition-colors">
+                      <h3 className="text-xl font-bold tracking-[-0.025em] text-bone group-hover:text-signal transition-colors">
                         {project.title}
                       </h3>
-                      <p className="text-xs sm:text-sm font-medium text-[#8a8380] mt-1 line-clamp-1">
+                      <p className="text-xs sm:text-sm font-medium text-granite mt-1 line-clamp-1">
                         {project.subtitle}
                       </p>
                     </div>
 
-                    <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed line-clamp-3">
+                    <p className="text-xs sm:text-sm text-stone leading-relaxed line-clamp-3">
                       {project.description}
                     </p>
 
                     {/* Bullet points summary */}
-                    <ul className="space-y-1 text-xs text-[#8a8380] pt-1">
+                    <ul className="space-y-1 text-xs text-granite pt-1">
                       {project.features.slice(0, 2).map((feat, fIdx) => (
                         <li
                           key={fIdx}
                           className="flex items-start gap-1.5 line-clamp-1"
                         >
-                          <span className="text-[#8a8380] font-mono">▸</span>
+                          <span className="text-granite font-mono">▸</span>
                           <span>{feat}</span>
                         </li>
                       ))}
@@ -554,12 +529,12 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   </div>
 
                   {/* Footer with Tech & Actions */}
-                  <div className="space-y-3 pt-3 border-t border-white/10">
+                  <div className="space-y-3 pt-3 border-t border-stroke">
                     <div className="flex flex-wrap gap-1.5">
                       {project.tech.map((techItem) => (
                         <span
                           key={techItem}
-                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#eeeeee]/5 border border-white/10 text-zinc-300"
+                          className="text-[10px] font-mono px-2 py-0.5 rounded-control bg-canvas/70 border border-stroke text-stone"
                         >
                           {techItem}
                         </span>
@@ -576,7 +551,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[3px] text-xs font-mono border border-[#ee6018]/35 bg-[#ee6018]/10 text-[#ee6018] hover:bg-[#ee6018]/20 transition-all font-medium"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-control text-xs font-mono border border-signal/35 bg-signal/10 text-signal hover:bg-signal/20 transition-all font-medium"
                             title="Visit live site"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -588,7 +563,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[3px] text-xs font-mono border border-white/10 bg-[#eeeeee]/5 text-zinc-300 hover:text-white hover:border-white/30 hover:bg-[#eeeeee]/10 transition-all"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-control text-xs font-mono border border-stroke bg-canvas/60 text-stone hover:text-bone hover:border-graphite transition-all"
                             title="View GitHub repository"
                           >
                             <GithubIcon className="w-3.5 h-3.5" />
@@ -599,7 +574,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
                       <button
                         onClick={() => onSelectProject(project)}
-                        className="inline-flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-white transition-colors ml-auto"
+                        className="inline-flex items-center gap-1 text-xs font-mono text-stone hover:text-bone transition-colors ml-auto font-medium"
                       >
                         <span>{t.projects.detailsBtn}</span>
                         <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

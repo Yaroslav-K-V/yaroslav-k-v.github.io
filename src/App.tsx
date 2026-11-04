@@ -7,6 +7,8 @@ import { Footer } from "./components/Footer";
 import { AssembleIntro } from "./components/AssembleIntro";
 import { LiveGrid } from "./components/LiveGrid";
 import { RouteLoader, ModalLoader } from "./components/RouteLoader";
+import { CommandPalette } from "./components/CommandPalette";
+import { CvPreviewModal } from "./components/CvPreviewModal";
 import { AnimatePresence } from "framer-motion";
 
 // Code-split page views and modal to optimize initial bundle size
@@ -134,6 +136,38 @@ export const App: React.FC = () => {
     }
     return false;
   });
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [cvPreviewOpen, setCvPreviewOpen] = useState(false);
+
+  // Global ⌘K / Ctrl+K shortcut for Command Palette
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, []);
+
+  // Linear-style radial cursor spotlight on .glass-panel-interactive cards
+  useEffect(() => {
+    if (!animationsEnabled) return;
+    const handlePointerMove = (e: PointerEvent) => {
+      const target = (e.target as HTMLElement | null)?.closest<HTMLElement>(
+        ".glass-panel-interactive",
+      );
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      target.style.setProperty("--spot-x", `${e.clientX - rect.left}px`);
+      target.style.setProperty("--spot-y", `${e.clientY - rect.top}px`);
+    };
+    window.addEventListener("pointermove", handlePointerMove, {
+      passive: true,
+    });
+    return () => window.removeEventListener("pointermove", handlePointerMove);
+  }, [animationsEnabled]);
 
   // Theme synchronization: always dark.
   useEffect(() => {
@@ -213,15 +247,18 @@ export const App: React.FC = () => {
     if (projects.some((p) => p.slug.toLowerCase() === hash.toLowerCase())) {
       url.hash = "";
     }
-    const targetPath = url.pathname.startsWith("/projects")
-      ? "/projects/"
-      : url.pathname;
+    const targetPath =
+      currentRoute === "welcome"
+        ? "/"
+        : url.pathname.startsWith("/projects")
+          ? "/projects/"
+          : url.pathname;
     window.history.pushState(
       null,
       "",
       targetPath + (url.search || "") + (url.hash || ""),
     );
-  }, []);
+  }, [currentRoute]);
 
   useEffect(() => {
     if (selectedProject) {
@@ -244,7 +281,7 @@ export const App: React.FC = () => {
 
   // Per-route document titles (including active project dossier).
   useEffect(() => {
-    if (currentRoute === "projects" && selectedProject) {
+    if (selectedProject) {
       document.title = `${selectedProject.title} — Yaroslav Krupoder`;
       return;
     }
@@ -264,6 +301,7 @@ export const App: React.FC = () => {
       import("./views/AboutView");
       import("./views/ProjectsView");
       import("./views/ContactsView");
+      import("./components/ProjectModal");
     };
 
     if (typeof window !== "undefined" && "requestIdleCallback" in window) {
@@ -299,13 +337,19 @@ export const App: React.FC = () => {
         onNavigate={navigateTo}
         animationsEnabled={animationsEnabled}
         onToggleAnimations={toggleAnimations}
+        onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+        onOpenCvPreview={() => setCvPreviewOpen(true)}
       />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-16">
         <Suspense fallback={<RouteLoader />}>
           <AnimatePresence mode="wait">
             {currentRoute === "welcome" && (
-              <HomeView key="welcome" onNavigate={navigateTo} />
+              <HomeView
+                key="welcome"
+                onNavigate={navigateTo}
+                onSelectProject={handleSelectProject}
+              />
             )}
             {currentRoute === "about" && <AboutView key="about" />}
             {currentRoute === "projects" && (
@@ -315,7 +359,12 @@ export const App: React.FC = () => {
                 initialProjectSlug={selectedProject?.slug}
               />
             )}
-            {currentRoute === "contacts" && <ContactsView key="contacts" />}
+            {currentRoute === "contacts" && (
+              <ContactsView
+                key="contacts"
+                onOpenCvPreview={() => setCvPreviewOpen(true)}
+              />
+            )}
           </AnimatePresence>
         </Suspense>
       </main>
@@ -333,6 +382,21 @@ export const App: React.FC = () => {
           <ProjectModal project={selectedProject} onClose={handleCloseModal} />
         </Suspense>
       )}
+
+      <CommandPalette
+        isOpen={commandPaletteOpen}
+        onClose={() => setCommandPaletteOpen(false)}
+        onNavigate={navigateTo}
+        onSelectProject={handleSelectProject}
+        onOpenCvPreview={() => setCvPreviewOpen(true)}
+        animationsEnabled={animationsEnabled}
+        onToggleAnimations={toggleAnimations}
+      />
+
+      <CvPreviewModal
+        isOpen={cvPreviewOpen}
+        onClose={() => setCvPreviewOpen(false)}
+      />
     </div>
   );
 };

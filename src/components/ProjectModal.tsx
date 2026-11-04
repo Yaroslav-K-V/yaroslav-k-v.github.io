@@ -211,15 +211,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   const dossier = activeProject ? getProjectDossier(activeProject) : null;
   const status = activeProject ? getStatusBadge(activeProject.badge) : null;
   const specNumber = activeProject
-    ? `PRJ-${String(activeProject.id).padStart(2, "0")}`
+    ? String(activeProject.id).padStart(2, "0")
     : "";
 
   const tabs: { id: ModalTab; label: string }[] = [
     { id: "all", label: t.modal.tabAll },
-    { id: "overview", label: `01 // ${t.modal.tabOverview}` },
-    { id: "architecture", label: `02 // ${t.modal.tabArchitecture}` },
-    { id: "tech", label: `03 // ${t.modal.tabTech}` },
-    { id: "metrics", label: `04 // ${t.modal.tabMetrics}` },
+    { id: "overview", label: `01 · ${t.modal.tabOverview}` },
+    { id: "architecture", label: `02 · ${t.modal.tabArchitecture}` },
+    { id: "tech", label: `03 · ${t.modal.tabTech}` },
+    { id: "metrics", label: `04 · ${t.modal.tabMetrics}` },
   ];
 
   return (
@@ -246,34 +246,34 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="relative w-full max-w-4xl max-h-[90dvh] sm:max-h-[88dvh] flex flex-col bg-[#101010]/90 text-[#eeeeee] rounded-t-[14px] sm:rounded-[10px] border border-white/10 shadow-none backdrop-blur-2xl z-10 overflow-hidden outline-none"
+            className="relative w-full max-w-4xl max-h-[90dvh] sm:max-h-[88dvh] flex flex-col glass-panel text-bone rounded-t-[12px] sm:rounded-panel border border-stroke backdrop-blur-2xl z-10 overflow-hidden outline-none"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Dossier Metadata Ribbon */}
-            <div className="flex flex-wrap items-center justify-between gap-2 px-5 sm:px-8 py-3.5 border-b border-white/10 bg-[#101010]/60 font-mono text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2 px-5 sm:px-8 py-3.5 border-b border-stroke bg-canvas/70 font-mono text-xs">
               <div className="flex items-center gap-3">
-                <span className="font-bold tracking-wider text-white">
+                <span className="font-bold tracking-wider text-chalk">
                   {specNumber}
                 </span>
-                <span className="hidden sm:inline text-[#8a8380]">|</span>
+                <span className="hidden sm:inline text-granite">|</span>
                 <div
-                  className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[3px] border text-[10px] ${status.className}`}
+                  className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-control border text-[10px] ${status.className}`}
                 >
                   <span
-                    className={`w-1.5 h-1.5 rounded-[3px] ${status.dotClass}`}
+                    className={`w-1.5 h-1.5 rounded-[2px] ${status.dotClass}`}
                   />
                   <span>{status.label}</span>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="hidden md:inline text-[11px] text-[#8a8380]">
+                <span className="hidden md:inline text-[11px] text-granite">
                   REV: 2026
                 </span>
                 <button
                   ref={closeButtonRef}
                   onClick={onClose}
-                  className="inline-flex items-center justify-center gap-1 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2.5 py-1 rounded-md text-[#8a8380] hover:text-white hover:bg-[#eeeeee]/10 transition-colors text-xs font-mono"
+                  className="inline-flex items-center justify-center gap-1 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2.5 py-1 rounded-control text-granite hover:text-bone hover:bg-stroke/40 transition-colors text-xs font-mono"
                   aria-label={t.modal.close}
                 >
                   <span>[ESC]</span>
@@ -283,19 +283,19 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
             </div>
 
             {/* Dossier Header Info & Primary Actions */}
-            <div className="px-5 sm:px-8 pt-6 pb-4 border-b border-white/10 space-y-4">
+            <div className="px-5 sm:px-8 pt-6 pb-4 border-b border-stroke space-y-4">
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div>
-                  <span className="text-[11px] font-mono uppercase tracking-widest text-[#8a8380]">
+                  <span className="text-[11px] font-mono uppercase tracking-widest text-granite">
                     {t.modal.projectDetailsEyebrow}
                   </span>
                   <h2
                     id="dossier-title"
-                    className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-50 mt-0.5"
+                    className="text-2xl sm:text-3xl font-bold tracking-[-0.03em] text-chalk mt-0.5"
                   >
                     {activeProject.title}
                   </h2>
-                  <p className="text-sm sm:text-base font-medium text-zinc-300 mt-1">
+                  <p className="text-sm sm:text-base font-medium text-stone mt-1">
                     {activeProject.subtitle}
                   </p>
                 </div>
@@ -305,7 +305,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       href={activeProject.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-[3px] bg-[#eeeeee] text-zinc-950 font-mono text-xs font-semibold hover:bg-zinc-200 transition-colors shadow-none"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-bone text-canvas font-mono text-xs font-semibold hover:bg-chalk transition-colors"
                     >
                       <span>{t.modal.openService}</span>
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -316,7 +316,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       href={activeProject.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-3.5 py-2 rounded-[3px] border border-white/10 bg-[#1d1a18]/60 text-[#eeeeee] font-mono text-xs font-medium hover:bg-[#eeeeee]/10 transition-colors"
+                      className="inline-flex items-center gap-2 px-3.5 py-2 rounded-control border border-stroke bg-canvas/60 text-bone font-mono text-xs font-medium hover:bg-stroke/40 transition-colors"
                     >
                       <GithubIcon className="w-3.5 h-3.5" />
                       <span>{t.modal.openGithub}</span>
@@ -334,12 +334,12 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 {dossier.metrics.map((m, idx) => (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-[3px] bg-[#eeeeee]/5 border border-white/5 font-mono"
+                    className="p-2.5 rounded-control bg-canvas/60 border border-stroke font-mono"
                   >
-                    <div className="text-[10px] text-[#8a8380] uppercase tracking-wider">
+                    <div className="text-[10px] text-granite uppercase tracking-wider">
                       {m.label}
                     </div>
-                    <div className="text-xs font-bold text-[#eeeeee] mt-0.5">
+                    <div className="text-xs font-bold text-bone mt-0.5">
                       {m.value}
                     </div>
                   </div>
@@ -347,15 +347,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               </div>
 
               {/* Navigation Tabs */}
-              <div className="flex items-center gap-2 overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 pt-2 pb-1 scrollbar-none border-t border-white/5">
+              <div className="flex items-center gap-2 overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 pt-2 pb-1 scrollbar-none border-t border-stroke/60">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`px-3 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-md text-xs font-mono whitespace-nowrap transition-all border ${
+                    className={`px-3 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-control text-xs font-mono whitespace-nowrap transition-all border ${
                       activeTab === tab.id
-                        ? "bg-[#eeeeee] text-zinc-950 border-white font-semibold"
-                        : "bg-transparent text-[#8a8380] border-transparent hover:text-[#eeeeee] hover:bg-[#eeeeee]/5"
+                        ? "bg-bone text-canvas border-bone font-semibold"
+                        : "bg-transparent text-granite border-transparent hover:text-bone hover:bg-stroke/40"
                     }`}
                   >
                     {tab.label}
@@ -377,33 +377,33 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       alt={`${activeProject.title} demo`}
                     />
                   )}
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                      <Terminal className="w-3.5 h-3.5 text-[#ee6018]" />
+                  <div className="flex items-center justify-between border-b border-stroke pb-2">
+                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-chalk flex items-center gap-2">
+                      <Terminal className="w-3.5 h-3.5 text-signal" />
                       <span>{t.modal.section01Title}</span>
                     </h3>
                   </div>
 
-                  <div className="p-4 rounded-[10px] bg-[#1d1a18]/40 border border-white/5 space-y-3">
-                    <div className="text-xs font-mono text-[#8a8380] uppercase tracking-wider">
+                  <div className="p-4 rounded-panel bg-canvas/55 border border-stroke/80 space-y-3">
+                    <div className="text-xs font-mono text-granite uppercase tracking-wider">
                       {t.modal.problemStatement}
                     </div>
-                    <p className="text-sm text-zinc-300 leading-relaxed">
+                    <p className="text-sm text-stone leading-relaxed">
                       {dossier.problemStatement}
                     </p>
                   </div>
 
                   <div className="space-y-2 pt-1">
-                    <div className="text-xs font-mono text-[#8a8380] uppercase tracking-wider">
+                    <div className="text-xs font-mono text-granite uppercase tracking-wider">
                       {t.modal.scopeObjectives}
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {dossier.scopeObjectives.map((obj, i) => (
                         <div
                           key={i}
-                          className="p-3 rounded-[3px] bg-[#eeeeee]/5 border border-white/5 flex items-start gap-2.5 text-xs text-zinc-300"
+                          className="p-3 rounded-control bg-canvas/55 border border-stroke/80 flex items-start gap-2.5 text-xs text-stone"
                         >
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#ee6018] flex-shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-signal flex-shrink-0 mt-0.5" />
                           <span>{obj}</span>
                         </div>
                       ))}
@@ -415,31 +415,31 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               {/* SECTION 2: TECHNICAL ARCHITECTURE & KEY DECISIONS */}
               {(activeTab === "all" || activeTab === "architecture") && (
                 <section className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                      <Layers className="w-3.5 h-3.5 text-[#ee6018]" />
+                  <div className="flex items-center justify-between border-b border-stroke pb-2">
+                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-chalk flex items-center gap-2">
+                      <Layers className="w-3.5 h-3.5 text-signal" />
                       <span>{t.modal.section02Title}</span>
                     </h3>
                   </div>
 
                   {/* Layered System Topology */}
                   <div className="space-y-2">
-                    <div className="text-xs font-mono text-[#8a8380] uppercase tracking-wider">
+                    <div className="text-xs font-mono text-granite uppercase tracking-wider">
                       {t.modal.howItsBuilt}
                     </div>
                     <div className="space-y-2 font-mono">
                       {dossier.architectureLayers.map((layer, lIdx) => (
                         <div
                           key={lIdx}
-                          className="p-3 rounded-[3px] bg-[#eeeeee]/5 border border-white/5 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 text-xs"
+                          className="p-3 rounded-control bg-canvas/55 border border-stroke/80 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 text-xs"
                         >
-                          <div className="flex items-center gap-2 font-bold text-[#eeeeee]">
-                            <span className="text-[#ee6018]">
+                          <div className="flex items-center gap-2 font-bold text-bone">
+                            <span className="text-signal">
                               [{String(lIdx + 1).padStart(2, "0")}]
                             </span>
                             <span>{layer.name}</span>
                           </div>
-                          <div className="text-[#8a8380] font-sans sm:font-mono text-xs">
+                          <div className="text-stone font-sans sm:font-mono text-xs">
                             {layer.detail}
                           </div>
                         </div>
@@ -449,20 +449,20 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
                   {/* Key Technical Decisions & Tradeoffs */}
                   <div className="space-y-3 pt-2">
-                    <div className="text-xs font-mono text-[#8a8380] uppercase tracking-wider">
+                    <div className="text-xs font-mono text-granite uppercase tracking-wider">
                       {t.modal.keyDecisions}
                     </div>
                     <div className="space-y-2.5">
                       {dossier.keyDecisions.map((dec, dIdx) => (
                         <div
                           key={dIdx}
-                          className="p-4 rounded-[10px] bg-[#1d1a18]/40 border border-white/5 space-y-1.5"
+                          className="p-4 rounded-panel bg-canvas/55 border border-stroke/80 space-y-1.5"
                         >
-                          <div className="text-xs font-bold font-mono text-[#eeeeee] flex items-center gap-2">
-                            <Cpu className="w-3.5 h-3.5 text-[#ee6018]" />
+                          <div className="text-xs font-bold font-mono text-bone flex items-center gap-2">
+                            <Cpu className="w-3.5 h-3.5 text-signal" />
                             <span>{dec.title}</span>
                           </div>
-                          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed pl-5">
+                          <p className="text-xs sm:text-sm text-stone leading-relaxed pl-5">
                             {dec.reasoning}
                           </p>
                         </div>
@@ -475,9 +475,9 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               {/* SECTION 3: TECH STACK MATRIX */}
               {(activeTab === "all" || activeTab === "tech") && (
                 <section className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                      <Boxes className="w-3.5 h-3.5 text-[#ee6018]" />
+                  <div className="flex items-center justify-between border-b border-stroke pb-2">
+                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-chalk flex items-center gap-2">
+                      <Boxes className="w-3.5 h-3.5 text-signal" />
                       <span>{t.modal.section03Title}</span>
                     </h3>
                   </div>
@@ -486,17 +486,17 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     {dossier.stackMatrix.map((group, gIdx) => (
                       <div
                         key={gIdx}
-                        className="p-4 rounded-[10px] bg-[#eeeeee]/5 border border-white/5 space-y-2.5"
+                        className="p-4 rounded-panel bg-canvas/55 border border-stroke/80 space-y-2.5"
                       >
-                        <div className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-[3px] bg-[#ee6018]" />
+                        <div className="text-xs font-mono font-bold uppercase tracking-wider text-bone flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-[2px] bg-signal" />
                           <span>{group.category}</span>
                         </div>
                         <div className="flex flex-wrap gap-1.5">
                           {group.items.map((item) => (
                             <span
                               key={item}
-                              className="text-xs font-mono px-2.5 py-1 rounded bg-[#1d1a18] border border-white/10 text-[#eeeeee]"
+                              className="text-xs font-mono px-2.5 py-1 rounded-control bg-surface border border-stroke text-stone"
                             >
                               {item}
                             </span>
@@ -511,24 +511,24 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               {/* SECTION 4: RESULTS, CAPABILITIES & METRICS */}
               {(activeTab === "all" || activeTab === "metrics") && (
                 <section className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                      <Activity className="w-3.5 h-3.5 text-[#ee6018]" />
+                  <div className="flex items-center justify-between border-b border-stroke pb-2">
+                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-chalk flex items-center gap-2">
+                      <Activity className="w-3.5 h-3.5 text-signal" />
                       <span>{t.modal.section04Title}</span>
                     </h3>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-xs font-mono text-[#8a8380] uppercase tracking-wider">
+                    <div className="text-xs font-mono text-granite uppercase tracking-wider">
                       {t.modal.checklistLabel}
                     </div>
                     <div className="grid grid-cols-1 gap-2 font-mono text-xs">
                       {activeProject.features.map((feat, fIdx) => (
                         <div
                           key={fIdx}
-                          className="p-3 rounded-[3px] bg-[#eeeeee]/5 border border-white/5 flex items-start gap-2.5 text-zinc-300"
+                          className="p-3 rounded-control bg-canvas/55 border border-stroke/80 flex items-start gap-2.5 text-stone"
                         >
-                          <ShieldCheck className="w-4 h-4 text-[#ee6018] flex-shrink-0 mt-0.5" />
+                          <ShieldCheck className="w-4 h-4 text-signal flex-shrink-0 mt-0.5" />
                           <span className="font-sans sm:font-mono leading-relaxed">
                             {feat}
                           </span>
@@ -538,11 +538,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   </div>
 
                   {activeProject.note && (
-                    <div className="p-4 rounded-[10px] bg-[#1d1a18]/60 border border-white/10 font-mono text-xs space-y-1">
-                      <div className="text-[10px] text-[#8a8380] uppercase tracking-wider">
+                    <div className="p-4 rounded-panel bg-canvas/70 border border-stroke font-mono text-xs space-y-1">
+                      <div className="text-[10px] text-granite uppercase tracking-wider">
                         {t.modal.notesLabel}
                       </div>
-                      <p className="text-zinc-300 italic">
+                      <p className="text-stone italic">
                         {activeProject.note}
                       </p>
                     </div>
@@ -552,9 +552,9 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
             </div>
 
             {/* Dossier Footer Toolbar */}
-            <div className="px-5 sm:px-8 py-3.5 border-t border-white/10 bg-[#101010]/60 flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
-              <div className="flex items-center gap-2 text-[#8a8380]">
-                <span className="w-2 h-2 rounded-[3px] bg-[#ee6018]" />
+            <div className="px-5 sm:px-8 py-3.5 border-t border-stroke bg-canvas/70 flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+              <div className="flex items-center gap-2 text-granite">
+                <span className="w-2 h-2 rounded-[2px] bg-signal" />
                 <span>{t.modal.footerEnd}</span>
               </div>
 
@@ -564,7 +564,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     href={activeProject.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[#ee6018] hover:underline"
+                    className="inline-flex items-center gap-1 text-signal hover:underline"
                   >
                     <span>{t.modal.liveServiceLink}</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -575,7 +575,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     href={activeProject.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-zinc-300 hover:underline"
+                    className="inline-flex items-center gap-1 text-stone hover:text-bone hover:underline"
                   >
                     <span>{t.modal.repositoryLink}</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -583,7 +583,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 )}
                 <button
                   onClick={onClose}
-                  className="px-3 py-1.5 rounded-[3px] bg-[#3d3a39] text-[#eeeeee] hover:bg-zinc-700 transition-colors font-medium"
+                  className="px-3 py-1.5 rounded-control bg-stroke text-bone hover:bg-graphite transition-colors font-medium"
                 >
                   {t.modal.closeBtn}
                 </button>
